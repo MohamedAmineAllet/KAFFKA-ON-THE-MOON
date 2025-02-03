@@ -1,0 +1,22 @@
+PremiereInterface:
+
+<PremiereInterface>:
+    Button:
+        background_color: 1,0,0,0
+        size: root.width*0.1,root.height*0.1
+        pos: root.width*0.45,root.height*0.25 #Pour centrer le bouton.
+        on_press:root.press()
+        Image:
+            source: "ImageInterfaceCamera/ImagePrendrePhoto6.png" #Image libre de droits : source https://fr.vecteezy.com/png/9400746-dslr-photo-appareil-photo-clipart-design-illustration
+            pos:self.parent.pos
+            size:self.parent.size
+            allow_strech: True
+    Label:
+        text: "Prendre Une Photo"
+        size: root.width*0.1,root.height*0.1
+        pos: root.width*0.45,root.height*0.17
+        allow_strech: True
+
+    #   text_size: self.width ,None #Donne la taille du text en x qui est similaire a la taille du bouton en longueur
+    #    halign: 'center' interessant pour la suite permet de centrer le texte dans un bouton probablement similaire pour un label.
+    #    valign: 'middle'
