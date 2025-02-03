@@ -1,12 +1,12 @@
 from kivy.app import App
-from kivy.uix.widget import Widget
-from kivy.uix.label import Label
-from kivy.core.window import Window
+from kivy.uix.screenmanager import ScreenManager, Screen
 
-Window.clearcolor = (79 / 255, 121 / 255, 66 / 255, 1)
+class InterfaceDAcceuil(Screen):
+    pass
 
 
-class PremiereInterface(Widget):
+
+class InterfacePilotage(Screen):
     pass
     # def press(self):
     #   self.nombreDeClique +=1
@@ -15,7 +15,7 @@ class PremiereInterface(Widget):
 
 class CameraProjetApp(App):
     def build(self):
-        return PremiereInterface()
+        return ScreenManager()
 
 
 if __name__ == '__main__':
