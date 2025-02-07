@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="Base code projet en SIM.&#10;Date :  2025-02-03&#10;commit par : Mohamed-Amine,Allet">
-      <change beforePath="$PROJECT_DIR$/.idea/Projet D'integration SIM.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Projet D'integration SIM.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Hardware/main_SoftwareInTheLoop.py" beforeDir="false" afterPath="$PROJECT_DIR$/Hardware/main_SoftwareInTheLoop.py" afterDir="false" />
-    </list>
+    <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="J'ai essayer de coder un peu le decollage du drone dans main_SoftwareInTheLoop.py&#10;&#10;Date :  2025-02-03&#10;commit par : Kian" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,12 +26,12 @@
     &quot;assignee&quot;: &quot;KKML19&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/MohamedAmineAllet/KAFFKA-ON-THE-MOON.git",
-    "accountId": "37a8de88-6370-4e03-b278-73ce930c6083"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/MohamedAmineAllet/KAFFKA-ON-THE-MOON.git&quot;,
+    &quot;accountId&quot;: &quot;37a8de88-6370-4e03-b278-73ce930c6083&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$USER_HOME$/AppData/Local/Programs/Python/Python312/Lib/site-packages/dronekit/__init__.py" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -117,7 +112,7 @@
       <option name="presentableId" value="Default" />
       <updated>1738600616704</updated>
       <workItem from="1738603710917" duration="10929000" />
-      <workItem from="1738863803616" duration="530000" />
+      <workItem from="1738863803616" duration="853000" />
     </task>
     <task id="LOCAL-00001" summary="Base code projet en SIM.&#10;Date :  2025-02-03&#10;commit par : Mohamed-Amine,Allet">
       <option name="closed" value="true" />
@@ -127,7 +122,15 @@
       <option name="project" value="LOCAL" />
       <updated>1738602436755</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="J'ai essayer de coder un peu le decollage du drone dans main_SoftwareInTheLoop.py&#10;&#10;Date :  2025-02-03&#10;commit par : Kian">
+      <option name="closed" value="true" />
+      <created>1738864621742</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1738864621742</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -135,7 +138,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Base code projet en SIM.&#10;Date :  2025-02-03&#10;commit par : Mohamed-Amine,Allet" />
-    <option name="LAST_COMMIT_MESSAGE" value="Base code projet en SIM.&#10;Date :  2025-02-03&#10;commit par : Mohamed-Amine,Allet" />
+    <MESSAGE value="J'ai essayer de coder un peu le decollage du drone dans main_SoftwareInTheLoop.py&#10;&#10;Date :  2025-02-03&#10;commit par : Kian" />
+    <option name="LAST_COMMIT_MESSAGE" value="J'ai essayer de coder un peu le decollage du drone dans main_SoftwareInTheLoop.py&#10;&#10;Date :  2025-02-03&#10;commit par : Kian" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$main_SoftwareInTheLoop.coverage" NAME="main_SoftwareInTheLoop Coverage Results" MODIFIED="1738782800839" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Hardware" />

@@ -14,20 +14,20 @@ def  arm_and_takeoff(target_altitude):
     while vehicle.mode.name != "GUIDED":
         time.sleep(1)
 
-        print("Armement des moteurs...")
+
 
         vehicle.armed = True
 
     while not vehicle.armed:
         time.sleep(1)
 
-    print("Décollage en cours...")
+
     vehicle.simple_takeoff(target_altitude)
 
 
 arm_and_takeoff(10)
 
-print("Atterrissage automatique...")
+
 vehicle.mode = VehicleMode("LAND")
 
 
