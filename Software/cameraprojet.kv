@@ -1,9 +1,20 @@
 <ScreenManager>:
-    InterfacePilotage:
-        name: 'interfacepilotage'
     InterfaceDAcceuil:
         name: 'interfacedacceuil'
+    InterfacePilotage:
+        name: 'interfacepilotage'
 
+<ButtonRound@Button>:  # Définition d'un bouton personnalisé, utilisant un bouton existant comme base
+    size_hint: None, None
+    size: 200, 200
+    background_normal: ''
+    background_color: 0, 0, 0, 0  # Fond transparent (pour ne pas afficher l'image par défaut)
+    canvas.before:
+        Color:
+            rgba: 0, 0, 1, 0
+        Ellipse:  # Dessiner un cercle (ellipse) avec la taille et position du bouton
+            pos: self.pos
+            size: self.size
 
 <InterfaceDAcceuil>:
     Image:
@@ -11,6 +22,23 @@
         size_hint:1,1
         allow_stretch: True
         keep_ratio: False
+    ButtonRound:
+        font_name: "fonts/Daily Bubble.ttf"
+        text: "Accueil"
+        allow_stretch: True
+        size_hint: (0.5,0.2)
+        text_size: self.size
+        halign: 'center'
+        valign: 'middle'
+        font_size: self.height*0.25
+
+
+        pos_hint: {'center_x': 422/612, 'center_y': 413/508 }
+        on_release: root.manager.current = 'interfacepilotage'
+
+
+
+
 
 
 <InterfacePilotage>:
@@ -20,22 +48,42 @@
         Rectangle:
             pos: self.pos
             size: self.size
-
     Button:
         background_color: 1,0,0,0
-        size_hint:0.1,0.1
-        pos: root.width*0.45,root.height*0.25 #Pour centrer le bouton.
+        size_hint:0.08,0.08
+        pos: root.width*0.05,root.height*0.1 #Pour centrer le bouton.
         on_press:root.press()
         Image:
-            source: "ImageInterfaceCamera/ImagePrendrePhoto6.png" #Image libre de droits : source https://fr.vecteezy.com/png/9400746-dslr-photo-appareil-photo-clipart-design-illustration
+            source: "ImageInterfaceCamera/ImageDecollerVideo2.png" #Image libre de droits : source https://fr.vecteezy.com/png/9400746-dslr-photo-appareil-photo-clipart-design-illustration
+            pos:self.parent.pos
+            size:self.parent.size
+            allow_strech: True
+    Button:
+        background_color: 1,0,0,0
+        size_hint:0.08,0.08
+        pos: root.width*0.9,root.height*0.2 #Pour centrer le bouton.
+        on_press:root.press()
+        Image:
+            source: "ImageInterfaceCamera/ImagePrendreVideo.png" #Image libre de droits : source https://fr.vecteezy.com/png/9400746-dslr-photo-appareil-photo-clipart-design-illustration
             pos:self.parent.pos
             size:self.parent.size
             allow_strech: True
     Label:
         text: "Photo"
         size_hint:0.1,0.1
-        pos: root.width*0.45,root.height*0.17
+        pos: root.width*0.9,root.height*0.03
         allow_strech: True
+
+    Button:
+        background_color: 1,0,0,0
+        size_hint:0.08,0.08
+        pos: root.width*0.9,root.height*0.1 #Pour centrer le bouton.
+        on_press:root.press()
+        Image:
+            source: "ImageInterfaceCamera/ImagePrendrePhoto6.png" #Image libre de droits : source https://fr.vecteezy.com/png/9400746-dslr-photo-appareil-photo-clipart-design-illustration
+            pos:self.parent.pos
+            size:self.parent.size
+            allow_strech: True
 
     #   text_size: self.width ,None #Donne la taille du text en x qui est similaire a la taille du bouton en longueur
     #    halign: 'center' interessant pour la suite permet de centrer le texte dans un bouton probablement similaire pour un label.
