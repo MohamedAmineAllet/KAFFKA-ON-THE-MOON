@@ -42,12 +42,12 @@
 
 
 <InterfacePilotage>:
-    canvas.before:
-        Color:
-            rgba: 79/255,121/5000,66/255,1
-        Rectangle:
-            pos: self.pos
-            size: self.size
+    CameraWidget:
+        # Par exemple, fixe la taille du widget
+        size_hint: 1, 1
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}  # Assure que l'image est bien centrée
+        keep_ratio: False
+        allow_stretch: True
     Button:
         background_color: 1,0,0,0
         size_hint:0.08,0.08
@@ -84,6 +84,8 @@
             pos:self.parent.pos
             size:self.parent.size
             allow_strech: True
+
+
 
     #   text_size: self.width ,None #Donne la taille du text en x qui est similaire a la taille du bouton en longueur
     #    halign: 'center' interessant pour la suite permet de centrer le texte dans un bouton probablement similaire pour un label.
