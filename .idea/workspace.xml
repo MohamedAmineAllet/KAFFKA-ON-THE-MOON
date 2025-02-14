@@ -5,6 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="fichier détection de la main&#10;Date :  2025-02-13&#10;commit par : Fatmagul Dedek" />
+    <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="nothing important">
+    <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="J'ai essayer de coder un peu le decollage du drone dans main_SoftwareInTheLoop.py&#10;&#10;Date :  2025-02-03&#10;commit par : Kian">
+      <change beforePath="$PROJECT_DIR$/.idea/Projet D'integration SIM.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Projet D'integration SIM.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Hardware/main_SoftwareInTheLoop.py" beforeDir="false" afterPath="$PROJECT_DIR$/Hardware/main_SoftwareInTheLoop.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -30,6 +37,7 @@
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/MohamedAmineAllet/KAFFKA-ON-THE-MOON.git&quot;,
     &quot;accountId&quot;: &quot;9887bea3-fa23-467e-8441-79f58c64b0aa&quot;
+    &quot;accountId&quot;: &quot;e0517eae-f959-435d-8d8b-14fa5eb54c37&quot;
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
@@ -155,6 +163,7 @@
       <workItem from="1739192703562" duration="199000" />
       <workItem from="1739194429451" duration="121000" />
       <workItem from="1739208617220" duration="6428000" />
+      <workItem from="1739464690314" duration="121000" />
     </task>
     <task id="LOCAL-00001" summary="Base code projet en SIM.&#10;Date :  2025-02-03&#10;commit par : Mohamed-Amine,Allet">
       <option name="closed" value="true" />
@@ -189,6 +198,24 @@
       <updated>1739470203206</updated>
     </task>
     <option name="localTasksCounter" value="5" />
+    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Permettre de run séparément sitl et main application">
+      <option name="closed" value="true" />
+      <created>1738899367602</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1738899367603</updated>
+    </task>
+    <task id="LOCAL-00005" summary="nothing important">
+      <option name="closed" value="true" />
+      <created>1739216362643</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1739216362644</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -201,9 +228,15 @@
     <MESSAGE value="Un peut d'organsation en packages" />
     <MESSAGE value="fichier détection de la main&#10;Date :  2025-02-13&#10;commit par : Fatmagul Dedek" />
     <option name="LAST_COMMIT_MESSAGE" value="fichier détection de la main&#10;Date :  2025-02-13&#10;commit par : Fatmagul Dedek" />
+    <option name="LAST_COMMIT_MESSAGE" value="J'ai essayer de coder un peu le decollage du drone dans main_SoftwareInTheLoop.py&#10;&#10;Date :  2025-02-03&#10;commit par : Kian" />
+    <MESSAGE value="Permettre de run séparément sitl et main application" />
+    <MESSAGE value="nothing important" />
+    <option name="LAST_COMMIT_MESSAGE" value="nothing important" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$Simple_Hand_Tracker.coverage" NAME="Simple-Hand-Tracker Coverage Results" MODIFIED="1739206216524" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
+    <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$SITL.coverage" NAME="SITL Coverage Results" MODIFIED="1739216421433" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Users\nadau\PycharmProjects\KAFFKA-ON-THE-MOON\Hardware" />
+    <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$main_SoftwareInTheLoop.coverage" NAME="main_SoftwareInTheLoop Coverage Results" MODIFIED="1738893676110" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Hardware" />
     <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$main_Application.coverage" NAME="main_Application Coverage Results" MODIFIED="1738893605448" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$Simple_Hand_Tracker.coverage" NAME="Simple-Hand-Tracker Coverage Results" MODIFIED="1739469831703" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$Are_Fingers_up_or_Down.coverage" NAME="Are Fingers up or Down Coverage Results" MODIFIED="1739206408783" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/.venv1/Scripts" />
