@@ -10,7 +10,6 @@ import cv2
 class CameraWidget(Image):
     def __init__(self, **kwargs):
         super(CameraWidget, self).__init__(**kwargs)
-        self.size_hint = (1,1)
         # Ouvre la capture de la webcam
         self.capture = cv2.VideoCapture(0)
         if not self.capture.isOpened():
