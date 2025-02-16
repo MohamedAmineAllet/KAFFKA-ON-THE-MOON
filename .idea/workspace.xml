@@ -88,7 +88,7 @@
       <recent name="C:\Users\nadau\PycharmProjects\KAFFKA-ON-THE-MOON\Hardware" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.SITL">
     <configuration name="SITL" type="PythonConfigurationType" factoryName="Python" singleton="false">
       <module name="Projet D'integration SIM" />
       <option name="ENV_FILES" value="" />
