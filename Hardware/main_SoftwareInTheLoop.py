@@ -1,20 +1,27 @@
 import dronekit_sitl
 import time
 import argparse
-import typing_extensions
+
+import collections
+if not hasattr(collections, 'MutableMapping'):
+    import collections.abc
+    collections.MutableMapping = collections.abc.MutableMapping
+
+
 from dronekit import connect, VehicleMode
 
 # Commencer SITL
 sitl = dronekit_sitl.start_default()
 connection_string = sitl.connection_string()
+
+print(f"Connect Mission Planner to: {connection_string}")  # Print the connection strin
 vehicle = connect(connection_string, wait_ready=True)  # Se connecter au véhicule simulé
 
 
 def connectMyCopter():
     parser = argparse.ArgumentParser(description="commands")
-    parser.add_argument("--connect")
+    parser.add_argument("--connect", default=connection_string)
     args = parser.parse_args()
-    connection_string = args.connect
     vehicle = connect(connection_string, wait_ready=True)
     return vehicle
 
@@ -52,8 +59,9 @@ time.sleep(2)
 
 while True:
     time.sleep(2)
-    vehicle.close()
-    sitl.stop()
+
+vehicle.close()
+sitl.stop()
 #print(f"Mode: {vehicle.mode.name}")
 
 # Fermer SITL proprement
