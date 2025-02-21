@@ -8,7 +8,7 @@ from dronekit import connect, VehicleMode
 print("MavProxy Port set!")
 
 # Chemin vers MAVProxy, à ajuster selon ton installation
-mavproxy_path = "C:\\Users\\nadau\\AppData\\Local\\Programs\\Python\\Python312\\Scripts\\mavproxy.py"
+mavproxy_path = "C:\\Users\\nadau\AppData\Local\Programs\Python\Python313\Lib\site-packages\mavproxy"
 
 # Lancer MAVProxy en arrière-plan avec les arguments appropriés
 subprocess.Popen([
