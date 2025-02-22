@@ -5,14 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="fichier détection de la main&#10;Date :  2025-02-13&#10;commit par : Fatmagul Dedek">
-      <change afterPath="$PROJECT_DIR$/MachinesIntelligentes/Donnés/DonnesMeteorologiqueSimple.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MachinesIntelligentes/Version1PredicteurMeteo.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MachinesIntelligentes/Version2PredicteurMeteo.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Software/fichiersHandtracking/HandPosition.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Software/fichiersHandtracking/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/Projet D'integration SIM.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Projet D'integration SIM.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/main_Application.py" beforeDir="false" afterPath="$PROJECT_DIR$/Software/main_Application.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/predicteurDeMeteo.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Software/cameraprojet.kv" beforeDir="false" afterPath="$PROJECT_DIR$/Software/cameraprojet.kv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Software/fichiersHandtracking/Are Fingers up or Down.py" beforeDir="false" afterPath="$PROJECT_DIR$/Software/fichiersHandtracking/Are Fingers up or Down.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Software/fichiersHandtracking/GlowBit-Gesture-Control.py" beforeDir="false" afterPath="$PROJECT_DIR$/Software/fichiersHandtracking/GlowBit-Gesture-Control.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,13 +64,14 @@
     &quot;Python.main_Application.executor&quot;: &quot;Run&quot;,
     &quot;Python.main_SoftwareInTheLoop.executor&quot;: &quot;Run&quot;,
     &quot;Python.predicteurDeMeteo.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Amine/Bdeb/Informatique/Projet D'integration SIM/KAFFKA-ON-THE-MOON&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Fatma/kivy_venv/KAFFKA-ON-THE-MOON&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -88,7 +90,7 @@
       <recent name="C:\Users\nadau\PycharmProjects\KAFFKA-ON-THE-MOON\Hardware" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.SITL">
+  <component name="RunManager">
     <configuration name="SITL" type="PythonConfigurationType" factoryName="Python" singleton="false">
       <module name="Projet D'integration SIM" />
       <option name="ENV_FILES" value="" />
@@ -143,8 +145,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-76f8388c3a79-JavaScript-PY-243.24978.54" />
-        <option value="bundled-python-sdk-91e3b7efe1d4-466328ff949b-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.24978.54" />
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-PY-243.23654.177" />
+        <option value="bundled-python-sdk-91d3a02ef49d-43b77aa2d136-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.23654.177" />
       </set>
     </attachedChunks>
   </component>
@@ -167,6 +169,9 @@
       <workItem from="1739194429451" duration="121000" />
       <workItem from="1739208617220" duration="6428000" />
       <workItem from="1739684789295" duration="1180000" />
+      <workItem from="1739981410776" duration="49000" />
+      <workItem from="1740181152828" duration="1894000" />
+      <workItem from="1740183827452" duration="10909000" />
     </task>
     <task id="LOCAL-00001" summary="Base code projet en SIM.&#10;Date :  2025-02-03&#10;commit par : Mohamed-Amine,Allet">
       <option name="closed" value="true" />
@@ -215,12 +220,17 @@
     <option name="LAST_COMMIT_MESSAGE" value="fichier détection de la main&#10;Date :  2025-02-13&#10;commit par : Fatmagul Dedek" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$main_Application.coverage" NAME="main_Application Coverage Results" MODIFIED="1739685649714" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
-    <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$Are_Fingers_up_or_Down.coverage" NAME="Are Fingers up or Down Coverage Results" MODIFIED="1739206408783" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/.venv1/Scripts" />
-    <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$Simple_Hand_Tracker.coverage" NAME="Simple-Hand-Tracker Coverage Results" MODIFIED="1739206216524" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
-    <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$predicteurDeMeteo.coverage" NAME="predicteurDeMeteo Coverage Results" MODIFIED="1739685614010" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MachinesIntelligentes" />
-    <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$main_SoftwareInTheLoop.coverage" NAME="main_SoftwareInTheLoop Coverage Results" MODIFIED="1738893676110" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Hardware" />
-    <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$Simple_Hand_Tracker.coverage" NAME="Simple-Hand-Tracker Coverage Results" MODIFIED="1739685692020" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$main_Application.coverage" NAME="main_Application Coverage Results" MODIFIED="1738893605448" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/misc_xml$test.coverage" NAME="test Coverage Results" MODIFIED="1740259372945" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software/fichiersHandtracking" />
+    <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$test.coverage" NAME="test Coverage Results" MODIFIED="1739988218257" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software/fichiersHandtracking" />
+    <SUITE FILE_PATH="coverage/misc_xml$Simple_Hand_Tracker.coverage" NAME="Simple-Hand-Tracker Coverage Results" MODIFIED="1740258477973" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
+    <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$main_SoftwareInTheLoop.coverage" NAME="main_SoftwareInTheLoop Coverage Results" MODIFIED="1738893676110" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Hardware" />
+    <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$Simple_Hand_Tracker.coverage" NAME="Simple-Hand-Tracker Coverage Results" MODIFIED="1739206216524" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
+    <SUITE FILE_PATH="coverage/misc_xml$main_Application.coverage" NAME="main_Application Coverage Results" MODIFIED="1740258426776" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
+    <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$main_Application.coverage" NAME="main_Application Coverage Results" MODIFIED="1739685649714" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
+    <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$predicteurDeMeteo.coverage" NAME="predicteurDeMeteo Coverage Results" MODIFIED="1739685614010" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MachinesIntelligentes" />
+    <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$Simple_Hand_Tracker.coverage" NAME="Simple-Hand-Tracker Coverage Results" MODIFIED="1739685692020" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
+    <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$Are_Fingers_up_or_Down.coverage" NAME="Are Fingers up or Down Coverage Results" MODIFIED="1739206408783" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/.venv1/Scripts" />
+    <SUITE FILE_PATH="coverage/misc_xml$Are_Fingers_up_or_Down.coverage" NAME="Are Fingers up or Down Coverage Results" MODIFIED="1740259464991" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software/fichiersHandtracking" />
   </component>
 </project>

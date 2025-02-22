@@ -7,8 +7,8 @@ import os
 from time import *
 
 import glowbit
-import RPi.GPIO as GPIO
-GPIO.setwarnings(False)
+#import RPi.GPIO as GPIO
+#GPIO.setwarnings(False)
 matrix = glowbit.matrix4x4(brightness = 255, rateLimitFPS = 80)
 
 cap = cv2.VideoCapture(0)
