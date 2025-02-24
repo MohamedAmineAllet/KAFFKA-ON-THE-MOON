@@ -4,18 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="fichier détection de la main&#10;Date :  2025-02-13&#10;commit par : Fatmagul Dedek">
-      <change afterPath="$PROJECT_DIR$/MachinesIntelligentes/Donnés/DonnesMeteorologiqueComplexe2014-2024.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MachinesIntelligentes/Version3PredicteurMeteo.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Projet D'integration SIM.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Projet D'integration SIM.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MachinesIntelligentes/Donnés/DonnesMeteorologiqueSimple.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MachinesIntelligentes/Donnés/DonnesMeteorologiqueSimple2013-2024.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MachinesIntelligentes/Version1PredicteurMeteo.py" beforeDir="false" afterPath="$PROJECT_DIR$/MachinesIntelligentes/Version1PredicteurMeteo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MachinesIntelligentes/Version2PredicteurMeteo.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/MachinesIntelligentes/Version2PredicteurMeteo.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/cameraprojet.kv" beforeDir="false" afterPath="$PROJECT_DIR$/Software/cameraprojet.kv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/main_Application.py" beforeDir="false" afterPath="$PROJECT_DIR$/Software/main_Application.py" afterDir="false" />
-    </list>
+    <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="1)Ajout couleur et contraste du text app kivy + test de l'accesibilité d'un fichier python dans un autre fichier python.&#10;2) J'ai fini le nettoyage des bases de données.&#10;3) J'ai commence la construction &amp; l'entrainement de du ml.(j'ai creer 2 type de ml) et je compte en creer un 3iem plus tard.&#10;Date :  2025-02-13&#10;commit par : Mohamed-Amine,Allet" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -202,7 +191,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739470203206</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="1)Ajout couleur et contraste du text app kivy + test de l'accesibilité d'un fichier python dans un autre fichier python.&#10;2) J'ai fini le nettoyage des bases de données.&#10;3) J'ai commence la construction &amp; l'entrainement de du ml.(j'ai creer 2 type de ml) et je compte en creer un 3iem plus tard.&#10;Date :  2025-02-13&#10;commit par : Mohamed-Amine,Allet">
+      <option name="closed" value="true" />
+      <created>1740370975021</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1740370975021</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -214,7 +211,8 @@
     <MESSAGE value="Software in the loop (simulation) correctement initialisé on peut maintenant apprendre comment est-ce qu'on code un ptn de drone en python" />
     <MESSAGE value="Un peut d'organsation en packages" />
     <MESSAGE value="fichier détection de la main&#10;Date :  2025-02-13&#10;commit par : Fatmagul Dedek" />
-    <option name="LAST_COMMIT_MESSAGE" value="fichier détection de la main&#10;Date :  2025-02-13&#10;commit par : Fatmagul Dedek" />
+    <MESSAGE value="1)Ajout couleur et contraste du text app kivy + test de l'accesibilité d'un fichier python dans un autre fichier python.&#10;2) J'ai fini le nettoyage des bases de données.&#10;3) J'ai commence la construction &amp; l'entrainement de du ml.(j'ai creer 2 type de ml) et je compte en creer un 3iem plus tard.&#10;Date :  2025-02-13&#10;commit par : Mohamed-Amine,Allet" />
+    <option name="LAST_COMMIT_MESSAGE" value="1)Ajout couleur et contraste du text app kivy + test de l'accesibilité d'un fichier python dans un autre fichier python.&#10;2) J'ai fini le nettoyage des bases de données.&#10;3) J'ai commence la construction &amp; l'entrainement de du ml.(j'ai creer 2 type de ml) et je compte en creer un 3iem plus tard.&#10;Date :  2025-02-13&#10;commit par : Mohamed-Amine,Allet" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$main_Application.coverage" NAME="main_Application Coverage Results" MODIFIED="1740370742533" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
