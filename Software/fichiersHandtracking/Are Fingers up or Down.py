@@ -30,12 +30,15 @@ while True:
     if len(b and a) != 0:
         xMin = a[0][1]
         xMax = a[0][1]
+        yMin = a[0][2]
+        yMax = a[0][2]
 
         doigtGauche = a[0]
         doigtDroite = a[0]
 
-        #compare la position x de tous les doigts et trouve le plus petit et le plus grand
+        #trouver les extrémités de la main
         for i in range(1, len(a) - 1):
+
             if a[i][1] < xMin:
                 xMin = a[i][1]
                 doigtGauche = a[i]
@@ -44,10 +47,19 @@ while True:
                 xMax = a[i][1]
                 doigtDroite = a[i]
 
+            if a[i][2] < yMin:
+                yMin = a[i][2]
+
+            if a[i][2] > yMax:
+                yMax = a[i][2]
+
+
         # print("xMin", xMin, " et xMax", xMax)
+        # print("Doigt à gauche: ", doigtGauche, ", Doigt à droite: ", doigtDroite)
 
 
-        finger = []
+
+        """"finger = []
         if a[0][1:] < a[4][1:]:
             finger.append(1)
             print(b[4])
@@ -63,14 +75,30 @@ while True:
                 fingers.append(1)
 
             else:
-                fingers.append(0)
+                fingers.append(0)"""
+
     # Below will print to the terminal the number of fingers that are up or down
-    x = fingers + finger
+    """x = fingers + finger
     c = Counter(x)
     up = c[1]
     down = c[0]
     print('This many fingers are up - ', up)
-    print('This many fingers are down - ', down)
+    print('This many fingers are down - ', down)"""
+    print ("Doigt à gauche: ", doigtGauche, ", Doigt à droite: ", doigtDroite)
+
+###À TESTERRRRRRRRRRRRRRRRRR
+    if yMax > frame1.shape[1]*0.2:
+        print("appeler méthode pour faire monter le drone")
+    if yMin < frame1.shape[1]*0.2:
+        print("appeler méthode qui fait descendre")
+
+    if xMax > frame1.shape[0]*0.2:
+        print("appeler méthode droite")
+    if xMin < frame1.shape[0]*0.2:
+        print("appeler méthode gauche")
+
+    print(frame1.shape[0])
+
 
     # Below shows the current frame to the desktop
     cv2.imshow("Frame", frame1);
@@ -78,7 +106,8 @@ while True:
 
     # Below will speak out load when |s| is pressed on the keyboard about what fingers are up or down
     if key == ord("q"):
-        speak("you have" + str(up) + "fingers up  and" + str(down) + "fingers down")
+        break
+        #speak("you have" + str(up) + "fingers up  and" + str(down) + "fingers down")
 
         # Below states that if the |s| is press on the keyboard it will stop the system
     if key == ord("s"):

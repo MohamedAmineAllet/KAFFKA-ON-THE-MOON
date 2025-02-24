@@ -32,6 +32,7 @@ def findpostion(frame1):
                 y = int(pt.y * h)
                 list.append([id,x,y])
 
+
     return list            
 
 
