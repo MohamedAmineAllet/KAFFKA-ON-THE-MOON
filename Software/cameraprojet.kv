@@ -87,6 +87,19 @@
             pos:self.parent.pos
             size:self.parent.size
             allow_stretch: True
+    Button:
+        background_color: 1,0,0,0
+        size_hint: 0.08, 0.08
+        pos: root.width * 0.05, root.height*0.003
+        on_press:root.press()
+        Image:
+            source:"ImageInterfaceCamera/plante2_converted.png"
+            pos:self.parent.pos
+            size:self.parent.size
+            allow_stretch: True
+
+
+
 
 
     Button:  #hand tracking
