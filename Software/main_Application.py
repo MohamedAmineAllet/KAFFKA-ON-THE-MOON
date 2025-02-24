@@ -11,6 +11,7 @@ class CameraWidget(Image):
     def __init__(self, **kwargs):
         super(CameraWidget, self).__init__(**kwargs)
         # Ouvre la capture de la webcam
+        #self.capture = cv2.VideoCapture('http://10.186.13.54:4747/video')
         self.capture = cv2.VideoCapture(0)
         if not self.capture.isOpened():
             print("Erreur d'ouverture du flux de la webcam.")
@@ -30,9 +31,14 @@ class InterfaceDAcceuil(Screen):
     pass
 class InterfacePilotage(Screen):
     pass
-    # def press(self):
-    #   self.nombreDeClique +=1
-    #  print("Bouton appuyé",self.nombreDeClique,"fois")
+    def press(self):
+        import os
+
+
+        def run_program():
+            os.system('python Simple-Hand-Tracker.py')
+
+        run_program()
 
 class CameraProjetApp(App):
     def build(self):

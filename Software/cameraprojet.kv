@@ -24,9 +24,12 @@
         keep_ratio: False
     ButtonRound:
         font_name: "fonts/Daily Bubble.ttf"
+        color: (157/255,0,1,1)
+        outline_color: (0,0,0)
+        outline_width: 2
         text: "Accueil"
         allow_stretch: True
-        size_hint: (0.5,0.2)
+        size_hint: (0.5,0.3)
         text_size: self.size
         halign: 'center'
         valign: 'middle'
@@ -57,7 +60,7 @@
             source: "ImageInterfaceCamera/ImageDecollerVideo2.png" #Image libre de droits : source https://fr.vecteezy.com/png/9400746-dslr-photo-appareil-photo-clipart-design-illustration
             pos:self.parent.pos
             size:self.parent.size
-            allow_strech: True
+            allow_stretch: True
     Button:
         background_color: 1,0,0,0
         size_hint:0.08,0.08
@@ -67,12 +70,12 @@
             source: "ImageInterfaceCamera/ImagePrendreVideo.png" #Image libre de droits : source https://fr.vecteezy.com/png/9400746-dslr-photo-appareil-photo-clipart-design-illustration
             pos:self.parent.pos
             size:self.parent.size
-            allow_strech: True
+            allow_stretch: True
     Label:
         text: "Photo"
         size_hint:0.1,0.1
         pos: root.width*0.9,root.height*0.03
-        allow_strech: True
+        allow_stretch: True
 
     Button:
         background_color: 1,0,0,0
@@ -83,7 +86,31 @@
             source: "ImageInterfaceCamera/ImagePrendrePhoto6.png" #Image libre de droits : source https://fr.vecteezy.com/png/9400746-dslr-photo-appareil-photo-clipart-design-illustration
             pos:self.parent.pos
             size:self.parent.size
-            allow_strech: True
+            allow_stretch: True
+    Button:
+        background_color: 1,0,0,0
+        size_hint: 0.08, 0.08
+        pos: root.width * 0.05, root.height*0.003
+        on_press:root.press()
+        Image:
+            source:"ImageInterfaceCamera/plante2_converted.png"
+            pos:self.parent.pos
+            size:self.parent.size
+            allow_stretch: True
+
+
+
+
+
+    Button:  #hand tracking
+        background_color: 255,255,255,1
+        size_hint:0.09,0.09
+        pos: root.width*0.045,root.height*0.2
+        Image:
+            source: "ImageInterfaceCamera/ImageHandTracking.png" #licence CC(Attribution): https://thenounproject.com/icon/hand-tracking-6668879/
+            pos: self.parent.pos
+            size:self.parent.size
+            allow_stretch: True
 
 
 
