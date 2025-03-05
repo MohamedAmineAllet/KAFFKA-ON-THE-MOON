@@ -44,9 +44,18 @@ class CameraWidget(Image):
 class InterfaceDAcceuil(Screen):
     pass
 class InterfacePilotage(Screen):
-    camera_active = False #Etat de la camera
+    drone_en_vol = False
+    def decoller_atterir_drone(self):#Pas oublier d'ajouter l'effet du drone ici en gros lorsque le drone decolle on donne une vitesse a voir avec Kemuel.
+        if self.drone_en_vol:
+            self.ids.img_decoller_atterir_drone.source = "ImageInterfaceCamera/ImageDecollerDrone.png"
+        else:
+            self.ids.img_decoller_atterir_drone.source = "ImageInterfaceCamera/ImageAtterireDrone.png"
 
-    def connecterLaCamera(self):
+        self.drone_en_vol = not self.drone_en_vol
+
+
+    camera_active = False #Etat de la camera
+    def connecter_la_camera(self):
 
         camera = self.ids.camera_widget
         if not self.camera_active:
@@ -61,12 +70,18 @@ class InterfacePilotage(Screen):
         self.camera_active = not self.camera_active
 
     def demarrerHandTracking(self):
-        #Ce code nous permet de lancer un autre fichier python dans le fichier python courrant.
+        # Ce code nous permet de lancer un autre fichier python dans le fichier python courrant.
         import os
         def run_program():
             os.system('python Simple-Hand-Tracker.py')
+        if self.camera_active:
+            # CODE A CHANGER TRES IMPORTANT RAISON : Dans le future parce que la camera n'est pas similaire pour les deux.
+            print("Desactiver la camera")
+        else:
+            run_program()
 
-        run_program()
+
+
 
 class CameraProjetApp(App):
     def build(self):

@@ -4,6 +4,8 @@
     InterfacePilotage:
         name: 'interfacepilotage'
 
+
+
 <ButtonRound@Button>:  # Définition d'un bouton personnalisé, utilisant un bouton existant comme base
     size_hint: None, None
     size: 200, 200
@@ -17,10 +19,31 @@
             size: self.size
 
 
+#:import Factory kivy.factory.Factory
+<MyPopup@Popup>:
+    auto_dismiss: False # Permet d'empecher l'utilisateur de quitter ce popup tant qu'il n'appui pas sur le bouton
+    title : "Avertissement !!!"
+    size_hint: 0.4,0.4
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            text: "Le drone est-il a l'écart de tout danger si ce n'est pas le cas veuillez éloigner tout objet pouvant endommager le drone."
+            text_size: root.width-10,None
+            halign: 'center'
+        BoxLayout:
+        Button:#Bouton permettant d'amorcer le decollage.
+            text: "Oui"
+            #La commande en dessous permet de lancer la methode dans la class interface pilotage a travers mon popup.
+            on_release: app.root.get_screen("interfacepilotage").decoller_atterir_drone()
+            on_release: root.dismiss()
+        Button:# Bouton permettant d'annuler le decollage
+            text: "Annuler"
+            on_release: root.dismiss()
+
 
 <InterfaceDAcceuil>:
     Image:
-        source: "ImageInterfaceAcceuil/PhotoAcceuil.png"
+        source: "ImageInterfaceAcceuil/PhotoAcceuil.png" #Chercher la source a mettre ici.
         size_hint:1,1
         allow_stretch: True
         keep_ratio: False
@@ -62,7 +85,7 @@
         pos: root.width*0.005,root.height*0.9
         on_release: root.manager.current = 'interfacedacceuil'
         Image:
-            source: "ImageInterfaceCamera/FlecheGaucheRetour.png"
+            source: "ImageInterfaceCamera/FlecheGaucheRetour.png" # Source de l'image : https://www.flaticon.com/fr/icone-gratuite/fleche-gauche_5093116
             pos: self.parent.pos
             size:self.parent.size
             allow_stretch: True
@@ -80,7 +103,7 @@
         halign: 'center'
         valign: 'middle'
         size_hint:0.1,0.1
-        on_press: root.connecterLaCamera()
+        on_press: root.connecter_la_camera()
 
 
     Button: #Bouton pour deviner il s'agit de quelle plante.
@@ -96,9 +119,10 @@
 
 
     Button:  #hand tracking
-        background_color: 255,255,255,1
+        background_color: 255,255,255,0
         size_hint:0.09,0.09
         pos: root.width*0.005,root.height*0.2
+        on_press : root.demarrerHandTracking()
         Image:
             source: "ImageInterfaceCamera/ImageHandTracking.png" #licence CC(Attribution): https://thenounproject.com/icon/hand-tracking-6668879/
             pos: self.parent.pos
@@ -109,9 +133,11 @@
         background_color: 1,0,0,0
         size_hint:0.08,0.08
         pos: root.width*0.005,root.height*0.1 #Pour centrer le bouton.
-        on_press:root.press()
+        on_release: Factory.MyPopup().open()
+        #on_press:root.decoller_atterir_drone()
         Image:
-            source: "ImageInterfaceCamera/ImageDecollerVideo2.png" #Image libre de droits : source https://fr.vecteezy.com/png/9400746-dslr-photo-appareil-photo-clipart-design-illustration
+            id: img_decoller_atterir_drone
+            source: "ImageInterfaceCamera/ImageDecollerDrone.png" #Image libre de droits : source https://fr.vecteezy.com/png/9400746-dslr-photo-appareil-photo-clipart-design-illustration
             pos:self.parent.pos
             size:self.parent.size
             allow_stretch: True
@@ -125,6 +151,7 @@
         pos: root.width*0.9,root.height*0.2 #Pour centrer le bouton.
         on_press:root.press()
         Image:
+
             source: "ImageInterfaceCamera/ImagePrendreVideo.png" #Image libre de droits : source https://fr.vecteezy.com/png/9400746-dslr-photo-appareil-photo-clipart-design-illustration
             pos:self.parent.pos
             size:self.parent.size
