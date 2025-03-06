@@ -4,7 +4,7 @@ import argparse
 
 import collections
 
-from dronekit_sitl.pysim.sim_wrapper import counter
+#from dronekit_sitl.pysim.sim_wrapper import counter
 
 if not hasattr(collections, 'MutableMapping'):
     import collections.abc
@@ -20,6 +20,36 @@ connection_string = sitl.connection_string()
 
 print(f"Connect Mission Planner to: {connection_string}")  # Print the connection strin
 vehicle = connect(connection_string, wait_ready=True)  # Se connecter au véhicule simulé
+
+
+masse = 2
+gravitational = 9.81
+coefficient_resistance_air = 0.1
+delta_temps = 0.1
+
+def apply_force(vx, vy, vz):
+    fx_trainee = vx * -coefficient_resistance_air
+    fy_trainee = vy * -coefficient_resistance_air
+    fz_trainee = vz * -coefficient_resistance_air
+
+    fy_g = -masse * gravitational
+    fy_poussee = masse * gravitational
+
+
+    fx_total = fx_trainee
+    fy_total = fy_trainee + fy_poussee + fy_g
+    fz_total = fz_trainee
+
+    ax = fx_total / masse
+    ay = fy_total / masse
+    az = fz_total / masse
+
+    new_vx = vx + ax * delta_temps
+    new_vy = vy + ay * delta_temps
+    new_vz = vz + az * delta_temps
+    return new_vx, new_vy, new_vz
+
+
 
 
 def connectMyCopter():
@@ -65,6 +95,7 @@ def arm_and_takeoff(target_altitude):
         time.sleep(1)
     print("Target altitude reached")
     return None
+
 
 
 vehicle = connectMyCopter()
