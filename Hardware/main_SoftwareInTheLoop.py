@@ -9,6 +9,7 @@ if not hasattr(collections, 'MutableMapping'):
 
 
 from dronekit import connect, VehicleMode
+from pymavlink import mavutil
 
 # Commencer SITL
 sitl = dronekit_sitl.start_default()
@@ -17,6 +18,9 @@ connection_string = sitl.connection_string()
 print(f"Connect Mission Planner to: {connection_string}")  # Print the connection strin
 vehicle = connect(connection_string, wait_ready=True)  # Se connecter au véhicule simulé
 
+#pas sure de la masse
+masse = 1.5
+
 
 def connectMyCopter():
     parser = argparse.ArgumentParser(description="commands")
@@ -24,6 +28,20 @@ def connectMyCopter():
     args = parser.parse_args()
     vehicle = connect(connection_string, wait_ready=True)
     return vehicle
+
+def set_velocity_body(vx, vy,vz):
+
+    #envoyer des commandes au drone dans le body frame
+    msg = vehicle.message_factory.set_position_target_local_ned_encode(
+        0,
+        0,0,
+        mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED,
+        0b0000111111000111,
+        vx,vy,vz,
+        0,0,0,
+        0,0,)
+    vehicle.send_mavlink(msg)
+    vehicle.flush()
 
 
 def arm_and_takeoff(target_altitude):
@@ -52,9 +70,45 @@ def arm_and_takeoff(target_altitude):
 
 
 vehicle = connectMyCopter()
+
 vehicle.mode = VehicleMode("GUIDED")
-arm_and_takeoff(2)
-vehicle.mode = VehicleMode("LAND")
+arm_and_takeoff(4)
+counter = 0
+while counter < 2:
+    set_velocity_body(1, 0, 0)
+    print("direction dans le Nord")
+    time.sleep(1)
+    counter= counter + 1
+#negative, sud, positif nord
+time.sleep(1)
+counter = 0
+while counter < 2:
+    set_velocity_body(-1, 0, 0)
+    print("direction dans le sud")
+    time.sleep(1)
+    counter= counter + 1
+time.sleep(1)
+
+#positif est, negatif ouest
+counter = 0
+while counter < 2:
+    set_velocity_body(0, 1, 0)
+    print("direction dans le est")
+    time.sleep(1)
+    counter= counter + 1
+time.sleep(1)
+counter = 0
+while counter < 2:
+    set_velocity_body(0, -1, 0)
+    print("direction dans le ouest")
+    time.sleep(1)
+    counter= counter + 1
+
+vehicle.mode = VehicleMode("RTL")
+# retourner au lauch
+
+
+#vehicle.mode = VehicleMode("LAND")
 time.sleep(2)
 
 while True:
