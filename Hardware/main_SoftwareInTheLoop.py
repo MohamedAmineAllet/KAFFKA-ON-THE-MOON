@@ -7,29 +7,35 @@ if not hasattr(collections, 'MutableMapping'):
     import collections.abc
 
     collections.MutableMapping = collections.abc.MutableMapping
-
+import dronekit_sitl
 from dronekit import connect, VehicleMode
 import time
 
+print("Tous le monde est prêt? On met les voiiiles...")
 
-# Commencer SITL
+# Commencer la simulation
 sitl = dronekit_sitl.start_default()
 connection_string = 'tcp:127.0.0.1:5760'  # Port ouvert par SITL
-#connection_string = 'tcp:127.0.0.1:5762'  # Port ouvert par SITL
 
-print(f"Connecting to vehicle on: {connection_string}")
+print(f"La chaîne de connection du véhicule: {connection_string}")
+# Se connecter au véhicule simulé
+vehicle = connect(connection_string, wait_ready=True)
 
-"""# 2 Lancer Mission Planner automatiquement
+# IMPORTANT NB: on a 10s pour connecter mission planner et mettre manuelement le mode guided (***Pourquoi dronekit ne le fait pas? Compatibilité?)
+for i in range(5, 0, -1):
+    print(i)
+    time.sleep(1)
+
+# 2 Lancer Mission Planner automatiquement
+"""
 mission_planner_path = "C:\\Program Files (x86)\\Mission Planner\\MissionPlanner.exe"
 subprocess.Popen([mission_planner_path])
 # Attendre que Mission Planner se lance
-time.sleep(5) """
+time.sleep(5) 
+"""
 
-# connecter dronekit
-vehicle = connect(connection_string, wait_ready=True)  # Se connecter au véhicule simulé
-time.sleep(5)
-
-"""# connect to Firmware soit FC et ardupilot
+# Se connecter au Firmware soit le Flight Controller et ardupilot
+"""
 def connectMyCopter():
     parser = argparse.ArgumentParser(description="commands")
     parser.add_argument("--connect", default=connection_string)
@@ -38,22 +44,39 @@ def connectMyCopter():
     return vehicle
 """
 
+
+# Méthode pour armer et décoller à une altitude donnée
 def arm_and_takeoff(target_altitude):
     while not vehicle.is_armable:
         print("wait for vehicle to be armed")
         time.sleep(1)
 
+    # Changer le mode du drone en "GUIDED"
     vehicle.mode = VehicleMode("GUIDED")
+
+    # Attendre que le mode soit bien activé
     while vehicle.mode.name != "GUIDED":
+        print("- En attente du changement de mode en GUIDED...")
         time.sleep(1)
-        vehicle.armed = True
-    print("Mode guided")
 
+    print("Mode actuel:" + vehicle.mode.name)
+
+    # Vérifier si le drone est armable avant de l'armer
+    while not vehicle.is_armable:
+        print("- En attente que le véhicule soit armable...")
+        time.sleep(1)
+
+    # Armer le drone
+    vehicle.armed = True
+
+    # Attendre que le drone soit effectivement armé
     while not vehicle.armed:
+        print("En attente de l'armement du véhicule...")
         time.sleep(1)
-    print("Vehicle armed")
 
+    print("- Véhicule armé et prêt à fonctionner !")
 
+    # **Fonctionalité DroneKit pour le décollage**
     vehicle.simple_takeoff(target_altitude)
 
     while True:
@@ -65,17 +88,12 @@ def arm_and_takeoff(target_altitude):
     return None
 
 
-#vehicle = connectMyCopter()
-vehicle.mode = VehicleMode("GUIDED")
+# vehicle = connectMyCopter() # Pour le Speedou
 arm_and_takeoff(2)
 vehicle.mode = VehicleMode("LAND")
 time.sleep(2)
 
-while True:
-    time.sleep(2)
-
 vehicle.close()
 sitl.stop()
-# print(f"Mode: {vehicle.mode.name}")
 
 # Fermer SITL proprement
