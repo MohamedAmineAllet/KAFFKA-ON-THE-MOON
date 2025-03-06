@@ -5,14 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="1)Ajout couleur et contraste du text app kivy + test de l'accesibilité d'un fichier python dans un autre fichier python.&#10;2) J'ai fini le nettoyage des bases de données.&#10;3) J'ai commence la construction &amp; l'entrainement de du ml.(j'ai creer 2 type de ml) et je compte en creer un 3iem plus tard.&#10;Date :  2025-02-13&#10;commit par : Mohamed-Amine,Allet">
-      <change afterPath="$PROJECT_DIR$/Software/ImageInterfaceCamera/ImageArriereFondCamera.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Projet D'integration SIM.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Projet D'integration SIM.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MachinesIntelligentes/Version2PredicteurMeteo.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/MachinesIntelligentes/Version2PredicteurMeteo.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MachinesIntelligentes/Version3PredicteurMeteo.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/MachinesIntelligentes/Version3PredicteurMeteo.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/ImageInterfaceCamera/ImageHandTracking.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/ImageInterfaceCamera/plante2_converted.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/cameraprojet.kv" beforeDir="false" afterPath="$PROJECT_DIR$/Software/cameraprojet.kv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/main_Application.py" beforeDir="false" afterPath="$PROJECT_DIR$/Software/main_Application.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Hardware/main_SoftwareInTheLoop.py" beforeDir="false" afterPath="$PROJECT_DIR$/Hardware/main_SoftwareInTheLoop.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,32 +50,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Python.Are Fingers up or Down.executor": "Run",
-    "Python.SITL.executor": "Run",
-    "Python.Simple-Hand-Tracker.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.main_Application.executor": "Run",
-    "Python.main_SoftwareInTheLoop.executor": "Run",
-    "Python.predicteurDeMeteo.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Amine/Bdeb/Informatique/Projet D'integration SIM/KAFFKA-ON-THE-MOON",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.intellij.jupyter.core.jupyter.connections.configuration.JupyterServerConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Python.Are Fingers up or Down.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SITL.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Simple-Hand-Tracker.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main_Application.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main_SoftwareInTheLoop.executor&quot;: &quot;Run&quot;,
+    &quot;Python.predicteurDeMeteo.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Amine/Bdeb/Informatique/Projet D'integration SIM/KAFFKA-ON-THE-MOON&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.intellij.jupyter.core.jupyter.connections.configuration.JupyterServerConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Amine\Bdeb\Informatique\Projet D'integration SIM\KAFFKA-ON-THE-MOON\MachinesIntelligentes\Donnés" />
@@ -88,7 +85,7 @@
       <recent name="C:\Users\nadau\PycharmProjects\KAFFKA-ON-THE-MOON\Hardware" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.SITL">
     <configuration name="SITL" type="PythonConfigurationType" factoryName="Python" singleton="false">
       <module name="Projet D'integration SIM" />
       <option name="ENV_FILES" value="" />
