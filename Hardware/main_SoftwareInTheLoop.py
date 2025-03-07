@@ -8,7 +8,7 @@ if not hasattr(collections, 'MutableMapping'):
 
     collections.MutableMapping = collections.abc.MutableMapping
 import dronekit_sitl
-from dronekit import connect, VehicleMode
+from dronekit import connect, VehicleMode, LocationGlobalRelative
 import time
 
 print("Tous le monde est prêt? On met les voiiiles...")
@@ -19,7 +19,7 @@ connection_string = 'tcp:127.0.0.1:5760'  # Port ouvert par SITL
 
 print(f"La chaîne de connection du véhicule: {connection_string}")
 # Se connecter au véhicule simulé
-vehicle = connect(connection_string, wait_ready=True)
+vehicule = connect(connection_string, wait_ready=True)
 
 # IMPORTANT NB: on a 10s pour connecter mission planner et mettre manuelement le mode guided (***Pourquoi dronekit ne le fait pas? Compatibilité?)
 for i in range(5, 0, -1):
@@ -47,53 +47,50 @@ def connectMyCopter():
 
 # Méthode pour armer et décoller à une altitude donnée
 def arm_and_takeoff(target_altitude):
-    while not vehicle.is_armable:
+    while not vehicule.is_armable:
         print("wait for vehicle to be armed")
         time.sleep(1)
 
     # Changer le mode du drone en "GUIDED"
-    vehicle.mode = VehicleMode("GUIDED")
+    vehicule.mode = VehicleMode("GUIDED")
 
     # Attendre que le mode soit bien activé
-    while vehicle.mode.name != "GUIDED":
+    while vehicule.mode.name != "GUIDED":
         print("- En attente du changement de mode en GUIDED...")
         time.sleep(1)
 
-    print("Mode actuel:" + vehicle.mode.name)
+    print("Mode actuel:" + vehicule.mode.name)
 
     # Vérifier si le drone est armable avant de l'armer
-    while not vehicle.is_armable:
-        print("- En attente que le véhicule soit armable...")
+    while not vehicule.is_armable:
         time.sleep(1)
 
     # Armer le drone
-    vehicle.armed = True
+    vehicule.armed = True
 
     # Attendre que le drone soit effectivement armé
-    while not vehicle.armed:
-        print("En attente de l'armement du véhicule...")
+    while not vehicule.armed:
         time.sleep(1)
 
     print("- Véhicule armé et prêt à fonctionner !")
 
     # **Fonctionalité DroneKit pour le décollage**
-    vehicle.simple_takeoff(target_altitude)
+    vehicule.simple_takeoff(target_altitude)
 
     while True:
-        print("Current Altitude: %d" % vehicle.location.global_relative_frame.alt)
-        if vehicle.location.global_relative_frame.alt > target_altitude:
+        print("Current Altitude: %d" % vehicule.location.global_relative_frame.alt)
+        if vehicule.location.global_relative_frame.alt > target_altitude:
             break
         time.sleep(1)
     print("Target altitude reached")
     return None
 
 
+""" La Mission en question """
 # vehicle = connectMyCopter() # Pour le Speedou
-arm_and_takeoff(2)
-vehicle.mode = VehicleMode("LAND")
-time.sleep(2)
+arm_and_takeoff(10)
 
-vehicle.close()
+vehicule.close()
 sitl.stop()
 
 # Fermer SITL proprement
