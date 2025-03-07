@@ -5,6 +5,8 @@ import argparse
 
 import collections
 
+from pymavlink import mavutil
+
 if not hasattr(collections, 'MutableMapping'):
     import collections.abc
 
@@ -30,6 +32,7 @@ gravitational = 9.81
 coefficient_resistance_air = 0.1
 delta_temps = 0.1
 
+
 def apply_force(vx, vy, vz):
     fx_trainee = vx * -coefficient_resistance_air
     fy_trainee = vy * -coefficient_resistance_air
@@ -37,7 +40,6 @@ def apply_force(vx, vy, vz):
 
     fy_g = -masse * gravitational
     fy_poussee = masse * gravitational
-
 
     fx_total = fx_trainee
     fy_total = fy_trainee + fy_poussee + fy_g
@@ -51,6 +53,7 @@ def apply_force(vx, vy, vz):
     new_vy = vy + ay * delta_temps
     new_vz = vz + az * delta_temps
     return new_vx, new_vy, new_vz
+
 
 # IMPORTANT NB: on a 10s pour connecter mission planner et mettre manuelement le mode guided (***Pourquoi dronekit ne le fait pas? Compatibilité?)
 for i in range(5, 0, -1):
@@ -75,17 +78,19 @@ def connectMyCopter():
     return vehicle
 """
 
+
 def set_velocity_body(vx, vy, vz):
-    msg = vehicle.message_factory.set_position_target_local_ned_encode(
+    msg = vehicule.message_factory.set_position_target_local_ned_encode(
         0,
-        0,0,
+        0, 0,
         mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED,
         0B0000111111000111,
-        vx,vy,vz,
-        0,0,0,
-        0,0,)
-    vehicle.send_mavlink(msg)
-    vehicle.flush()
+        vx, vy, vz,
+        0, 0, 0,
+        0, 0, )
+    vehicule.send_mavlink(msg)
+    vehicule.flush()
+
 
 # Méthode pour armer et décoller à une altitude donnée
 def arm_and_takeoff(target_altitude):
@@ -128,8 +133,7 @@ def arm_and_takeoff(target_altitude):
     return None
 
 
-
-""" La Mission en question """
+""" ****La Mission en question**** """
 # vehicle = connectMyCopter() # Pour le Speedou
 arm_and_takeoff(10)
 vx, vy, vz = 0
@@ -137,11 +141,11 @@ vx, vy, vz = 0
 counter = 0
 while counter < 2:
     apply_force(vx, vy, vz)
-    set_velocity_body(vx,vy,vz)
+    set_velocity_body(vx, vy, vz)
     print("direction Nord")
     time.sleep(1)
     counter = counter + 1
-#negative sud, positif nord
+# negative sud, positif nord
 time.sleep(1)
 counter = 0
 
@@ -154,7 +158,7 @@ while counter < 2:
 
 time.sleep(1)
 counter = 0
-#negative ouest, positif est
+# negative ouest, positif est
 while counter < 2:
     apply_force(vx, vy, vz)
     set_velocity_body(vx, vy, vz)
@@ -175,15 +179,12 @@ while counter < 2:
 time.sleep(1)
 counter = 0
 
-vehicle.mode = VehicleMode("RTL")
-#retourne au lauch
+vehicule.mode = VehicleMode("RTL")
+# retourne au lauch
 
 time.sleep(2)
-
 
 vehicule.close()
 sitl.stop()
 
 # Fermer SITL proprement
-
-
