@@ -1,11 +1,6 @@
 import cv2
 from collections import Counter
-from module import findnameoflandmark,findpostion,speak
-import math
-
-
-import os
-from time import *
+from Software.module import findnameoflandmark,findpostion,speak
 
 import keyboard
 import subprocess

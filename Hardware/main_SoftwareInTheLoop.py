@@ -1,12 +1,15 @@
 import subprocess
 import dronekit_sitl
+import time
 import argparse
+
 import collections
 
 if not hasattr(collections, 'MutableMapping'):
     import collections.abc
 
     collections.MutableMapping = collections.abc.MutableMapping
+
 import dronekit_sitl
 from dronekit import connect, VehicleMode, LocationGlobalRelative
 import time
@@ -20,6 +23,34 @@ connection_string = 'tcp:127.0.0.1:5760'  # Port ouvert par SITL
 print(f"La chaîne de connection du véhicule: {connection_string}")
 # Se connecter au véhicule simulé
 vehicule = connect(connection_string, wait_ready=True)
+
+# Force
+masse = 2
+gravitational = 9.81
+coefficient_resistance_air = 0.1
+delta_temps = 0.1
+
+def apply_force(vx, vy, vz):
+    fx_trainee = vx * -coefficient_resistance_air
+    fy_trainee = vy * -coefficient_resistance_air
+    fz_trainee = vz * -coefficient_resistance_air
+
+    fy_g = -masse * gravitational
+    fy_poussee = masse * gravitational
+
+
+    fx_total = fx_trainee
+    fy_total = fy_trainee + fy_poussee + fy_g
+    fz_total = fz_trainee
+
+    ax = fx_total / masse
+    ay = fy_total / masse
+    az = fz_total / masse
+
+    new_vx = vx + ax * delta_temps
+    new_vy = vy + ay * delta_temps
+    new_vz = vz + az * delta_temps
+    return new_vx, new_vy, new_vz
 
 # IMPORTANT NB: on a 10s pour connecter mission planner et mettre manuelement le mode guided (***Pourquoi dronekit ne le fait pas? Compatibilité?)
 for i in range(5, 0, -1):
@@ -44,6 +75,17 @@ def connectMyCopter():
     return vehicle
 """
 
+def set_velocity_body(vx, vy, vz):
+    msg = vehicle.message_factory.set_position_target_local_ned_encode(
+        0,
+        0,0,
+        mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED,
+        0B0000111111000111,
+        vx,vy,vz,
+        0,0,0,
+        0,0,)
+    vehicle.send_mavlink(msg)
+    vehicle.flush()
 
 # Méthode pour armer et décoller à une altitude donnée
 def arm_and_takeoff(target_altitude):
@@ -86,11 +128,62 @@ def arm_and_takeoff(target_altitude):
     return None
 
 
+
 """ La Mission en question """
 # vehicle = connectMyCopter() # Pour le Speedou
 arm_and_takeoff(10)
+vx, vy, vz = 0
+
+counter = 0
+while counter < 2:
+    apply_force(vx, vy, vz)
+    set_velocity_body(vx,vy,vz)
+    print("direction Nord")
+    time.sleep(1)
+    counter = counter + 1
+#negative sud, positif nord
+time.sleep(1)
+counter = 0
+
+while counter < 2:
+    apply_force(-vx, vy, vz)
+    set_velocity_body(vx, vy, vz)
+    print("direction Sud")
+    time.sleep(1)
+    counter = counter + 1
+
+time.sleep(1)
+counter = 0
+#negative ouest, positif est
+while counter < 2:
+    apply_force(vx, vy, vz)
+    set_velocity_body(vx, vy, vz)
+    print("direction est")
+    time.sleep(1)
+    counter = counter + 1
+
+time.sleep(1)
+counter = 0
+
+while counter < 2:
+    apply_force(vx, -vy, vz)
+    set_velocity_body(vx, vy, vz)
+    print("direction ouest")
+    time.sleep(1)
+    counter = counter + 1
+
+time.sleep(1)
+counter = 0
+
+vehicle.mode = VehicleMode("RTL")
+#retourne au lauch
+
+time.sleep(2)
+
 
 vehicule.close()
 sitl.stop()
 
 # Fermer SITL proprement
+
+
