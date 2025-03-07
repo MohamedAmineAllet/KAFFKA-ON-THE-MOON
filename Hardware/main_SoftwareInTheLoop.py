@@ -101,9 +101,14 @@ def arm_and_takeoff(target_altitude):
 vehicle = connectMyCopter()
 vehicle.mode = VehicleMode("GUIDED")
 arm_and_takeoff(4)
+
+vx, vy, vz = 0
+
+
 counter = 0
 while counter < 2:
-    set_velocity_body(1, 0, 0)
+    apply_force(vx, vy, vz)
+    set_velocity_body(vx,vy,vz)
     print("direction Nord")
     time.sleep(1)
     counter = counter + 1
@@ -112,7 +117,8 @@ time.sleep(1)
 counter = 0
 
 while counter < 2:
-    set_velocity_body(-1, 0, 0)
+    apply_force(-vx, vy, vz)
+    set_velocity_body(vx, vy, vz)
     print("direction Sud")
     time.sleep(1)
     counter = counter + 1
@@ -121,7 +127,8 @@ time.sleep(1)
 counter = 0
 #negative ouest, positif est
 while counter < 2:
-    set_velocity_body(0, 1, 0)
+    apply_force(vx, vy, vz)
+    set_velocity_body(vx, vy, vz)
     print("direction est")
     time.sleep(1)
     counter = counter + 1
@@ -130,7 +137,8 @@ time.sleep(1)
 counter = 0
 
 while counter < 2:
-    set_velocity_body(0, -1, 0)
+    apply_force(vx, -vy, vz)
+    set_velocity_body(vx, vy, vz)
     print("direction ouest")
     time.sleep(1)
     counter = counter + 1
