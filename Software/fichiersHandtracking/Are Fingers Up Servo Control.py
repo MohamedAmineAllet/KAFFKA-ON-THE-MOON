@@ -1,12 +1,9 @@
 import cv2
 from collections import Counter
-from module import findnameoflandmark,findpostion,speak
-import math
+from Software.module import findnameoflandmark,findpostion,speak
 
 from adafruit_servokit import ServoKit
 kit = ServoKit(channels=16)
-from time import *
-
 
 kit.servo[0].angle = 140
 kit.servo[1].angle = 140

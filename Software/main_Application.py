@@ -13,7 +13,7 @@ class CameraWidget(Image):
         super(CameraWidget, self).__init__(**kwargs)
         self.capture = None  # La capture vidéo sera activée/désactivée
 
-#a changer la source pour l'URL de la camera.
+#à changer la source pour l'URL de la caméra.
     def start_camera(self,source=0, fps=30):
         #Demarre la camera dependamment de la source.
         self.capture = cv2.VideoCapture(source)
@@ -73,7 +73,7 @@ class InterfacePilotage(Screen):
         # Ce code nous permet de lancer un autre fichier python dans le fichier python courrant.
         import os
         def run_program():
-            os.system('python Simple-Hand-Tracker.py')
+            os.system('Controle De La Main.py')
         if self.camera_active:
             # CODE A CHANGER TRES IMPORTANT RAISON : Dans le future parce que la camera n'est pas similaire pour les deux.
             print("Desactiver la camera")
