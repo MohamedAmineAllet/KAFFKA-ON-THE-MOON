@@ -26,6 +26,17 @@ print(f"La chaîne de connection du véhicule: {connection_string}")
 # Se connecter au véhicule simulé
 vehicule = connect(connection_string, wait_ready=True)
 
+def setGuidedMode():
+    """
+    Forcer le mode guide via mavlink
+    """
+    vehicule._master.mav.set_mode_send(
+        vehicule._master.target_system,
+        mavutil.mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,
+        4  # Mode GUIDED = 4 en ArduPilot
+    )
+    time.sleep(1)
+
 """ 
 # Méthode avec les forces À Revoir 
 masse = 2
@@ -60,11 +71,6 @@ def apply_force(vx, vy, vz, teta_X=0, teta_Y=0):
 
 """
 
-# IMPORTANT NB: on a 10s pour connecter mission planner et mettre manuelement le mode guided (***Pourquoi dronekit ne le fait pas? Compatibilité?)
-for i in range(5, 0, -1):
-    print(i)
-    time.sleep(1)
-
 # 2 Lancer Mission Planner automatiquement
 """
 mission_planner_path = "C:\\Program Files (x86)\\Mission Planner\\MissionPlanner.exe"
@@ -84,27 +90,52 @@ def connectMyCopter():
 """
 
 
+def positionConversion(ned, yaw):
+    """ Convertit la position NED en Body Frame (Avant, Droite, Bas). """
+    nord, est, bas = ned
+
+    avant = nord * math.cos(yaw) + est * math.sin(yaw)
+    droite = -nord * math.sin(yaw) + est * math.cos(yaw)
+    return [avant, droite, bas]  # Bas reste inchangé
+
+    # Récupérer la position NED
+    position_ned = vehicule.location.local_frame  # [Nord, Est, Bas] en mètres
+    yaw = vehicule.attitude.yaw  # Orientation (yaw) en radians
+
+    # Convertir en Body Frame
+    position_body = ned_vers_body_position([position_ned.north, position_ned.east, position_ned.down], yaw)
+
+    # Afficher la position en Body Frame
+    return ("Position en Body Frame:", position_body)
+
+
 def setVitesse(vx, vy, vz, duree):
     """
     Déplacer notre véhicule dans une certaine direction en changeant le vecteur vitesse
-    :param vx: + Nord / - Sud
-    :param vy: + Est / - Ouest
-    :param vz: + Bas / - Haut
-    Mais pourquoi?
+    :param vx: + Nord / - Sud      ||  + Devant / - Derrière
+    :param vy: + Est / - Ouest     || + Droite / - Gauche
+    :param vz: + Bas / - Haut      || + Bas / - Haut
+    Système de coordonnées conventionel NED  ||  Système de coordonnées Relatve au drone <-
     """
     msg = vehicule.message_factory.set_position_target_local_ned_encode(
-        0, # time_boot_ms (not used)
-        0, 0, # target system, target component
-        mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED, # frame
-        0b0000111111000111, # type_mask (only speeds enabled)
-        0,0,0, # x, y, z positions (not used)
-        vx, vy, vz, # x, y, z velocity in m/s
-        0, 0, 0, # x, y, z acceleration (not supported yet, ignored in GCS_Mavlink)
+        0,  # time_boot_ms (not used)
+        0, 0,  # target system, target component
+        mavutil.mavlink.MAV_FRAME_BODY_NED,  # FRAME_BODY_NED pour se déplacer Body Frame
+        0b0000111111000111,  # type_mask (only speeds enabled)
+        0, 0, 0,  # x, y, z positions (not used)
+        vx, vy, vz,  # x, y, z velocity in m/s
+        0, 0, 0,  # x, y, z acceleration (not supported yet, ignored in GCS_Mavlink)
         0, 0, )  # yaw, yaw_rate (not supported yet, ignored in GCS_Mavlink)
+
     # send command to vehicle on 1 Hz cycle
     for x in range(0, duree):
         vehicule.send_mavlink(msg)
         time.sleep(1)
+        # Afficher la position relative au vehicule
+        position_ned = vehicule.location.local_frame  # [North, East, Down] en mètres
+        yaw = vehicule.attitude.yaw  # Orientation du drone (yaw) en radians
+        position_body = positionConversion([position_ned.north, position_ned.east, position_ned.down], yaw)
+        print("Position Locale Relative à Home: %s" % position_body)
 
 
 # Méthode pour armer et décoller à une altitude donnée
@@ -114,12 +145,10 @@ def arm_and_takeoff(target_altitude):
         time.sleep(1)
 
     # Changer le mode du drone en "GUIDED"
-    vehicule.mode = VehicleMode("GUIDED")
-
-    # Attendre que le mode soit bien activé
-    while vehicule.mode.name != "GUIDED":
+    while vehicule.mode.name != 'GUIDED':
         print("- En attente du changement de mode en GUIDED...")
-        time.sleep(2)
+        setGuidedMode()
+        time.sleep(1)
 
     print("Mode actuel:" + vehicule.mode.name)
 
@@ -152,18 +181,17 @@ def arm_and_takeoff(target_altitude):
 # vehicle = connectMyCopter() # Pour le Speedou
 arm_and_takeoff(10)
 
-#vers le Nord
-setVitesse(10,0,0,5)
+# vers le Nord
+setVitesse(10, 0, 0, 5)
 
-#vers le Sud
-setVitesse(-10,0,0,5)
+# vers le Sud
+setVitesse(-10, 0, 0, 5)
 
-#vers l'Est
-setVitesse(0,10,0,5)
+# vers l'Est
+setVitesse(0, 10, 0, 5)
 
-#vers l'Ouest
-setVitesse(0,-10,0,5)
-
+# vers l'Ouest
+setVitesse(0, -10, 0, 5)
 
 vehicule.mode = VehicleMode("RTL")
 if vehicule.mode == VehicleMode("RTL"):
