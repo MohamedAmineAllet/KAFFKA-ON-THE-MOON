@@ -26,7 +26,8 @@ print(f"La chaîne de connection du véhicule: {connection_string}")
 # Se connecter au véhicule simulé
 vehicule = connect(connection_string, wait_ready=True)
 
-# Force
+""" 
+# Méthode avec les forces À Revoir 
 masse = 2
 gravitational = 9.81
 coefficient_resistance_air = 0.1
@@ -57,6 +58,7 @@ def apply_force(vx, vy, vz, teta_X=0, teta_Y=0):
     new_vz = vz + az * delta_temps
     return new_vx, new_vy, new_vz
 
+"""
 
 # IMPORTANT NB: on a 10s pour connecter mission planner et mettre manuelement le mode guided (***Pourquoi dronekit ne le fait pas? Compatibilité?)
 for i in range(5, 0, -1):
@@ -82,18 +84,27 @@ def connectMyCopter():
 """
 
 
-def set_velocity_body(vx, vy, vz):
+def setVitesse(vx, vy, vz, duree):
+    """
+    Déplacer notre véhicule dans une certaine direction en changeant le vecteur vitesse
+    :param vx: + Nord / - Sud
+    :param vy: + Est / - Ouest
+    :param vz: + Bas / - Haut
+    Mais pourquoi?
+    """
     msg = vehicule.message_factory.set_position_target_local_ned_encode(
-        0,
-        0, 0,
-        mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED,
-        0b0000111111000111,
-        0,0,0,
-        vx, vy, vz,
-        0, 0, 0,
-        0, 0, )
-    vehicule.send_mavlink(msg)
-    vehicule.flush()
+        0, # time_boot_ms (not used)
+        0, 0, # target system, target component
+        mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED, # frame
+        0b0000111111000111, # type_mask (only speeds enabled)
+        0,0,0, # x, y, z positions (not used)
+        vx, vy, vz, # x, y, z velocity in m/s
+        0, 0, 0, # x, y, z acceleration (not supported yet, ignored in GCS_Mavlink)
+        0, 0, )  # yaw, yaw_rate (not supported yet, ignored in GCS_Mavlink)
+    # send command to vehicle on 1 Hz cycle
+    for x in range(0, duree):
+        vehicule.send_mavlink(msg)
+        time.sleep(1)
 
 
 # Méthode pour armer et décoller à une altitude donnée
@@ -108,7 +119,7 @@ def arm_and_takeoff(target_altitude):
     # Attendre que le mode soit bien activé
     while vehicule.mode.name != "GUIDED":
         print("- En attente du changement de mode en GUIDED...")
-        time.sleep(1)
+        time.sleep(2)
 
     print("Mode actuel:" + vehicule.mode.name)
 
@@ -137,55 +148,21 @@ def arm_and_takeoff(target_altitude):
     return None
 
 
-# vitesse intial a 0
-
-print("Modes disponibles:", vehicule.mode)
-
 """ ****La Mission en question**** """
 # vehicle = connectMyCopter() # Pour le Speedou
 arm_and_takeoff(10)
-#vx,vy,vz = 0
-#vx, vy, vz = apply_force(vx,vy,vz)
 
-counter = 0
-while counter < 2:
-#    apply_force(vx, vy, vz)
-    set_velocity_body(10, 0, 0)
-    print("direction Nord")
-    time.sleep(1)
-    counter = counter + 1
-# negative sud, positif nord
-time.sleep(1)
-counter = 0
+#vers le Nord
+setVitesse(10,0,0,5)
 
-while counter < 2:
-#    apply_force(-vx, vy, vz)
-    set_velocity_body(-10, 0, 0)
-    print("direction Sud")
-    time.sleep(1)
-    counter = counter + 1
+#vers le Sud
+setVitesse(-10,0,0,5)
 
-time.sleep(1)
-counter = 0
-# negative ouest, positif est
-while counter < 2:
-#    apply_force(vx, vy, vz)
-    set_velocity_body(0, 10, 0)
-    print("direction est")
-    time.sleep(1)
-    counter = counter + 1
+#vers l'Est
+setVitesse(0,10,0,5)
 
-time.sleep(1)
-counter = 0
-
-while counter < 2:
-#    apply_force(vx, -vy, vz)
-    set_velocity_body(0, -10, 0)
-    print("direction ouest")
-    time.sleep(1)
-    counter = counter + 1
-
-time.sleep(1)
+#vers l'Ouest
+setVitesse(0,-10,0,5)
 
 
 vehicule.mode = VehicleMode("RTL")
@@ -200,3 +177,48 @@ vehicule.close()
 sitl.stop()
 
 # Fermer SITL proprement
+###### problèmes
+# - Le code est malpropre
+# - Il n'y a pas de meilleurs moyen pour utiliser les vitesse par exemple deltaTemps plutot que counter?
+# -
+
+"""
+counter = 0
+#  Vx => negative sud, positif nord
+
+def vitesseNord(counter):
+    while counter < 2:
+        setVitesse(10, 0, 0)
+        print("direction Nord")
+        time.sleep(1)
+        counter = counter + 1
+    time.sleep(1)
+    counter = 0
+def vitesseSud(counter):
+    while counter < 2:
+        setVitesse(-10, 0, 0)
+        print("direction Sud")
+        time.sleep(1)
+        counter = counter + 1
+    time.sleep(1)
+    counter = 0
+
+
+# Vy => negative ouest, positif est
+while counter < 2:
+    setVitesse(0, 10, 0)
+    print("direction est")
+    time.sleep(1)
+    counter = counter + 1
+
+time.sleep(1)
+counter = 0
+
+while counter < 2:
+    setVitesse(0, -10, 0)
+    print("direction ouest")
+    time.sleep(1)
+    counter = counter + 1
+
+time.sleep(1)
+"""
