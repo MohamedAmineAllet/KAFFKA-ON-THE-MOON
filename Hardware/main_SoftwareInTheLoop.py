@@ -2,7 +2,7 @@ import subprocess
 import dronekit_sitl
 import time
 import argparse
-
+import math
 import collections
 
 from pymavlink import mavutil
@@ -33,17 +33,20 @@ coefficient_resistance_air = 0.1
 delta_temps = 0.1
 
 
-def apply_force(vx, vy, vz):
+def apply_force(vx, vy, vz, teta_X=0, teta_Y=0):
     fx_trainee = vx * -coefficient_resistance_air
     fy_trainee = vy * -coefficient_resistance_air
     fz_trainee = vz * -coefficient_resistance_air
 
+    f_total_poussee = masse * gravitational  # pas sure
     fy_g = -masse * gravitational
-    fy_poussee = masse * gravitational
+    fz_poussee = f_total_poussee * math.cos(teta_X) * math.cos(teta_Y)
+    fx_poussee = f_total_poussee * math.sin(teta_X)
+    fy_poussee = f_total_poussee * math.sin(teta_Y)
 
-    fx_total = fx_trainee
+    fx_total = fx_trainee + fx_poussee
     fy_total = fy_trainee + fy_poussee + fy_g
-    fz_total = fz_trainee
+    fz_total = fz_trainee + fz_poussee
 
     ax = fx_total / masse
     ay = fy_total / masse
@@ -84,7 +87,8 @@ def set_velocity_body(vx, vy, vz):
         0,
         0, 0,
         mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED,
-        0B0000111111000111,
+        0b0000111111000111,
+        0,0,0,
         vx, vy, vz,
         0, 0, 0,
         0, 0, )
@@ -133,15 +137,20 @@ def arm_and_takeoff(target_altitude):
     return None
 
 
+# vitesse intial a 0
+
+print("Modes disponibles:", vehicule.mode)
+
 """ ****La Mission en question**** """
 # vehicle = connectMyCopter() # Pour le Speedou
 arm_and_takeoff(10)
-vx, vy, vz = 0
+#vx,vy,vz = 0
+#vx, vy, vz = apply_force(vx,vy,vz)
 
 counter = 0
 while counter < 2:
-    apply_force(vx, vy, vz)
-    set_velocity_body(vx, vy, vz)
+#    apply_force(vx, vy, vz)
+    set_velocity_body(10, 0, 0)
     print("direction Nord")
     time.sleep(1)
     counter = counter + 1
@@ -150,8 +159,8 @@ time.sleep(1)
 counter = 0
 
 while counter < 2:
-    apply_force(-vx, vy, vz)
-    set_velocity_body(vx, vy, vz)
+#    apply_force(-vx, vy, vz)
+    set_velocity_body(-10, 0, 0)
     print("direction Sud")
     time.sleep(1)
     counter = counter + 1
@@ -160,8 +169,8 @@ time.sleep(1)
 counter = 0
 # negative ouest, positif est
 while counter < 2:
-    apply_force(vx, vy, vz)
-    set_velocity_body(vx, vy, vz)
+#    apply_force(vx, vy, vz)
+    set_velocity_body(0, 10, 0)
     print("direction est")
     time.sleep(1)
     counter = counter + 1
@@ -170,16 +179,19 @@ time.sleep(1)
 counter = 0
 
 while counter < 2:
-    apply_force(vx, -vy, vz)
-    set_velocity_body(vx, vy, vz)
+#    apply_force(vx, -vy, vz)
+    set_velocity_body(0, -10, 0)
     print("direction ouest")
     time.sleep(1)
     counter = counter + 1
 
 time.sleep(1)
-counter = 0
+
 
 vehicule.mode = VehicleMode("RTL")
+if vehicule.mode == VehicleMode("RTL"):
+    print("Retourne au lauch")
+
 # retourne au lauch
 
 time.sleep(2)
