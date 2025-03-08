@@ -15,6 +15,7 @@ if not hasattr(collections, 'MutableMapping'):
 import dronekit_sitl
 from dronekit import connect, VehicleMode, LocationGlobalRelative
 import time
+from dronekit import LocationGlobalRelative
 
 print("Tous le monde est prêt? On met les voiiiles...")
 
@@ -36,6 +37,17 @@ def setGuidedMode():
         4  # Mode GUIDED = 4 en ArduPilot
     )
     time.sleep(1)
+
+def setReturnToLauch():
+
+    "Forcer le mode RTL via mavLink"
+    vehicule._master.mav.set_mode_send(
+        vehicule._master.target_system,
+        mavutil.mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,
+        6  # Mode GUIDED = 4 en ArduPilot
+    )
+    time.sleep(1)
+
 
 """ 
 # Méthode avec les forces À Revoir 
@@ -134,8 +146,12 @@ def setVitesse(vx, vy, vz, duree):
         # Afficher la position relative au vehicule
         position_ned = vehicule.location.local_frame  # [North, East, Down] en mètres
         yaw = vehicule.attitude.yaw  # Orientation du drone (yaw) en radians
+        latitude = vehicule.location.global_frame.lat  # Current latitude
+        longitude = vehicule.location.global_frame.lon  # Current longitude
+        altitude = vehicule.location.global_relative_frame.alt  # Altitude
         position_body = positionConversion([position_ned.north, position_ned.east, position_ned.down], yaw)
         print("Position Locale Relative à Home: %s" % position_body)
+        print(" latitude : %.6f" % latitude + "longitude : %.6f" % longitude + "Altidude: %.2f m" %altitude)
 
 
 # Méthode pour armer et décoller à une altitude donnée
@@ -176,6 +192,29 @@ def arm_and_takeoff(target_altitude):
     print("Target altitude reached")
     return None
 
+def ajouter_point(latitude, longitude, altitude):
+    return LocationGlobalRelative(latitude,longitude,altitude)
+
+
+def suivre_trajectoire(vehicule, point):
+    setGuidedMode()
+
+    print(f"Navigation vers {point.lat}, {point.lon}, {point.alt}m")
+
+    vehicule.simple_goto(point, groundspeed= 10)
+
+    while True:# permet de calculer la distance restante jusqu'a notre point
+        position_actuelle = vehicule.location.global_relative_frame
+        distance = math.sqrt(
+            (point.lat - position_actuelle.lat) ** 2 +
+            (point.lon - position_actuelle.lon) ** 2
+        ) * 111320  # Convertir degrés -> mètres, 1 degres = 111320m
+
+        print(f" Distance restante : {distance:.2f}m")
+        if distance < 2:
+            print("trajectoire atteinte !")
+            break
+        time.sleep(2)
 
 """ ****La Mission en question**** """
 # vehicle = connectMyCopter() # Pour le Speedou
@@ -193,9 +232,12 @@ setVitesse(0, 10, 0, 5)
 # vers l'Ouest
 setVitesse(0, -10, 0, 5)
 
-vehicule.mode = VehicleMode("RTL")
-if vehicule.mode == VehicleMode("RTL"):
-    print("Retourne au lauch")
+point = ajouter_point(-35.362919, 149.165452, 7)
+
+suivre_trajectoire(vehicule, point)
+
+setReturnToLauch()
+
 
 # retourne au lauch
 
@@ -208,7 +250,7 @@ sitl.stop()
 ###### problèmes
 # - Le code est malpropre
 # - Il n'y a pas de meilleurs moyen pour utiliser les vitesse par exemple deltaTemps plutot que counter?
-# -
+# - set retouner au lauch ne fonctionne pas, par exemple guided fonctione belle et bien
 
 """
 counter = 0
