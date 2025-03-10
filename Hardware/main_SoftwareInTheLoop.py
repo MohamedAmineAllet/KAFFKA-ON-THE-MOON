@@ -27,6 +27,7 @@ print(f"La chaîne de connection du véhicule: {connection_string}")
 # Se connecter au véhicule simulé
 vehicule = connect(connection_string, wait_ready=True)
 
+
 def setGuidedMode():
     """
     Forcer le mode guide via mavlink
@@ -38,9 +39,10 @@ def setGuidedMode():
     )
     time.sleep(1)
 
-def setReturnToLauch():
 
+def setReturnToLauch():
     "Forcer le mode RTL via mavLink"
+    print("on retourne au lauch")
     vehicule._master.mav.set_mode_send(
         vehicule._master.target_system,
         mavutil.mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,
@@ -150,8 +152,8 @@ def setVitesse(vx, vy, vz, duree):
         longitude = vehicule.location.global_frame.lon  # Current longitude
         altitude = vehicule.location.global_relative_frame.alt  # Altitude
         position_body = positionConversion([position_ned.north, position_ned.east, position_ned.down], yaw)
-        print("Position Locale Relative à Home: %s" % position_body)
-        print(" latitude : %.6f" % latitude + "longitude : %.6f" % longitude + "Altidude: %.2f m" %altitude)
+        print(position_ned)
+        print(" latitude : %.6f" % latitude + " longitude : %.6f" % longitude + " altidude: %.2f m" % altitude)
 
 
 # Méthode pour armer et décoller à une altitude donnée
@@ -193,7 +195,7 @@ def arm_and_takeoff(target_altitude):
     return None
 
 def ajouter_point(latitude, longitude, altitude):
-    return LocationGlobalRelative(latitude,longitude,altitude)
+    return LocationGlobalRelative(latitude, longitude, altitude)
 
 
 def suivre_trajectoire(vehicule, point):
@@ -201,9 +203,9 @@ def suivre_trajectoire(vehicule, point):
 
     print(f"Navigation vers {point.lat}, {point.lon}, {point.alt}m")
 
-    vehicule.simple_goto(point, groundspeed= 10)
+    vehicule.simple_goto(point, groundspeed=10)
 
-    while True:# permet de calculer la distance restante jusqu'a notre point
+    while True:  # permet de calculer la distance restante jusqu'a notre point
         position_actuelle = vehicule.location.global_relative_frame
         distance = math.sqrt(
             (point.lat - position_actuelle.lat) ** 2 +
@@ -215,6 +217,34 @@ def suivre_trajectoire(vehicule, point):
             print("trajectoire atteinte !")
             break
         time.sleep(2)
+
+
+def voler_en_cercle(rayon, vitesse, boucles=1, duree=10):
+    print("demarrage du vol en cercle")
+    points = 24
+    angle_step = 2 * math.pi / points
+    for loop in range(0, boucles):
+        for point in range(points):
+            angle = point * angle_step
+            vx = vitesse * math.cos(angle)  # Vitesse sur l'axe Nord/Sud
+            vy = vitesse * math.sin(angle)  # Vitesse sur l'axe Est/Ouest
+            vz = 0  # Altitude constante
+            setVitesse(vx, vy, vz, duree)
+    print("vole en cercle terminer")
+    setReturnToLauch()
+    """
+            nb_points = int(duree / 0.5)
+            angle_incrementer = (2 * math.pi)
+
+            for i in range(nb_points):
+                angle = i * angle_incrementer
+                vx = vitesse * math.cos(angle)
+                vy = vitesse * math.sin(angle)
+                setVitesse(vx, vy, 0, 1)
+            print("vole en cercle terminer")
+            setReturnToLauch()
+            """
+
 
 """ ****La Mission en question**** """
 # vehicle = connectMyCopter() # Pour le Speedou
@@ -236,10 +266,8 @@ point = ajouter_point(-35.362919, 149.165452, 7)
 
 suivre_trajectoire(vehicule, point)
 
-setReturnToLauch()
+voler_en_cercle(5, 3, 10)
 
-
-# retourne au lauch
 
 time.sleep(2)
 
@@ -250,7 +278,7 @@ sitl.stop()
 ###### problèmes
 # - Le code est malpropre
 # - Il n'y a pas de meilleurs moyen pour utiliser les vitesse par exemple deltaTemps plutot que counter?
-# - set retouner au lauch ne fonctionne pas, par exemple guided fonctione belle et bien
+# -
 
 """
 counter = 0
