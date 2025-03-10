@@ -5,11 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="1) Reduction de l'erreur + ajout d'une plus grand base de donnes de data du climat au canada.&#10;2) ajout Popup pour confirmer le decollage/atterissage.&#10;Date :  2025-03-04&#10;commit par : Mohamed-Amine,Allet">
-      <change afterPath="$PROJECT_DIR$/MachinesIntelligentes/1VersionPDredicteurMeteo.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Projet D'integration SIM.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Projet D'integration SIM.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MachinesIntelligentes/Version1PredicteurMeteo.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MachinesIntelligentes/Version2PredicteurMeteo.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/MachinesIntelligentes/Version2PredicteurMeteo.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MachinesIntelligentes/Version3PredicteurMeteo.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/MachinesIntelligentes/Version3PredicteurMeteo.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Software/Controle De La Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Software/Controle_De_La_Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Software/main_Application.py" beforeDir="false" afterPath="$PROJECT_DIR$/Software/main_Application.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +26,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -33,12 +34,12 @@
     &quot;assignee&quot;: &quot;KKML19&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/MohamedAmineAllet/KAFFKA-ON-THE-MOON.git",
-    "accountId": "c394922b-ccad-4d54-9e13-cd46e4bd3c47"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/MohamedAmineAllet/KAFFKA-ON-THE-MOON.git&quot;,
+    &quot;accountId&quot;: &quot;c394922b-ccad-4d54-9e13-cd46e4bd3c47&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$USER_HOME$/AppData/Local/Programs/Python/Python312/Lib/site-packages/dronekit/__init__.py" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -55,6 +56,8 @@
   "keyToString": {
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Python.Are Fingers up or Down.executor": "Run",
+    "Python.Controle De La Main.executor": "Run",
+    "Python.Controle_De_La_Main.executor": "Run",
     "Python.SITL.executor": "Run",
     "Python.Simple-Hand-Tracker.executor": "Run",
     "Python.main.executor": "Run",
@@ -168,7 +171,7 @@
       <workItem from="1739194429451" duration="121000" />
       <workItem from="1739208617220" duration="6428000" />
       <workItem from="1739684789295" duration="1180000" />
-      <workItem from="1741052485374" duration="37107000" />
+      <workItem from="1741052485374" duration="39015000" />
     </task>
     <task id="LOCAL-00001" summary="Base code projet en SIM.&#10;Date :  2025-02-03&#10;commit par : Mohamed-Amine,Allet">
       <option name="closed" value="true" />
@@ -234,7 +237,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741134207225</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="1) Reduction de l'erreur + ajout d'une plus grand base de donnes de data du climat au canada.&#10;2) ajout Popup pour confirmer le decollage/atterissage.&#10;Date :  2025-03-04&#10;commit par : Mohamed-Amine,Allet">
+      <option name="closed" value="true" />
+      <created>1741489511609</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1741489511609</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -252,10 +263,12 @@
     <option name="LAST_COMMIT_MESSAGE" value="1) Reduction de l'erreur + ajout d'une plus grand base de donnes de data du climat au canada.&#10;2) ajout Popup pour confirmer le decollage/atterissage.&#10;Date :  2025-03-04&#10;commit par : Mohamed-Amine,Allet" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/workspace_xml$main_SoftwareInTheLoop.coverage" NAME="main_SoftwareInTheLoop Coverage Results" MODIFIED="1741490029974" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Hardware" />
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$main_Application.coverage" NAME="main_Application Coverage Results" MODIFIED="1741051919052" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$Are_Fingers_up_or_Down.coverage" NAME="Are Fingers up or Down Coverage Results" MODIFIED="1739206408783" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/.venv1/Scripts" />
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$test6.coverage" NAME="test6 Coverage Results" MODIFIED="1740196660784" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
-    <SUITE FILE_PATH="coverage/workspace_xml$main_Application.coverage" NAME="main_Application Coverage Results" MODIFIED="1741133941903" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
+    <SUITE FILE_PATH="coverage/workspace_xml$Controle_De_La_Main.coverage" NAME="Controle_De_La_Main Coverage Results" MODIFIED="1741610936673" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
+    <SUITE FILE_PATH="coverage/workspace_xml$main_Application.coverage" NAME="main_Application Coverage Results" MODIFIED="1741611036925" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$Simple_Hand_Tracker.coverage" NAME="Simple-Hand-Tracker Coverage Results" MODIFIED="1739206216524" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/workspace_xml$Simple_Hand_Tracker.coverage" NAME="Simple-Hand-Tracker Coverage Results" MODIFIED="1741134408467" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$predicteurDeMeteo.coverage" NAME="predicteurDeMeteo Coverage Results" MODIFIED="1739685614010" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MachinesIntelligentes" />
