@@ -5,6 +5,7 @@ import argparse
 import math
 import collections
 
+
 from pymavlink import mavutil
 
 if not hasattr(collections, 'MutableMapping'):
