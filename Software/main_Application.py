@@ -1,3 +1,5 @@
+import multiprocessing
+
 from kivy.app import App
 from kivy.properties import NumericProperty
 from kivy.uix.image import Image
@@ -9,7 +11,11 @@ from kivy.uix.screenmanager import ScreenManager, Screen, RiseInTransition
 from kivy.animation import Animation
 import cv2
 
+
 #Biblioteque utile a la transmission video du Rpy vers l'appareil.
+
+
+
 
 class JoystickDeplacementHorizental(Widget):
     deplacement_x = NumericProperty(0)
@@ -73,8 +79,6 @@ class CameraWidget(Image):
     def __init__(self, **kwargs):
         super(CameraWidget, self).__init__(**kwargs)
         self.capture = None  # La capture vidéo sera activée/désactivée
-
-#à changer la source pour l'URL de la caméra.
     def start_camera(self,source=0, fps=30):
         #Demarre la camera dependamment de la source.
         self.capture = cv2.VideoCapture(source)
@@ -84,6 +88,7 @@ class CameraWidget(Image):
             return
         Clock.schedule_interval(self.update, 1.0 / fps)
 
+    #à changer la source pour l'URL de la caméra.
     def update(self, dt):
 
         if self.capture:
@@ -110,15 +115,17 @@ class InterfacePilotage(Screen):
     drone_en_vol = False
     slider_altitude_active = False
     slider_rotation_active = False
-
     def decoller_atterir_drone(self):#Pas oublier d'ajouter l'effet du drone ici en gros lorsque le drone decolle on donne une vitesse a voir avec Kemuel.
         if self.drone_en_vol:
             self.ids.img_decoller_atterir_drone.source = "ImageInterfaceCamera/ImageDecollerDrone.png"
+            self.drone_en_vol = not self.drone_en_vol
+
+            return 1
         else:
             self.ids.img_decoller_atterir_drone.source = "ImageInterfaceCamera/ImageAtterireDrone.png"
+            self.drone_en_vol = not self.drone_en_vol
 
-        self.drone_en_vol = not self.drone_en_vol
-
+            return -1
 
     def demarrerHandTracking(self):
         # Ce code nous permet de lancer un autre fichier python dans le fichier python courrant.
@@ -130,6 +137,8 @@ class InterfacePilotage(Screen):
             print("Desactiver la camera")
         else:
             run_program()
+
+
 
     def connecter_la_camera(self):
 
@@ -186,8 +195,6 @@ class InterfacePilotage(Screen):
         anim.start(self.ids.slider_rotation)
         self.ids.slider_rotation.value = 0
 
-
-
     def reinitialization(self):
         #Reset la camera.
         camera = self.ids.camera_widget
@@ -221,7 +228,9 @@ class CameraProjetApp(App):
         #Permet de choisir le type de transition.
         sm.transition = RiseInTransition()
         return sm
-
-
 if __name__ == '__main__':
     CameraProjetApp().run()
+
+
+
+
