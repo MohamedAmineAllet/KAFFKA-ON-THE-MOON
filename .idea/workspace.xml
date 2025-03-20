@@ -8,6 +8,7 @@
     <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="1) Modification dans le titre des fichiers.&#10;Date :  2025-03-10&#10;commit par : Mohamed-Amine,Allet">
       <change afterPath="$PROJECT_DIR$/MachinesIntelligentes/Donnés/weatherstats_montreal_daily (3).csv" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Software/ImageInterfaceCamera/The_Goat.png" afterDir="false" />
+    <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="1) Ajout d'un fichier lieur_fichier.py qui lance en parralèle les deux mains.&#10;2)Utilisation d'un socket qui permet de partager certaines données entre les fichiers mains constamment dès le moment ou elle sont changé dans un fichier(Ici main_Application.py)&#10;3) Reset a 0 la valeur transférée lorsqu'on relache le joystick.&#10;Date :  2025-03-20&#10;commit par : Mohamed-Amine,Allet">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Hardware/main_SoftwareInTheLoop.py" beforeDir="false" afterPath="$PROJECT_DIR$/Hardware/main_SoftwareInTheLoop.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Hardware/main_SoftwareInTheLoop.py" beforeDir="false" afterPath="$PROJECT_DIR$/Hardware/main_SoftwareInTheLoop.py" afterDir="false" />
@@ -91,11 +92,14 @@
     &quot;Python.Controle_De_La_Main.executor&quot;: &quot;Run&quot;,
     &quot;Python.SITL.executor&quot;: &quot;Run&quot;,
     &quot;Python.Simple-Hand-Tracker.executor&quot;: &quot;Run&quot;,
+    &quot;Python.fichier2.executor&quot;: &quot;Run&quot;,
+    &quot;Python.lieur_fichier.executor&quot;: &quot;Run&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
     &quot;Python.main_Application.executor&quot;: &quot;Run&quot;,
     &quot;Python.main_SoftwareInTheLoop.executor&quot;: &quot;Run&quot;,
     &quot;Python.predicteurDeMeteo.executor&quot;: &quot;Run&quot;,
     &quot;Python.predicteurTest.executor&quot;: &quot;Run&quot;,
+    &quot;Python.relieur_fichier.executor&quot;: &quot;Run&quot;,
     &quot;Python.test2.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
@@ -119,11 +123,11 @@
       <recent name="C:\Amine\Bdeb\Informatique\Projet D'integration SIM\KAFFKA-ON-THE-MOON\Software\ImageInterfaceCamera" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Amine\Bdeb\Informatique\Projet D'integration SIM\KAFFKA-ON-THE-MOON" />
+      <recent name="C:\Amine\Bdeb\Informatique\Projet D'integration SIM\KAFFKA-ON-THE-MOON\Software" />
       <recent name="C:\Amine\Bdeb\Informatique\Projet D'integration SIM\KAFFKA-ON-THE-MOON\Software\ImageInterfaceCamera" />
       <recent name="C:\Amine\Bdeb\Informatique\Projet D'integration SIM\KAFFKA-ON-THE-MOON\MachinesIntelligentes\Donnés" />
       <recent name="C:\Amine\Bdeb\Informatique\Projet D'integration SIM\KAFFKA-ON-THE-MOON\MachinesIntelligentes" />
-      <recent name="C:\Users\Fatma\kivy_venv\KAFFKA-ON-THE-MOON\Software\fichiersHandtracking" />
-      <recent name="C:\Users\Fatma\kivy_venv\KAFFKA-ON-THE-MOON\Software" />
     </key>
   </component>
   <component name="RunManager">
@@ -210,7 +214,11 @@
       <workItem from="1741742908564" duration="9237000" />
       <workItem from="1742001273721" duration="4869000" />
       <workItem from="1742093727804" duration="2287000" />
-      <workItem from="1742177085136" duration="13042000" />
+      <workItem from="1742177085136" duration="27427000" />
+      <workItem from="1742272882686" duration="2481000" />
+      <workItem from="1742329707563" duration="2649000" />
+      <workItem from="1742408469120" duration="1521000" />
+      <workItem from="1742439715122" duration="5900000" />
     </task>
     <task id="LOCAL-00001" summary="Base code projet en SIM.&#10;Date :  2025-02-03&#10;commit par : Mohamed-Amine,Allet">
       <option name="closed" value="true" />
@@ -292,7 +300,31 @@
       <option name="project" value="LOCAL" />
       <updated>1741611806878</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="1) Ajout l'affichage des différents joysticks et on rend une valeur pour déplacer le drone.&#10;Date :  2025-03-17&#10;commit par : Mohamed-Amine,Allet">
+      <option name="closed" value="true" />
+      <created>1742227133733</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1742227133733</updated>
+    </task>
+    <task id="LOCAL-00012" summary="1) Ajout l'affichage des différents joysticks et on rend une valeur pour déplacer le drone.&#10;Date :  2025-03-17&#10;commit par : Mohamed-Amine,Allet">
+      <option name="closed" value="true" />
+      <created>1742257500294</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1742257500294</updated>
+    </task>
+    <task id="LOCAL-00013" summary="1) Ajout d'un fichier lieur_fichier.py qui lance en parralèle les deux mains.&#10;2)Utilisation d'un socket qui permet de partager certaines données entre les fichiers mains constamment dès le moment ou elle sont changé dans un fichier(Ici main_Application.py)&#10;3) Reset a 0 la valeur transférée lorsqu'on relache le joystick.&#10;Date :  2025-03-20&#10;commit par : Mohamed-Amine,Allet">
+      <option name="closed" value="true" />
+      <created>1742449706347</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1742449706347</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -308,20 +340,25 @@
     <MESSAGE value="1)Ajout d'un bouton activation/desactivaton camera.&#10;2)Ajout bouton retour.&#10;Date :  2025-03-03&#10;commit par : Mohamed-Amine,Allet" />
     <MESSAGE value="1) Reduction de l'erreur + ajout d'une plus grand base de donnes de data du climat au canada.&#10;2) ajout Popup pour confirmer le decollage/atterissage.&#10;Date :  2025-03-04&#10;commit par : Mohamed-Amine,Allet" />
     <MESSAGE value="1) Modification dans le titre des fichiers.&#10;Date :  2025-03-10&#10;commit par : Mohamed-Amine,Allet" />
+    <MESSAGE value="1) Ajout l'affichage des différents joysticks et on rend une valeur pour déplacer le drone.&#10;Date :  2025-03-17&#10;commit par : Mohamed-Amine,Allet" />
+    <MESSAGE value="1) Ajout d'un fichier lieur_fichier.py qui lance en parralèle les deux mains.&#10;2)Utilisation d'un socket qui permet de partager certaines données entre les fichiers mains constamment dès le moment ou elle sont changé dans un fichier(Ici main_Application.py)&#10;3) Reset a 0 la valeur transférée lorsqu'on relache le joystick.&#10;Date :  2025-03-20&#10;commit par : Mohamed-Amine,Allet" />
+    <option name="LAST_COMMIT_MESSAGE" value="1) Ajout d'un fichier lieur_fichier.py qui lance en parralèle les deux mains.&#10;2)Utilisation d'un socket qui permet de partager certaines données entre les fichiers mains constamment dès le moment ou elle sont changé dans un fichier(Ici main_Application.py)&#10;3) Reset a 0 la valeur transférée lorsqu'on relache le joystick.&#10;Date :  2025-03-20&#10;commit par : Mohamed-Amine,Allet" />
     <option name="LAST_COMMIT_MESSAGE" value="1) Modification dans le titre des fichiers.&#10;Date :  2025-03-10&#10;commit par : Mohamed-Amine,Allet" />
     <MESSAGE value="methode permetant au drone de voler en cercle(dans le main_SoftwareInTheLoop.py)&#10;Kian Gokhale&#10;2025-03-10" />
     <option name="LAST_COMMIT_MESSAGE" value="methode permetant au drone de voler en cercle(dans le main_SoftwareInTheLoop.py)&#10;Kian Gokhale&#10;2025-03-10" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/workspace_xml$main_SoftwareInTheLoop.coverage" NAME="main_SoftwareInTheLoop Coverage Results" MODIFIED="1741490029974" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Hardware" />
+    <SUITE FILE_PATH="coverage/workspace_xml$relieur_fichier.coverage" NAME="relieur_fichier Coverage Results" MODIFIED="1742257066605" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
+    <SUITE FILE_PATH="coverage/workspace_xml$main_SoftwareInTheLoop.coverage" NAME="main_SoftwareInTheLoop Coverage Results" MODIFIED="1742361891064" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software/Hardware" />
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$main_Application.coverage" NAME="main_Application Coverage Results" MODIFIED="1741051919052" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$Are_Fingers_up_or_Down.coverage" NAME="Are Fingers up or Down Coverage Results" MODIFIED="1739206408783" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/.venv1/Scripts" />
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$test6.coverage" NAME="test6 Coverage Results" MODIFIED="1740196660784" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/workspace_xml$Controle_De_La_Main.coverage" NAME="Controle_De_La_Main Coverage Results" MODIFIED="1741610936673" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
-    <SUITE FILE_PATH="coverage/workspace_xml$main_Application.coverage" NAME="main_Application Coverage Results" MODIFIED="1742223527459" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
+    <SUITE FILE_PATH="coverage/workspace_xml$main_Application.coverage" NAME="main_Application Coverage Results" MODIFIED="1742361634464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$Simple_Hand_Tracker.coverage" NAME="Simple-Hand-Tracker Coverage Results" MODIFIED="1739206216524" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/workspace_xml$Simple_Hand_Tracker.coverage" NAME="Simple-Hand-Tracker Coverage Results" MODIFIED="1741134408467" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$predicteurDeMeteo.coverage" NAME="predicteurDeMeteo Coverage Results" MODIFIED="1739685614010" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MachinesIntelligentes" />
+    <SUITE FILE_PATH="coverage/workspace_xml$fichier2.coverage" NAME="fichier2 Coverage Results" MODIFIED="1742252648825" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/workspace_xml$test2.coverage" NAME="test2 Coverage Results" MODIFIED="1741641627734" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$main_Application.coverage" NAME="main_Application Coverage Results" MODIFIED="1738893605448" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$main_SoftwareInTheLoop.coverage" NAME="main_SoftwareInTheLoop Coverage Results" MODIFIED="1740425766430" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Hardware" />
@@ -330,5 +367,6 @@
     <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$main_SoftwareInTheLoop.coverage" NAME="main_SoftwareInTheLoop Coverage Results" MODIFIED="1738893676110" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Hardware" />
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$Simple_Hand_Tracker.coverage" NAME="Simple-Hand-Tracker Coverage Results" MODIFIED="1739685692020" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$Version1PredicteurMeteo.coverage" NAME="Version1PredicteurMeteo Coverage Results" MODIFIED="1739906755431" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MachinesIntelligentes" />
+    <SUITE FILE_PATH="coverage/workspace_xml$lieur_fichier.coverage" NAME="lieur_fichier Coverage Results" MODIFIED="1742449449410" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
   </component>
 </project>
