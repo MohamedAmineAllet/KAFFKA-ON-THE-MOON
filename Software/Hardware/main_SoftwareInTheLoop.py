@@ -1,4 +1,7 @@
 import subprocess
+import threading
+from time import sleep
+
 import dronekit_sitl
 import time
 import argparse
@@ -17,6 +20,11 @@ from dronekit import connect, VehicleMode, LocationGlobalRelative
 import time
 from dronekit import LocationGlobalRelative
 
+import socket
+
+
+
+
 print("Tous le monde est prêt? On met les voiiiles...")
 
 # Commencer la simulation
@@ -27,7 +35,31 @@ print(f"La chaîne de connection du véhicule: {connection_string}")
 # Se connecter au véhicule simulé
 vehicule = connect(connection_string, wait_ready=True)
 
+def receveur_joystick_valeur():
+    while True:
+        try:
+            client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            client.connect(("localhost", 12345))
+            print("Conncté au serveur joystick")
 
+            while True:
+                data = client.recv(1024).decode()
+                if not data:
+                    break
+                try:
+                    x_str,y_str = data.split(',')
+                    x = float(x_str)
+                    y = float(y_str)
+                    set_vitesse_drone_version_2(x,y)
+                except ValueError:
+                    print("Données invalides :",data)
+        except(ConnectionRefusedError,ConnectionResetError ) as e:
+            print("Erreur de connection reconnection dans 1s...",str(e))
+            time.sleep(1)
+        finally:
+            client.close()
+joystick_thread = threading.Thread(target=receveur_joystick_valeur,daemon=True)
+joystick_thread.start()
 def setGuidedMode():
     """
     Forcer le mode guide via mavlink
@@ -156,6 +188,19 @@ def setVitesse(vx, vy, vz, duree):
         print(" latitude : %.6f" % latitude + " longitude : %.6f" % longitude + " altidude: %.2f m" % altitude)
 
 
+def set_vitesse_drone_version_2(vx, vy):
+    msg = vehicule.message_factory.set_position_target_local_ned_encode(
+        0, 0, 0,
+        mavutil.mavlink.MAV_FRAME_BODY_NED,
+        0b0000111111000111,
+        0, 0, 0,
+        vx, vy, 0,  # Utilisation des valeurs X/Y du joystick
+        0, 0, 0,
+        0, 0)
+
+    vehicule.send_mavlink(msg)
+    print(f"Vitesse mise à jour: X={vx:.2f}, Y={vy:.2f}")
+
 # Méthode pour armer et décoller à une altitude donnée
 def arm_and_takeoff(target_altitude):
     while not vehicule.is_armable:
@@ -244,6 +289,10 @@ def voler_en_cercle(rayon, vitesse, boucles=1, duree=10):
             print("vole en cercle terminer")
             setReturnToLauch()
             """
+def tester_le_transfert_de_donner(coefficiant_x,coefficiant_y):
+    print("coeff x",coefficiant_x)
+    print("coeff y",coefficiant_y)
+    
 
 
 """ ****La Mission en question**** """

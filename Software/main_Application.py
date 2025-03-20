@@ -1,25 +1,74 @@
-import multiprocessing
+"""
+Ce programme s'occupe de gerer l'image d'une caméra qui se trouve sur un drone dans ce context,il s'occupe aussi
+d'afficher les commandes qui controlent le drone en question,l'application s'occupe de prendre une photo/vidéo pour la
+stocker dans un fichier réservé pour ça,(...)
+
+@autheur : Mohamed-Amine,Allet
+@autheur :
+@autheur :
+@autheur :
+@version : Python (3.11.9) Kivy(2.3.1)
+"""
 
 from kivy.app import App
 from kivy.properties import NumericProperty
 from kivy.uix.image import Image
 from kivy.graphics.texture import Texture
-from kivy.clock import Clock
 from kivy.uix.widget import Widget
 from kivy.graphics import Color, Ellipse, Line
 from kivy.uix.screenmanager import ScreenManager, Screen, RiseInTransition
 from kivy.animation import Animation
+from kivy.clock import Clock
 import cv2
+#from Hardware import main_SoftwareInTheLoop
 
 
 #Biblioteque utile a la transmission video du Rpy vers l'appareil.
+import socket
+import time
+import threading
 
+class JoystickServer(threading.Thread):
+    def __init__(self):
+        super().__init__()
+        self.joystick_x = 0.0
+        self.joystick_y = 0.0
+        self.running = True
+        self.lock = threading.Lock()
 
+    def run(self):
+        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server.bind(('localhost', 12345))
+        server.listen(1)
+        print("Serveur joystick en écoute ...")
 
-
+        conn, addr = server.accept()
+        print("Client connecté", addr)
+        while self.running:
+            with self.lock:
+                data = f"{self.joystick_x},{self.joystick_y}".encode()
+            try:
+                conn.sendall(data)
+                time.sleep(0.05)
+            except(BrokenPipeError,ConnectionResetError):
+                break
+        conn.close()
+        server.close()
+    def update_values(self,x,y):
+        with self.lock:
+            self.joystick_x = x
+            self.joystick_y = y
+joystick_server = JoystickServer()
+joystick_server.start()
+"""
+La class JoystickDeplacementHorizental est une class que j'ai conçu afin de stocker deux coefficiant un en x et un en y
+que je vais utiliser pour déplacer le drone horizentalement seulement.Afin, d'illustrer ce joystick a l'utilisateur 
+il sera dessiner avec une premiere elipse comme background et une deuxième elipse blanche comme joystick
+"""
 class JoystickDeplacementHorizental(Widget):
     deplacement_x = NumericProperty(0)
     deplacement_y = NumericProperty(0)
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.size = (200*(3/4), 200*(3/4))  # Taille du joystick
@@ -36,7 +85,12 @@ class JoystickDeplacementHorizental(Widget):
 
 
     def update_graphics_pos(self, *args):
-        """Met à jour la position des cercles lors d'un changement de position."""
+        """
+        La méthode update_graphics_pos s'occupe de changer l'affichage des positions des cercles de manière interactive
+        lorsque l'utilisateur clique a un endroit.
+        :param self:
+        :param args:
+        """
         base_x = self.center_x - self.base.size[0] / 2
         base_y = self.center_y - self.base.size[1] / 2
         self.base.pos = (base_x, base_y)
@@ -46,6 +100,13 @@ class JoystickDeplacementHorizental(Widget):
         self.knob.pos = (knob_x, knob_y)
 
     def on_touch_move(self, touch):# a ecrire toute les formules dans word.
+        """
+        En gros en rapide que je veux mieu écrire.(cette methode stock la valeeur de l'endroit ou touche
+        l'utilisateur pour la stocker afin de l'utiliser dans l'affichage
+         graphique pour aussi normalizer cette valeur afin de l'utiliser comme coefficiant x & y plus tard.
+        :param touch:
+        :return:
+        """
         if self.disabled:
             return False
         if self.collide_point(*touch.pos):
@@ -67,6 +128,8 @@ class JoystickDeplacementHorizental(Widget):
             # Mettre à jour les valeurs X et Y (normalisées entre -1 et 1)
             self.value_x = dx / max_radius
             self.value_y = dy / max_radius
+            #Update le transfert du coefficiant x et y.
+            joystick_server.update_values(self.value_x, self.value_y)
 
             print(f"Joystick position: X={self.value_x:.2f}, Y={self.value_y:.2f}")
 
@@ -74,6 +137,15 @@ class JoystickDeplacementHorizental(Widget):
         if self.disabled:
             return False
         self.update_graphics_pos()
+
+        # Envoyer les nouvelles valeurs au serveur après l'animation
+        def send_zero_values(dt):
+            joystick_server.update_values(0.0, 0.0)
+            print(f"Joystick relâché : X=0.00, Y=0.00")
+
+        Clock.schedule_once(send_zero_values, 0.2)
+    print("x",deplacement_x)
+    print("y",deplacement_y)
 
 class CameraWidget(Image):
     def __init__(self, **kwargs):
