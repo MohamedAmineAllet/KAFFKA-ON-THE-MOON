@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="1) Ajout l'affichage des différents joysticks et on rend une valeur pour déplacer le drone.&#10;Date :  2025-03-17&#10;commit par : Mohamed-Amine,Allet">
+    <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="1) Ajout d'un fichier lieur_fichier.py qui lance en parralèle les deux mains.&#10;2)Utilisation d'un socket qui permet de partager certaines données entre les fichiers mains constamment dès le moment ou elle sont changé dans un fichier(Ici main_Application.py)&#10;3) Reset a 0 la valeur transférée lorsqu'on relache le joystick.&#10;Date :  2025-03-20&#10;commit par : Mohamed-Amine,Allet">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MachinesIntelligentes/1VersionPDredicteurMeteo.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/MachinesIntelligentes/1VersionPDredicteurMeteo.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/Hardware/main_SoftwareInTheLoop.py" beforeDir="false" afterPath="$PROJECT_DIR$/Software/Hardware/main_SoftwareInTheLoop.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/lieur_fichier.py" beforeDir="false" afterPath="$PROJECT_DIR$/Software/lieur_fichier.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Software/main_Application.py" beforeDir="false" afterPath="$PROJECT_DIR$/Software/main_Application.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -186,7 +183,7 @@
       <workItem from="1742272882686" duration="2481000" />
       <workItem from="1742329707563" duration="2649000" />
       <workItem from="1742408469120" duration="1521000" />
-      <workItem from="1742439715122" duration="5508000" />
+      <workItem from="1742439715122" duration="5900000" />
     </task>
     <task id="LOCAL-00001" summary="Base code projet en SIM.&#10;Date :  2025-02-03&#10;commit par : Mohamed-Amine,Allet">
       <option name="closed" value="true" />
@@ -284,7 +281,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742257500294</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="1) Ajout d'un fichier lieur_fichier.py qui lance en parralèle les deux mains.&#10;2)Utilisation d'un socket qui permet de partager certaines données entre les fichiers mains constamment dès le moment ou elle sont changé dans un fichier(Ici main_Application.py)&#10;3) Reset a 0 la valeur transférée lorsqu'on relache le joystick.&#10;Date :  2025-03-20&#10;commit par : Mohamed-Amine,Allet">
+      <option name="closed" value="true" />
+      <created>1742449706347</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1742449706347</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -301,7 +306,8 @@
     <MESSAGE value="1) Reduction de l'erreur + ajout d'une plus grand base de donnes de data du climat au canada.&#10;2) ajout Popup pour confirmer le decollage/atterissage.&#10;Date :  2025-03-04&#10;commit par : Mohamed-Amine,Allet" />
     <MESSAGE value="1) Modification dans le titre des fichiers.&#10;Date :  2025-03-10&#10;commit par : Mohamed-Amine,Allet" />
     <MESSAGE value="1) Ajout l'affichage des différents joysticks et on rend une valeur pour déplacer le drone.&#10;Date :  2025-03-17&#10;commit par : Mohamed-Amine,Allet" />
-    <option name="LAST_COMMIT_MESSAGE" value="1) Ajout l'affichage des différents joysticks et on rend une valeur pour déplacer le drone.&#10;Date :  2025-03-17&#10;commit par : Mohamed-Amine,Allet" />
+    <MESSAGE value="1) Ajout d'un fichier lieur_fichier.py qui lance en parralèle les deux mains.&#10;2)Utilisation d'un socket qui permet de partager certaines données entre les fichiers mains constamment dès le moment ou elle sont changé dans un fichier(Ici main_Application.py)&#10;3) Reset a 0 la valeur transférée lorsqu'on relache le joystick.&#10;Date :  2025-03-20&#10;commit par : Mohamed-Amine,Allet" />
+    <option name="LAST_COMMIT_MESSAGE" value="1) Ajout d'un fichier lieur_fichier.py qui lance en parralèle les deux mains.&#10;2)Utilisation d'un socket qui permet de partager certaines données entre les fichiers mains constamment dès le moment ou elle sont changé dans un fichier(Ici main_Application.py)&#10;3) Reset a 0 la valeur transférée lorsqu'on relache le joystick.&#10;Date :  2025-03-20&#10;commit par : Mohamed-Amine,Allet" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/workspace_xml$relieur_fichier.coverage" NAME="relieur_fichier Coverage Results" MODIFIED="1742257066605" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />

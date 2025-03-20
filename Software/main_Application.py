@@ -138,7 +138,7 @@ class JoystickDeplacementHorizental(Widget):
             return False
         self.update_graphics_pos()
 
-        # Envoyer les nouvelles valeurs au serveur après l'animation
+        # Envoyer les nouvelles valeurs au serveur
         def send_zero_values(dt):
             joystick_server.update_values(0.0, 0.0)
             print(f"Joystick relâché : X=0.00, Y=0.00")
