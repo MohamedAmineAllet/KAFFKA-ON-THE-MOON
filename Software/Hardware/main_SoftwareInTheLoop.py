@@ -265,7 +265,7 @@ def suivre_trajectoire(vehicule, point):
         time.sleep(2)
 
 
-def voler_en_cercle(rayon, vitesse, boucles=1, duree=10):
+def voler_en_cercle(vitesse, boucles=1, duree=10):
     print("demarrage du vol en cercle")
     points = 24
     angle_step = 2 * math.pi / points
