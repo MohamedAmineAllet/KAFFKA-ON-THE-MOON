@@ -200,7 +200,6 @@ def set_vitesse_drone_version_2(vx, vy):
         0, 0)
 
     vehicule.send_mavlink(msg)
-    print(f"Vitesse mise à jour: X={vx:.2f}, Y={vy:.2f}")
 
 # Méthode pour armer et décoller à une altitude donnée
 def arm_and_takeoff(target_altitude):
