@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="1) Ajout d'un fichier lieur_fichier.py qui lance en parralèle les deux mains.&#10;2)Utilisation d'un socket qui permet de partager certaines données entre les fichiers mains constamment dès le moment ou elle sont changé dans un fichier(Ici main_Application.py)&#10;3) Reset a 0 la valeur transférée lorsqu'on relache le joystick.&#10;Date :  2025-03-20&#10;commit par : Mohamed-Amine,Allet">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/main_Application.py" beforeDir="false" afterPath="$PROJECT_DIR$/Software/main_Application.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MachinesIntelligentes/1VersionPDredicteurMeteo.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/MachinesIntelligentes/1VersionPDredicteurMeteo.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MachinesIntelligentes/Version2PredicteurMeteo.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/MachinesIntelligentes/Version2PredicteurMeteo.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Software/Hardware/main_SoftwareInTheLoop.py" beforeDir="false" afterPath="$PROJECT_DIR$/Software/Hardware/main_SoftwareInTheLoop.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +96,7 @@
       <recent name="C:\Amine\Bdeb\Informatique\Projet D'integration SIM\KAFFKA-ON-THE-MOON\MachinesIntelligentes" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.SITL">
     <configuration name="SITL" type="PythonConfigurationType" factoryName="Python" singleton="false">
       <module name="Projet D'integration SIM" />
       <option name="ENV_FILES" value="" />
@@ -183,7 +185,9 @@
       <workItem from="1742272882686" duration="2481000" />
       <workItem from="1742329707563" duration="2649000" />
       <workItem from="1742408469120" duration="1521000" />
-      <workItem from="1742439715122" duration="5900000" />
+      <workItem from="1742439715122" duration="5957000" />
+      <workItem from="1742487591617" duration="4560000" />
+      <workItem from="1742603496351" duration="544000" />
     </task>
     <task id="LOCAL-00001" summary="Base code projet en SIM.&#10;Date :  2025-02-03&#10;commit par : Mohamed-Amine,Allet">
       <option name="closed" value="true" />
@@ -289,7 +293,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742449706347</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="1) Ajout d'un fichier lieur_fichier.py qui lance en parralèle les deux mains.&#10;2)Utilisation d'un socket qui permet de partager certaines données entre les fichiers mains constamment dès le moment ou elle sont changé dans un fichier(Ici main_Application.py)&#10;3) Reset a 0 la valeur transférée lorsqu'on relache le joystick.&#10;Date :  2025-03-20&#10;commit par : Mohamed-Amine,Allet">
+      <option name="closed" value="true" />
+      <created>1742449924243</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1742449924243</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -316,7 +328,7 @@
     <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$Are_Fingers_up_or_Down.coverage" NAME="Are Fingers up or Down Coverage Results" MODIFIED="1739206408783" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/.venv1/Scripts" />
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$test6.coverage" NAME="test6 Coverage Results" MODIFIED="1740196660784" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/workspace_xml$Controle_De_La_Main.coverage" NAME="Controle_De_La_Main Coverage Results" MODIFIED="1741610936673" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
-    <SUITE FILE_PATH="coverage/workspace_xml$main_Application.coverage" NAME="main_Application Coverage Results" MODIFIED="1742361634464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
+    <SUITE FILE_PATH="coverage/workspace_xml$main_Application.coverage" NAME="main_Application Coverage Results" MODIFIED="1742492408404" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$Simple_Hand_Tracker.coverage" NAME="Simple-Hand-Tracker Coverage Results" MODIFIED="1739206216524" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/workspace_xml$Simple_Hand_Tracker.coverage" NAME="Simple-Hand-Tracker Coverage Results" MODIFIED="1741134408467" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$predicteurDeMeteo.coverage" NAME="predicteurDeMeteo Coverage Results" MODIFIED="1739685614010" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MachinesIntelligentes" />
@@ -329,6 +341,6 @@
     <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$main_SoftwareInTheLoop.coverage" NAME="main_SoftwareInTheLoop Coverage Results" MODIFIED="1738893676110" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Hardware" />
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$Simple_Hand_Tracker.coverage" NAME="Simple-Hand-Tracker Coverage Results" MODIFIED="1739685692020" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$Version1PredicteurMeteo.coverage" NAME="Version1PredicteurMeteo Coverage Results" MODIFIED="1739906755431" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MachinesIntelligentes" />
-    <SUITE FILE_PATH="coverage/workspace_xml$lieur_fichier.coverage" NAME="lieur_fichier Coverage Results" MODIFIED="1742449449410" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
+    <SUITE FILE_PATH="coverage/workspace_xml$lieur_fichier.coverage" NAME="lieur_fichier Coverage Results" MODIFIED="1742492656099" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
   </component>
 </project>

@@ -39,7 +39,7 @@ def receveur_joystick_valeur():
     while True:
         try:
             client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            client.connect(("localhost", 12345))
+            client.connect(("localhost",12345))
             print("Conncté au serveur joystick")
 
             while True:
@@ -60,6 +60,7 @@ def receveur_joystick_valeur():
             client.close()
 joystick_thread = threading.Thread(target=receveur_joystick_valeur,daemon=True)
 joystick_thread.start()
+
 def setGuidedMode():
     """
     Forcer le mode guide via mavlink
