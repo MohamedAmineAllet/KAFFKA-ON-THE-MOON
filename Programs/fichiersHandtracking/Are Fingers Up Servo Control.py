@@ -1,9 +1,23 @@
 import cv2
 from collections import Counter
-from Software.module import findnameoflandmark,findpostion,speak
+from programs.module import findnameoflandmark,findpostion,speak
 
-import keyboard
-import subprocess
+from adafruit_servokit import ServoKit
+kit = ServoKit(channels=16)
+
+kit.servo[0].angle = 140
+kit.servo[1].angle = 140
+kit.servo[2].angle = 130
+kit.servo[3].angle = 160
+kit.servo[4].angle = 140
+
+#kit.servo[x].angle = 90
+# 1 = Thumb
+# 0 = Index
+# 4 = Middle
+# 2 = Ring
+# 3 = Pinkie
+
 
 cap = cv2.VideoCapture(0)
 tip=[8,12,16,20]
@@ -32,14 +46,15 @@ while True:
            
            
            #My Additions
-           
-           #volume = 100
-           #command = ["amixer", "sset", "Master", "{}%".format(volume)]
-           #subprocess.Popen(command)
-           
+           kit.servo[0].angle = 50
+           kit.servo[1].angle = 40
+           kit.servo[2].angle = 40
+           kit.servo[3].angle = 40
+           kit.servo[4].angle = 40
                       
         else:
-           finger.append(0)     
+           finger.append(0)   
+
         
         
         
@@ -54,6 +69,15 @@ while True:
                    kit.servo[0].angle = 50
                
                    
+              
+               #My Additions
+                #kit.servo[0].angle = 140
+                #kit.servo[1].angle = 140
+                #kit.servo[2].angle = 130
+                #kit.servo[3].angle = 160
+                #kit.servo[4].angle = 140
+               
+               
                
                
                fingers.append(1)
@@ -61,7 +85,12 @@ while True:
             else:
                fingers.append(0)
                
-              
+               #MY ADDITIONS
+               kit.servo[0].angle = 140
+               kit.servo[1].angle = 140
+               kit.servo[2].angle = 130
+               kit.servo[3].angle = 160
+               kit.servo[4].angle = 140
                
                
      x=fingers + finger
@@ -74,44 +103,6 @@ while True:
      
      cv2.imshow("Frame", frame1);
      key = cv2.waitKey(1) & 0xFF
-     
-     #My Additions
-     #5 fingers Up does nothing
-     #4 Video Start Playing
-     #3 Video Stop Playing
-     #2 Fingers Zero Volume
-     #1 Fingers Full Volume
-     #0 Shutdown but has been uncommented so won't activate
-     
-     
-     if up == 4:
-         
-        keyboard.press_and_release('Ctrl+Alt+n')
-        
-         
-     if up == 3:
-        
-        keyboard.press_and_release('Ctrl+Alt+b')
-        
-     
-     if up == 2:
-           
-        volume = 100
-        command = ["amixer", "sset", "Master", "{}%".format(volume)]
-        subprocess.Popen(command)
-     
-     if up == 1:
-           
-        volume = 0
-        command = ["amixer", "sset", "Master", "{}%".format(volume)]
-        subprocess.Popen(command)    
-         
-     
-     #if up == 0:
-        #print('.......Shutting Down in 5 seconds initiated.......')
-        #sleep(5)
-        #os.system("sudo shutdown -h now")
-
      if key == ord("q"):
         speak("sir you have"+str(up)+"fingers up  and"+str(down)+"fingers down") 
                     

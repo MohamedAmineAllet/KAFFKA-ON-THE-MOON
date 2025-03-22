@@ -1,11 +1,9 @@
 import cv2
 from collections import Counter
-from Software.module import findnameoflandmark,findpostion,speak
+from programs.module import findnameoflandmark,findpostion,speak
 
-import glowbit
-#import RPi.GPIO as GPIO
-#GPIO.setwarnings(False)
-matrix = glowbit.matrix4x4(brightness = 255, rateLimitFPS = 80)
+import keyboard
+import subprocess
 
 cap = cv2.VideoCapture(0)
 tip=[8,12,16,20]
@@ -76,39 +74,44 @@ while True:
      
      cv2.imshow("Frame", frame1);
      key = cv2.waitKey(1) & 0xFF
-    
-    
+     
      #My Additions
-     #Multiple Colours Based on Fingers
-     if up == 1:
-        
-        c = matrix.purple()
-        matrix.pixelsFill(c)
+     #5 fingers Up does nothing
+     #4 Video Start Playing
+     #3 Video Stop Playing
+     #2 Fingers Zero Volume
+     #1 Fingers Full Volume
+     #0 Shutdown but has been uncommented so won't activate
      
-     if up == 2:
-        
-        c = matrix.yellow()
-        matrix.pixelsFill(c)
-     
-     if up == 3:
-        
-        c = matrix.blue()
-        matrix.pixelsFill(c)
      
      if up == 4:
+         
+        keyboard.press_and_release('Ctrl+Alt+n')
         
-        c = matrix.red()
-        matrix.pixelsFill(c)
-     
-     if up == 0:
+         
+     if up == 3:
         
-        c = matrix.green()
-        matrix.pixelsFill(c)
-     
-     #Below will make the 4x4 matrice shine the correct colour based on If statements based on fingers
-     matrix.pixelsShow()
+        keyboard.press_and_release('Ctrl+Alt+b')
         
      
+     if up == 2:
+           
+        volume = 100
+        command = ["amixer", "sset", "Master", "{}%".format(volume)]
+        subprocess.Popen(command)
+     
+     if up == 1:
+           
+        volume = 0
+        command = ["amixer", "sset", "Master", "{}%".format(volume)]
+        subprocess.Popen(command)    
+         
+     
+     #if up == 0:
+        #print('.......Shutting Down in 5 seconds initiated.......')
+        #sleep(5)
+        #os.system("sudo shutdown -h now")
+
      if key == ord("q"):
         speak("sir you have"+str(up)+"fingers up  and"+str(down)+"fingers down") 
                     

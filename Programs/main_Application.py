@@ -22,8 +22,7 @@ from kivy.clock import Clock
 import cv2
 #from Hardware import main_SoftwareInTheLoop
 
-
-#Biblioteque utile a la transmission video du Rpy vers l'appareil.
+#Biblioteque utile a la transmission video du Rpi vers l'appareil.
 import socket
 import time
 import threading
@@ -37,12 +36,15 @@ class JoystickServer(threading.Thread):
         self.lock = threading.Lock()
 
     def run(self):
+        """
+        Creer un serveur pour héberger des donnéees et des informations en utilisant un socket
+        """
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server.bind(('localhost', 12345))
-        server.listen(1)
+        server.listen(1) #
         print("Serveur joystick en écoute ...")
 
-        conn, addr = server.accept()
+        conn, addr = server.accept() #addresse du client qui se connecte et socket de communication
         print("Client connecté", addr)
         while self.running:
             with self.lock:
@@ -289,9 +291,6 @@ class InterfacePilotage(Screen):
         slider_horizental = self.ids.slider_altitude
         slider_horizental.opacity = 0
         slider_horizental.disabled = True
-
-
-
 
 
 class CameraProjetApp(App):

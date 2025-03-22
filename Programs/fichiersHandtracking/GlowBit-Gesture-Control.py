@@ -1,23 +1,11 @@
 import cv2
 from collections import Counter
-from Software.module import findnameoflandmark,findpostion,speak
+from programs.module import findnameoflandmark,findpostion,speak
 
-from adafruit_servokit import ServoKit
-kit = ServoKit(channels=16)
-
-kit.servo[0].angle = 140
-kit.servo[1].angle = 140
-kit.servo[2].angle = 130
-kit.servo[3].angle = 160
-kit.servo[4].angle = 140
-
-#kit.servo[x].angle = 90
-# 1 = Thumb
-# 0 = Index
-# 4 = Middle
-# 2 = Ring
-# 3 = Pinkie
-
+import glowbit
+#import RPi.GPIO as GPIO
+#GPIO.setwarnings(False)
+matrix = glowbit.matrix4x4(brightness = 255, rateLimitFPS = 80)
 
 cap = cv2.VideoCapture(0)
 tip=[8,12,16,20]
@@ -46,15 +34,14 @@ while True:
            
            
            #My Additions
-           kit.servo[0].angle = 50
-           kit.servo[1].angle = 40
-           kit.servo[2].angle = 40
-           kit.servo[3].angle = 40
-           kit.servo[4].angle = 40
+           
+           #volume = 100
+           #command = ["amixer", "sset", "Master", "{}%".format(volume)]
+           #subprocess.Popen(command)
+           
                       
         else:
-           finger.append(0)   
-
+           finger.append(0)     
         
         
         
@@ -69,15 +56,6 @@ while True:
                    kit.servo[0].angle = 50
                
                    
-              
-               #My Additions
-                #kit.servo[0].angle = 140
-                #kit.servo[1].angle = 140
-                #kit.servo[2].angle = 130
-                #kit.servo[3].angle = 160
-                #kit.servo[4].angle = 140
-               
-               
                
                
                fingers.append(1)
@@ -85,12 +63,7 @@ while True:
             else:
                fingers.append(0)
                
-               #MY ADDITIONS
-               kit.servo[0].angle = 140
-               kit.servo[1].angle = 140
-               kit.servo[2].angle = 130
-               kit.servo[3].angle = 160
-               kit.servo[4].angle = 140
+              
                
                
      x=fingers + finger
@@ -103,6 +76,39 @@ while True:
      
      cv2.imshow("Frame", frame1);
      key = cv2.waitKey(1) & 0xFF
+    
+    
+     #My Additions
+     #Multiple Colours Based on Fingers
+     if up == 1:
+        
+        c = matrix.purple()
+        matrix.pixelsFill(c)
+     
+     if up == 2:
+        
+        c = matrix.yellow()
+        matrix.pixelsFill(c)
+     
+     if up == 3:
+        
+        c = matrix.blue()
+        matrix.pixelsFill(c)
+     
+     if up == 4:
+        
+        c = matrix.red()
+        matrix.pixelsFill(c)
+     
+     if up == 0:
+        
+        c = matrix.green()
+        matrix.pixelsFill(c)
+     
+     #Below will make the 4x4 matrice shine the correct colour based on If statements based on fingers
+     matrix.pixelsShow()
+        
+     
      if key == ord("q"):
         speak("sir you have"+str(up)+"fingers up  and"+str(down)+"fingers down") 
                     
