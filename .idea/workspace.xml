@@ -4,6 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+    <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="1)Ajout couleur et contraste du text app kivy + test de l'accesibilité d'un fichier python dans un autre fichier python.&#10;2) J'ai fini le nettoyage des bases de données.&#10;3) J'ai commence la construction &amp; l'entrainement de du ml.(j'ai creer 2 type de ml) et je compte en creer un 3iem plus tard.&#10;Date :  2025-02-13&#10;commit par : Mohamed-Amine,Allet" />
     <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="1) Reduction de l'erreur + ajout d'une plus grand base de donnes de data du climat au canada.&#10;2) ajout Popup pour confirmer le decollage/atterissage.&#10;Date :  2025-03-04&#10;commit par : Mohamed-Amine,Allet">
     <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="1) Modification dans le titre des fichiers.&#10;Date :  2025-03-10&#10;commit par : Mohamed-Amine,Allet">
       <change afterPath="$PROJECT_DIR$/MachinesIntelligentes/Donnés/weatherstats_montreal_daily (3).csv" afterDir="false" />
@@ -263,6 +264,7 @@
       <workItem from="1742408469120" duration="1521000" />
       <workItem from="1742439715122" duration="5900000" />
       <workItem from="1742582989021" duration="13027000" />
+      <workItem from="1741274768709" duration="8311000" />
     </task>
     <task id="LOCAL-00001" summary="Base code projet en SIM.&#10;Date :  2025-02-03&#10;commit par : Mohamed-Amine,Allet">
       <option name="closed" value="true" />
@@ -320,6 +322,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741051637465</updated>
     </task>
+    <task id="LOCAL-00007" summary="1)Ajout couleur et contraste du text app kivy + test de l'accesibilité d'un fichier python dans un autre fichier python.&#10;2) J'ai fini le nettoyage des bases de données.&#10;3) J'ai commence la construction &amp; l'entrainement de du ml.(j'ai creer 2 type de ml) et je compte en creer un 3iem plus tard.&#10;Date :  2025-02-13&#10;commit par : Mohamed-Amine,Allet">
+      <option name="closed" value="true" />
+      <created>1741298861182</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1741298861182</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <task id="LOCAL-00008" summary="1) Reduction de l'erreur + ajout d'une plus grand base de donnes de data du climat au canada.&#10;2) ajout Popup pour confirmer le decollage/atterissage.&#10;Date :  2025-03-04&#10;commit par : Mohamed-Amine,Allet">
       <option name="closed" value="true" />
       <created>1741134207225</created>
