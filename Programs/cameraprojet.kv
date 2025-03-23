@@ -52,7 +52,7 @@
         color: (157/255,0,1,1)
         outline_color: (0,0,0)
         outline_width: 2
-        text: "Accueil"
+        #text: "Accueil"
         allow_stretch: True
         size_hint: (0.5,0.3)
         text_size: self.size
@@ -192,7 +192,7 @@
         disabled: True
 
     Slider:
-        id: slider_altitude
+        id: slider_rotation
         min:-1
         max:1
         value:0 #Valeur initial.
@@ -200,13 +200,14 @@
         size_hint:0.3,0.01
         pos_hint: {"center_x": 0.29, "center_y": 0.2}
         on_touch_up: root.reset_slider()
+        on_value: root.afficher_valeur()
         disabled: True
         opacity: 0
         value_track: True
         value_track_color:(0,1,1,1)
         cursor_image: "ImageInterfaceCamera/The_Goat.png"
     Slider:
-        id:slider_rotation
+        id: slider_altitude
         min:-1
         max:1
         value:0 #Valeur initial.
@@ -214,6 +215,7 @@
         orientation: "vertical"
         size_hint:0.01,0.3
         pos_hint: {"center_x": 0.3, "center_y": 0.2}
+        on_value: root.afficher_valeur()
         disabled: True
         opacity: 0
         

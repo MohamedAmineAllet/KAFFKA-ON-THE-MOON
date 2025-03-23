@@ -12,9 +12,6 @@ import time
 from dronekit import LocationGlobalRelative
 import socket
 from pymavlink import mavutil
-if not hasattr(collections, 'MutableMapping'):
-    import collections.abc
-    collections.MutableMapping = collections.abc.MutableMapping
 
 print("Tous le monde est prêt? On met les voiiiles...")
 
@@ -114,7 +111,7 @@ def setVitesse(vx, vy, vz, duree):
         mavutil.mavlink.MAV_FRAME_BODY_NED,  # FRAME_BODY_NED pour se déplacer Body Frame
         0b0000111111000111,  # type_mask (only speeds enabled)
         0, 0, 0,  # x, y, z positions (not used)
-        vx, vy, vz,  # x, y, z velocity in m/s
+        vx, vy,vz,  # x, y, z velocity in m/s
         0, 0, 0,  # x, y, z acceleration (not supported yet, ignored in GCS_Mavlink)
         0, 0, )  # yaw, yaw_rate (not supported yet, ignored in GCS_Mavlink)
 
@@ -196,7 +193,6 @@ def suivre_trajectoire(vehicule, point, vitesse=10):
     :param point:
     :param vitesse:
     """
-    setMode(4)  # Mode GUIDED = 4 en ArduPilot
     print(f"Navigation vers {point.lat}, {point.lon}, {point.alt}m")
 
     vehicule.simple_goto(point, groundspeed= vitesse)
@@ -285,24 +281,24 @@ joystick_thread.start()
 
 """ ******* La Mission en question ****** """
 # vehicle = connectMyCopter() # Pour le Speedou
-arm_and_takeoff(8)
+arm_and_takeoff(4)
 
 # vers le Nord
-setVitesse(10, 0, 0, 1)
+setVitesse(10, 0, 0, 10)
 
 # vers le Sud
-setVitesse(-10, 0, 0, 1)
+setVitesse(-10, 0, 0, 10)
 
 # ne pas bouger durant 5s
-setMode(0)
+setMode(5) #Loiter
 time.sleep(5)
 setMode(4)
 
 # vers l'Est
-setVitesse(0, 10, 0, 1)
+setVitesse(0, 10, 0, 10)
 
 # vers l'Ouest
-setVitesse(0, -10, 0, 1)
+setVitesse(0, -10, 0, 10)
 
 # se rendre à un point précis
 point = ajouter_point(-35.362919, 149.165452, 7)
