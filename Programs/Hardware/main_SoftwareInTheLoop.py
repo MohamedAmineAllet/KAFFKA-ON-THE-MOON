@@ -1,29 +1,17 @@
 import subprocess
 import threading
 from time import sleep
-
 import dronekit_sitl
 import time
 import argparse
 import math
 import collections
-
-from pymavlink import mavutil
-
-if not hasattr(collections, 'MutableMapping'):
-    import collections.abc
-
-    collections.MutableMapping = collections.abc.MutableMapping
-
 import dronekit_sitl
 from dronekit import connect, VehicleMode, LocationGlobalRelative
 import time
 from dronekit import LocationGlobalRelative
-
 import socket
-
-
-
+from pymavlink import mavutil
 
 print("Tous le monde est prêt? On met les voiiiles...")
 
@@ -35,88 +23,34 @@ print(f"La chaîne de connection du véhicule: {connection_string}")
 # Se connecter au véhicule simulé
 vehicule = connect(connection_string, wait_ready=True)
 
-def receveur_joystick_valeur():
-    while True:
-        try:
-            client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            client.connect(("localhost",12345))
-            print("Conncté au serveur joystick")
-
-            while True:
-                data = client.recv(1024).decode()
-                if not data:
-                    break
-                try:
-                    x_str,y_str = data.split(',')
-                    x = float(x_str)
-                    y = float(y_str)
-                    set_vitesse_drone_version_2(x,y)
-                except ValueError:
-                    print("Données invalides :",data)
-        except(ConnectionRefusedError,ConnectionResetError ) as e:
-            print("Erreur de connection reconnection dans 1s...",str(e))
-            time.sleep(1)
-        finally:
-            client.close()
-joystick_thread = threading.Thread(target=receveur_joystick_valeur,daemon=True)
-joystick_thread.start()
-
-def setGuidedMode():
+def setMode(modeNumber):
     """
     Forcer le mode guide via mavlink
+    :type modeId: code mavlink pour le mode
+    Mode	custom_mode (MAVLink)
+    STABILIZE   	0
+    ACRO	        1
+    ALT_HOLD    	2
+    AUTO	        3
+    GUIDED	        4
+    LOITER	        5
+    RTL         	6
+    CIRCLE	        7
+    LAND	        9
+    DRIFT	        11
+    SPORT	        13
+    POSHOLD     	16
+    BRAKE	        17
+    THROW	        18
+    AVOID_ADSB	    19
+    GUIDED_NO_GPS	20
     """
     vehicule._master.mav.set_mode_send(
         vehicule._master.target_system,
         mavutil.mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,
-        4  # Mode GUIDED = 4 en ArduPilot
+        modeNumber
     )
     time.sleep(1)
-
-
-def setReturnToLauch():
-    "Forcer le mode RTL via mavLink"
-    print("on retourne au lauch")
-    vehicule._master.mav.set_mode_send(
-        vehicule._master.target_system,
-        mavutil.mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,
-        6  # Mode GUIDED = 4 en ArduPilot
-    )
-    time.sleep(1)
-
-
-""" 
-# Méthode avec les forces À Revoir 
-masse = 2
-gravitational = 9.81
-coefficient_resistance_air = 0.1
-delta_temps = 0.1
-
-
-def apply_force(vx, vy, vz, teta_X=0, teta_Y=0):
-    fx_trainee = vx * -coefficient_resistance_air
-    fy_trainee = vy * -coefficient_resistance_air
-    fz_trainee = vz * -coefficient_resistance_air
-
-    f_total_poussee = masse * gravitational  # pas sure
-    fy_g = -masse * gravitational
-    fz_poussee = f_total_poussee * math.cos(teta_X) * math.cos(teta_Y)
-    fx_poussee = f_total_poussee * math.sin(teta_X)
-    fy_poussee = f_total_poussee * math.sin(teta_Y)
-
-    fx_total = fx_trainee + fx_poussee
-    fy_total = fy_trainee + fy_poussee + fy_g
-    fz_total = fz_trainee + fz_poussee
-
-    ax = fx_total / masse
-    ay = fy_total / masse
-    az = fz_total / masse
-
-    new_vx = vx + ax * delta_temps
-    new_vy = vy + ay * delta_temps
-    new_vz = vz + az * delta_temps
-    return new_vx, new_vy, new_vz
-
-"""
 
 # 2 Lancer Mission Planner automatiquement
 """
@@ -136,7 +70,6 @@ def connectMyCopter():
     return vehicle
 """
 
-
 def positionConversion(ned, yaw):
     """ Convertit la position NED en Body Frame (Avant, Droite, Bas). """
     nord, est, bas = ned
@@ -155,6 +88,8 @@ def positionConversion(ned, yaw):
     # Afficher la position en Body Frame
     return ("Position en Body Frame:", position_body)
 
+# Stockage de la position initiale
+position_initiale = None
 
 def setVitesse(vx, vy, vz, duree):
     """
@@ -164,13 +99,19 @@ def setVitesse(vx, vy, vz, duree):
     :param vz: + Bas / - Haut      || + Bas / - Haut
     Système de coordonnées conventionel NED  ||  Système de coordonnées Relatve au drone <-
     """
+    global position_initiale
+
+    # Capturer la position initiale au premier appel
+    if position_initiale is None:
+        position_initiale = vehicule.location.local_frame  # NED par rapport à home
+
     msg = vehicule.message_factory.set_position_target_local_ned_encode(
         0,  # time_boot_ms (not used)
         0, 0,  # target system, target component
         mavutil.mavlink.MAV_FRAME_BODY_NED,  # FRAME_BODY_NED pour se déplacer Body Frame
         0b0000111111000111,  # type_mask (only speeds enabled)
         0, 0, 0,  # x, y, z positions (not used)
-        vx, vy, vz,  # x, y, z velocity in m/s
+        vx, vy,vz,  # x, y, z velocity in m/s
         0, 0, 0,  # x, y, z acceleration (not supported yet, ignored in GCS_Mavlink)
         0, 0, )  # yaw, yaw_rate (not supported yet, ignored in GCS_Mavlink)
 
@@ -178,31 +119,32 @@ def setVitesse(vx, vy, vz, duree):
     for x in range(0, duree):
         vehicule.send_mavlink(msg)
         time.sleep(1)
-        # Afficher la position relative au vehicule
+        """ # Afficher la position relative au vehicule
         position_ned = vehicule.location.local_frame  # [North, East, Down] en mètres
         yaw = vehicule.attitude.yaw  # Orientation du drone (yaw) en radians
         latitude = vehicule.location.global_frame.lat  # Current latitude
         longitude = vehicule.location.global_frame.lon  # Current longitude
         altitude = vehicule.location.global_relative_frame.alt  # Altitude
-        position_body = positionConversion([position_ned.north, position_ned.east, position_ned.down], yaw)
-        print(position_ned)
-        print(" latitude : %.6f" % latitude + " longitude : %.6f" % longitude + " altidude: %.2f m" % altitude)
+        # print(" latitude : %.6f" % latitude + " longitude : %.6f" % longitude + " altidude: %.2f m" % altitude)
+        print(f"Vitesse actuelle: Vx={vx:.2f}, Vy={vy:.2f}, Vz={vz:.2f}")"""
+        # Position actuelle
+        position_actuelle = vehicule.location.local_frame  # [North, East, Down]
 
+        # Calcul du déplacement par rapport à la position initiale
+        if position_actuelle and position_initiale:
+            delta_x = position_actuelle.north - position_initiale.north
+            delta_y = position_actuelle.east - position_initiale.east
+            delta_z = position_actuelle.down - position_initiale.down  # Z négatif vers le bas
 
-def set_vitesse_drone_version_2(vx, vy):
-    msg = vehicule.message_factory.set_position_target_local_ned_encode(
-        0, 0, 0,
-        mavutil.mavlink.MAV_FRAME_BODY_NED,
-        0b0000111111000111,
-        0, 0, 0,
-        vx, vy, 0,  # Utilisation des valeurs X/Y du joystick
-        0, 0, 0,
-        0, 0)
+            print(f"Déplacement relatif: ΔX={delta_x:.2f}m, ΔY={delta_y:.2f}m, ΔZ={delta_z:.2f}m")
+            print(f"Vitesse actuelle: Vx={vx:.2f}, Vy={vy:.2f}, Vz={vz:.2f}")
 
-    vehicule.send_mavlink(msg)
-
-# Méthode pour armer et décoller à une altitude donnée
 def arm_and_takeoff(target_altitude):
+    """
+    Méthode pour armer et faire décoller à une altitude donnée
+    :param target_altitude:
+    :return: a ready to fly copter
+    """
     while not vehicule.is_armable:
         print("wait for vehicle to be armed")
         time.sleep(1)
@@ -210,7 +152,7 @@ def arm_and_takeoff(target_altitude):
     # Changer le mode du drone en "GUIDED"
     while vehicule.mode.name != 'GUIDED':
         print("- En attente du changement de mode en GUIDED...")
-        setGuidedMode()
+        setMode(4)  # Mode GUIDED = 4 en ArduPilot
         time.sleep(1)
 
     print("Mode actuel:" + vehicule.mode.name)
@@ -232,7 +174,7 @@ def arm_and_takeoff(target_altitude):
     vehicule.simple_takeoff(target_altitude)
 
     while True:
-        print("Current Altitude: %d" % vehicule.location.global_relative_frame.alt)
+        print("Altitude Actuelle: %d" % vehicule.location.global_relative_frame.alt)
         if vehicule.location.global_relative_frame.alt > target_altitude:
             break
         time.sleep(1)
@@ -242,20 +184,25 @@ def arm_and_takeoff(target_altitude):
 def ajouter_point(latitude, longitude, altitude):
     return LocationGlobalRelative(latitude, longitude, altitude)
 
-
-def suivre_trajectoire(vehicule, point):
-    setGuidedMode()
-
+def suivre_trajectoire(vehicule, point, vitesse=10):
+    """
+    simple goto mais en affichant la distance restante.
+    IMPORTANT: ici on travail avec des location.global_relative_frame
+    soit des altitudes et des longitudes qui suivent les coordonées WGS84 (gps)
+    :param vehicule:
+    :param point:
+    :param vitesse:
+    """
     print(f"Navigation vers {point.lat}, {point.lon}, {point.alt}m")
 
-    vehicule.simple_goto(point, groundspeed=10)
+    vehicule.simple_goto(point, groundspeed= vitesse)
 
     while True:  # permet de calculer la distance restante jusqu'a notre point
         position_actuelle = vehicule.location.global_relative_frame
         distance = math.sqrt(
             (point.lat - position_actuelle.lat) ** 2 +
             (point.lon - position_actuelle.lon) ** 2
-        ) * 111320  # Convertir degrés -> mètres, 1 degres = 111320m
+        ) * 111320  # Convertir degrés en mètres, 1 degres = 111320m
 
         print(f" Distance restante : {distance:.2f}m")
         if distance < 2:
@@ -263,10 +210,18 @@ def suivre_trajectoire(vehicule, point):
             break
         time.sleep(2)
 
-
-def voler_en_cercle(vitesse, boucles=1, duree=10):
+def voler_en_cercle(rayon, vitesse, boucles=1, duree=10):
+    """
+    faire voler le drone en cercle.
+    PS: J'aimerais aussi faire un tourbillon plus tard!!!
+    ** si je dis pas de la merde pour les paramètres **
+    :param rayon: du cercle
+    :param vitesse: pour chaque "points"
+    :param boucles: nombre de tours
+    :param duree: temps pour chaque points
+    """
     print("demarrage du vol en cercle")
-    points = 24
+    points = 24 # nombre de points selon lesquels on
     angle_step = 2 * math.pi / points
     for loop in range(0, boucles):
         for point in range(points):
@@ -274,9 +229,9 @@ def voler_en_cercle(vitesse, boucles=1, duree=10):
             vx = vitesse * math.cos(angle)  # Vitesse sur l'axe Nord/Sud
             vy = vitesse * math.sin(angle)  # Vitesse sur l'axe Est/Ouest
             vz = 0  # Altitude constante
-            setVitesse(vx, vy, vz, duree)
+            setVitesse(vx, vy, vz, duree) # effets de la durée sur le cercle???
+
     print("vole en cercle terminer")
-    setReturnToLauch()
     """
             nb_points = int(duree / 0.5)
             angle_incrementer = (2 * math.pi)
@@ -289,83 +244,78 @@ def voler_en_cercle(vitesse, boucles=1, duree=10):
             print("vole en cercle terminer")
             setReturnToLauch()
             """
-def tester_le_transfert_de_donner(coefficiant_x,coefficiant_y):
-    print("coeff x",coefficiant_x)
-    print("coeff y",coefficiant_y)
-    
 
+def client_du_joystick():
+    """
+    Utilisation de socket (Interface de connection réseau) pour se connecter en tant que client
+    au serveur de l'application et recevoir des valeurs et informations ex: joystick
+    """
+    while True: # boucle infinie pour se connecter au serveur et gérer les données en continu
+        try:
+            client = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # IPv4 , TCP
+            client.connect(("localhost", 12345))
+            print("Conncté au serveur joystick")
 
-""" ****La Mission en question**** """
+            while True:
+                data = client.recv(
+                    1024).decode()  # Décoder les informations venant du serveur (dans l'application)
+                if not data: # pas de message => break
+                    break
+                try:
+                    x_str, y_str = data.split(',')  # valeurs selon l'axe des x et y dans un plan parallèle au sol entre [-1, 1]
+                    Vy = float(x_str) * 10 # pour nous y c'est l'axe est ouest donc x du joystick
+                    Vx = float(y_str) * 10  # Pour nous x c'est l'axe nord sud donc y du joystick
+
+                    setVitesse(Vx, Vy, 0, 5)
+                except ValueError:
+                    print("Données invalides :", data)
+        except(ConnectionRefusedError, ConnectionResetError) as e: # erreurs de connections
+            # print("Erreur de connection reconnection dans 1s...", str(e))
+            time.sleep(1)
+        finally:
+            client.close()
+
+# Crée un thread pour excécuter la fonction client en arrière plan
+joystick_thread = threading.Thread(target=client_du_joystick, daemon=True)
+joystick_thread.start()
+
+""" ******* La Mission en question ****** """
 # vehicle = connectMyCopter() # Pour le Speedou
-arm_and_takeoff(10)
+arm_and_takeoff(4)
 
 # vers le Nord
-setVitesse(10, 0, 0, 5)
+setVitesse(10, 0, 0, 10)
 
 # vers le Sud
-setVitesse(-10, 0, 0, 5)
+setVitesse(-10, 0, 0, 10)
+
+# ne pas bouger durant 5s
+setMode(5) #Loiter
+time.sleep(5)
+setMode(4)
 
 # vers l'Est
-setVitesse(0, 10, 0, 5)
+setVitesse(0, 10, 0, 10)
 
 # vers l'Ouest
-setVitesse(0, -10, 0, 5)
+setVitesse(0, -10, 0, 10)
 
+# se rendre à un point précis
 point = ajouter_point(-35.362919, 149.165452, 7)
-
 suivre_trajectoire(vehicule, point)
 
-voler_en_cercle(5, 3, 10)
+# titre assez explicite
+voler_en_cercle(5, 3, 1)
 
+setMode(6)  # Mode RTL = 6 en ArduPilot
 
+# Fermer SITL proprement
 time.sleep(2)
-
 vehicule.close()
 sitl.stop()
 
-# Fermer SITL proprement
-###### problèmes
-# - Le code est malpropre
-# - Il n'y a pas de meilleurs moyen pour utiliser les vitesse par exemple deltaTemps plutot que counter?
+###### problèmes ######
+# - Faire un tourbillon
+# - le code du cercle
 # -
 
-"""
-counter = 0
-#  Vx => negative sud, positif nord
-
-def vitesseNord(counter):
-    while counter < 2:
-        setVitesse(10, 0, 0)
-        print("direction Nord")
-        time.sleep(1)
-        counter = counter + 1
-    time.sleep(1)
-    counter = 0
-def vitesseSud(counter):
-    while counter < 2:
-        setVitesse(-10, 0, 0)
-        print("direction Sud")
-        time.sleep(1)
-        counter = counter + 1
-    time.sleep(1)
-    counter = 0
-
-
-# Vy => negative ouest, positif est
-while counter < 2:
-    setVitesse(0, 10, 0)
-    print("direction est")
-    time.sleep(1)
-    counter = counter + 1
-
-time.sleep(1)
-counter = 0
-
-while counter < 2:
-    setVitesse(0, -10, 0)
-    print("direction ouest")
-    time.sleep(1)
-    counter = counter + 1
-
-time.sleep(1)
-"""

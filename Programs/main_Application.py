@@ -269,6 +269,10 @@ class InterfacePilotage(Screen):
         anim.start(self.ids.slider_rotation)
         self.ids.slider_rotation.value = 0
 
+    def afficher_valeur(self):
+        print("Valeur de la vitesse d'altitude :", self.ids.slider_altitude.value)
+        print("Valeur de la vitesse de rotation :", self.ids.slider_rotation.value)
+
     def reinitialization(self):
         #Reset la camera.
         camera = self.ids.camera_widget
