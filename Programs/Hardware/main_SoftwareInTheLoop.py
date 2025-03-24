@@ -7,6 +7,11 @@ import argparse
 import math
 import collections
 import dronekit_sitl
+
+import collections
+import collections.abc
+collections.MutableMapping = collections.abc.MutableMapping
+
 from dronekit import connect, VehicleMode, LocationGlobalRelative
 import time
 from dronekit import LocationGlobalRelative
@@ -210,18 +215,17 @@ def suivre_trajectoire(vehicule, point, vitesse=10):
             break
         time.sleep(2)
 
-def voler_en_cercle(rayon, vitesse, boucles=1, duree=10):
+def voler_en_cercle(vitesse, boucles, duree):
     """
     faire voler le drone en cercle.
     PS: J'aimerais aussi faire un tourbillon plus tard!!!
     ** si je dis pas de la merde pour les paramètres **
-    :param rayon: du cercle
     :param vitesse: pour chaque "points"
     :param boucles: nombre de tours
     :param duree: temps pour chaque points
     """
     print("demarrage du vol en cercle")
-    points = 24 # nombre de points selon lesquels on
+    points = 36 # nombre de points selon la grandeur du cercle
     angle_step = 2 * math.pi / points
     for loop in range(0, boucles):
         for point in range(points):
@@ -284,30 +288,36 @@ joystick_thread.start()
 arm_and_takeoff(4)
 
 # vers le Nord
-setVitesse(10, 0, 0, 10)
+#setVitesse(10, 0, 0, 10)
 
 # vers le Sud
-setVitesse(-10, 0, 0, 10)
+#setVitesse(-10, 0, 0, 10)
 
 # ne pas bouger durant 5s
-setMode(5) #Loiter
+#setMode(5) #Loiter
 time.sleep(5)
-setMode(4)
+#setMode(4)
 
 # vers l'Est
-setVitesse(0, 10, 0, 10)
+#setVitesse(0, 10, 0, 10)
 
 # vers l'Ouest
-setVitesse(0, -10, 0, 10)
+#setVitesse(0, -10, 0, 10)
 
 # se rendre à un point précis
 point = ajouter_point(-35.362919, 149.165452, 7)
 suivre_trajectoire(vehicule, point)
 
 # titre assez explicite
-voler_en_cercle(5, 3, 1)
+voler_en_cercle(5, 1, 1)
 
-setMode(6)  # Mode RTL = 6 en ArduPilot
+setMode(6) # Mode RTL = 6 en ArduPilot
+setMode(9)
+print("Altitude Actuelle: %d" % vehicule.location.global_relative_frame.alt)
+
+
+
+
 
 # Fermer SITL proprement
 time.sleep(2)
