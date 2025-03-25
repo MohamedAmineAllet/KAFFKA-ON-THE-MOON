@@ -7,6 +7,22 @@ import math
 
 # Use CV2 Functionality to create a Video stream and add some values + variables
 cap = cv2.VideoCapture(0)
+tip=[8,12,16,20]
+tipname=[8,12,16,20]
+fingers=[]
+finger=[]
+
+def minimum(position, minimum):
+    if position < minimum:
+        return position
+    else:
+        return minimum
+def maximum(position, maximum):
+    if position > maximum:
+        return position
+    else:
+        return maximum
+
 # Create an infinite loop which will produce the live feed to our desktop and that will search for hands
 while True:
     ret, frame = cap.read()
@@ -36,40 +52,47 @@ while True:
         yMin = a[0][2]
         yMax = a[0][2]
 
-        doigtGauche = a[0]
-        doigtDroite = a[0]
-
         #trouver les extrémités de la main
         for i in range(1, len(a) - 1):
-            if a[i][1] < xMin:
-                xMin = a[i][1]
-                doigtGauche = a[i]
-            if a[i][1] > xMax:
-                xMax = a[i][1]
-                doigtDroite = a[i]
-            if a[i][2] < yMin:
-                yMin = a[i][2]
-            if a[i][2] > yMax:
-                yMax = a[i][2]
+            xmin = minimum(a[i][1], xMin)
+            xmax = maximum(a[i][1], xMax)
+            ymin = minimum(a[i][2], yMin)
+            ymax = maximum(a[i][2], yMax)
 
 
         #faire bouger selon la position dans l'écran
-        if yMax < bas and yMin < haut:
-            print("appeler méthode pour faire monter le drone")
         if yMax > bas and yMin > haut:
-            print("appeler méthode qui fait descendre")
-        if yMax > bas and yMin < haut:
-            print("conflit, ne bouge pas")
-
-
+            print("appeler méthode, bas")
+        if yMax < bas and yMin < haut:
+            print("appeler méthode, haut")
         if xMax > droite and xMin > gauche:
-            print("appeler méthode droite")
+            print("méthode droite")
         if xMax < droite and xMin < gauche:
-            print("appeler méthode gauche")
-        if xMax > droite and xMin < gauche:
-            print("conflit, ne bouge pas")
+            print("méthode gauche")
 
 
+        finger = []
+        if a[0][1:] < a[4][1:]:
+            finger.append(1)
+        else:
+            finger.append(0)
+
+        fingers = []
+        for id in range(0, 4):
+            if a[tip[id]][2:] < a[tip[id] - 2][2:]:
+                fingers.append(1)
+            else:
+                fingers.append(0)
+
+    # Below will print to the terminal the number of fingers that are up or down
+    x = fingers + finger
+    c = Counter(x)
+    up = c[1]
+
+    if up == 1:
+        print("avance")
+    elif up == 2:
+        print("recule")
 
     # Below shows the current frame to the desktop
     cv2.imshow("Frame", frame1);
@@ -79,7 +102,3 @@ while True:
     if key == ord("q"):
         break
         #speak("you have" + str(up) + "fingers up  and" + str(down) + "fingers down")
-
-        # Below states that if the |s| is press on the keyboard it will stop the system
-    if key == ord("s"):
-        break
