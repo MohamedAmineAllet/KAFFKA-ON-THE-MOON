@@ -160,6 +160,11 @@ class CameraWidget(Image):
 
 
     def capture_un_frame(self):
+        """
+        Cette méthode me permet de capturer la frame du moment afin de l'utiliser plus tard
+        dans l'Interface Pilotage.
+        :return frame La frame du moment courant qui est affiché dans l'application:
+        """
         if self.capture and self.capture.isOpened():
             ret, frame = self.capture.read()
             if ret and frame is not None:
