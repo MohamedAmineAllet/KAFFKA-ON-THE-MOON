@@ -120,6 +120,7 @@
 
 
     Button: #Bouton pour deviner il s'agit de quelle plante.
+
         background_color: 1,0,0,0
         size_hint: 0.08, 0.08
         pos: root.width * 0.005, root.height*0.3
@@ -171,10 +172,11 @@
             allow_stretch: True
 
     Button:#Bouton pour prendre une photo.
+        id : prendre_photo
         background_color: 1,0,0,0
         size_hint:0.08,0.08
         pos: root.width*0.9,root.height*0.1 #Pour centrer le bouton.
-        on_press:root.press()
+        on_press:root.prendreUnePhoto()
         Image:
             source: "ImageInterfaceCamera/ImagePrendrePhoto6.png" #Image libre de droits : source https://fr.vecteezy.com/png/9400746-dslr-photo-appareil-photo-clipart-design-illustration
             pos:self.parent.pos

@@ -7,7 +7,6 @@ import math
 
 # Use CV2 Functionality to create a Video stream and add some values + variables
 cap = cv2.VideoCapture(0)
-
 # Create an infinite loop which will produce the live feed to our desktop and that will search for hands
 while True:
     ret, frame = cap.read()

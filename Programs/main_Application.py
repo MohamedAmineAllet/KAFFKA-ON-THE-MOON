@@ -9,7 +9,9 @@ stocker dans un fichier réservé pour ça,(...)
 @autheur :
 @version : Python (3.11.9) Kivy(2.3.1)
 """
+import os
 
+import numpy as np
 from kivy.app import App
 from kivy.properties import NumericProperty
 from kivy.uix.image import Image
@@ -20,12 +22,14 @@ from kivy.uix.screenmanager import ScreenManager, Screen, RiseInTransition
 from kivy.animation import Animation
 from kivy.clock import Clock
 import cv2
-#from Hardware import main_SoftwareInTheLoop
+# from Hardware import main_SoftwareInTheLoop
 
-#Biblioteque utile a la transmission video du Rpi vers l'appareil.
+# Biblioteque utile a la transmission video du Rpi vers l'appareil.
 import socket
 import time
 import threading
+import datetime
+
 
 class JoystickServer(threading.Thread):
     def __init__(self):
@@ -40,11 +44,12 @@ class JoystickServer(threading.Thread):
         Creer un serveur pour héberger des donnéees et des informations en utilisant un socket
         """
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
         server.bind(('localhost', 12345))
-        server.listen(1) #
+        server.listen(1)  #
         print("Serveur joystick en écoute ...")
 
-        conn, addr = server.accept() #addresse du client qui se connecte et socket de communication
+        conn, addr = server.accept()  # addresse du client qui se connecte et socket de communication
         print("Client connecté", addr)
         while self.running:
             with self.lock:
@@ -52,14 +57,17 @@ class JoystickServer(threading.Thread):
             try:
                 conn.sendall(data)
                 time.sleep(0.05)
-            except(BrokenPipeError,ConnectionResetError):
+            except(BrokenPipeError, ConnectionResetError):
                 break
         conn.close()
         server.close()
-    def update_values(self,x,y):
+
+    def update_values(self, x, y):
         with self.lock:
             self.joystick_x = x
             self.joystick_y = y
+
+
 joystick_server = JoystickServer()
 joystick_server.start()
 """
@@ -67,14 +75,14 @@ La class JoystickDeplacementHorizental est une class que j'ai conçu afin de sto
 que je vais utiliser pour déplacer le drone horizentalement seulement.Afin, d'illustrer ce joystick a l'utilisateur 
 il sera dessiner avec une premiere elipse comme background et une deuxième elipse blanche comme joystick
 """
+
+
 class JoystickDeplacementHorizental(Widget):
-    deplacement_x = NumericProperty(0)
-    deplacement_y = NumericProperty(0)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.size = (200*(3/4), 200*(3/4))  # Taille du joystick
-        self.knob_size = (50*(3/4), 50*(3/4))  # Taille du bouton central
+        self.size = (200 * (3 / 4), 200 * (3 / 4))  # Taille du joystick
+        self.knob_size = (50 * (3 / 4), 50 * (3 / 4))  # Taille du bouton central
         with self.canvas:
             Color(0, 0, 1, 0.5)  # Bleu semi-transparent pour la base
             self.base = Ellipse(size=self.size, pos=self.center)  # Base fixe du joystick
@@ -82,9 +90,6 @@ class JoystickDeplacementHorizental(Widget):
             Color(1, 1, 1, 1)  # Blanc pour le bouton central
             self.knob = Ellipse(size=self.knob_size, pos=self.center)  # Bouton central
         self.bind(pos=self.update_graphics_pos)  # Met à jour les positions graphiques
-
-
-
 
     def update_graphics_pos(self, *args):
         """
@@ -101,7 +106,7 @@ class JoystickDeplacementHorizental(Widget):
         knob_y = self.center_y - self.knob.size[1] / 2
         self.knob.pos = (knob_x, knob_y)
 
-    def on_touch_move(self, touch):# a ecrire toute les formules dans word.
+    def on_touch_move(self, touch):  # a ecrire toute les formules dans word.
         """
         En gros en rapide que je veux mieu écrire.(cette methode stock la valeeur de l'endroit ou touche
         l'utilisateur pour la stocker afin de l'utiliser dans l'affichage
@@ -130,7 +135,7 @@ class JoystickDeplacementHorizental(Widget):
             # Mettre à jour les valeurs X et Y (normalisées entre -1 et 1)
             self.value_x = dx / max_radius
             self.value_y = dy / max_radius
-            #Update le transfert du coefficiant x et y.
+            # Update le transfert du coefficiant x et y.
             joystick_server.update_values(self.value_x, self.value_y)
 
             print(f"Joystick position: X={self.value_x:.2f}, Y={self.value_y:.2f}")
@@ -146,15 +151,23 @@ class JoystickDeplacementHorizental(Widget):
             print(f"Joystick relâché : X=0.00, Y=0.00")
 
         Clock.schedule_once(send_zero_values, 0.2)
-    print("x",deplacement_x)
-    print("y",deplacement_y)
+
 
 class CameraWidget(Image):
     def __init__(self, **kwargs):
         super(CameraWidget, self).__init__(**kwargs)
         self.capture = None  # La capture vidéo sera activée/désactivée
-    def start_camera(self,source=0, fps=30):
-        #Demarre la camera dependamment de la source.
+
+
+    def capture_un_frame(self):
+        if self.capture and self.capture.isOpened():
+            ret, frame = self.capture.read()
+            if ret and frame is not None:
+                return frame
+        return None
+
+    def start_camera(self, source=0, fps=30):
+        # Demarre la camera dépendamment de la source.
         self.capture = cv2.VideoCapture(source)
 
         if not self.capture.isOpened():
@@ -162,7 +175,7 @@ class CameraWidget(Image):
             return
         Clock.schedule_interval(self.update, 1.0 / fps)
 
-    #à changer la source pour l'URL de la caméra.
+    # à changer la source pour l'URL de la caméra.
     def update(self, dt):
 
         if self.capture:
@@ -174,27 +187,33 @@ class CameraWidget(Image):
                 self.texture = texture
 
     def stop_camera(self):
-        #Arrete la transmission video et remet l'image par defaut
+        # Arrete la transmission video et remet l'image par defaut
         if self.capture:
             self.capture.release()
             self.capture = None
         Clock.unschedule(self.update)
         self.source = "ImageInterfaceCamera/ImageArriereFondCamera.png"
 
+
+
 class InterfaceDAcceuil(Screen):
     pass
+
+
 class InterfacePilotage(Screen):
     camera_active = False
     joystick_active = False
     drone_en_vol = False
     slider_altitude_active = False
     slider_rotation_active = False
-    def decoller_atterir_drone(self):#Pas oublier d'ajouter l'effet du drone ici en gros lorsque le drone decolle on donne une vitesse a voir avec Kemuel.
+
+    def decoller_atterir_drone(
+            self):  # Pas oublier d'ajouter l'effet du drone ici en gros lorsque le drone decolle on donne une vitesse a voir avec Kemuel.
         if self.drone_en_vol:
             self.ids.img_decoller_atterir_drone.source = "ImageInterfaceCamera/ImageDecollerDrone.png"
             self.drone_en_vol = not self.drone_en_vol
 
-            return 1
+            joystick_server.update_values()
         else:
             self.ids.img_decoller_atterir_drone.source = "ImageInterfaceCamera/ImageAtterireDrone.png"
             self.drone_en_vol = not self.drone_en_vol
@@ -206,13 +225,12 @@ class InterfacePilotage(Screen):
         import os
         def run_program():
             os.system('Controle_De_La_Main.py')
+
         if self.camera_active:
             # CODE A CHANGER TRES IMPORTANT RAISON : Dans le future parce que la camera n'est pas similaire pour les deux.
             print("Desactiver la camera")
         else:
             run_program()
-
-
 
     def connecter_la_camera(self):
 
@@ -260,7 +278,7 @@ class InterfacePilotage(Screen):
 
         anim = Animation(value=0, duration=0.2)
 
-        #Ce code anime le retour a la valeur de 0 pour le facteur de changement de vitesse d'altitude
+        # Ce code anime le retour a la valeur de 0 pour le facteur de changement de vitesse d'altitude
         # et pour le facteur de changement de vitesse de rotation.
 
         anim.start(self.ids.slider_altitude)
@@ -273,8 +291,27 @@ class InterfacePilotage(Screen):
         print("Valeur de la vitesse d'altitude :", self.ids.slider_altitude.value)
         print("Valeur de la vitesse de rotation :", self.ids.slider_rotation.value)
 
+    # Bouton de droite
+    def prendreUnePhoto(self):
+        camera = self.ids.camera_widget
+        frame = camera.capture_un_frame()
+
+        if frame is not None:
+            try:
+                timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M")
+                nom_image = f"PhotoStockee/photo_{timestamp}.png"
+
+                os.makedirs("PhotoStockee", exist_ok=True)
+                cv2.imwrite(nom_image, frame)
+                print(f"Photo sauvegardée : {nom_image}")
+
+
+            except Exception as e:
+                print(f"Erreur critique lors de la sauvegarde : {str(e)}")
+        else:
+            print("La caméra n'est pas ouverte.")
     def reinitialization(self):
-        #Reset la camera.
+        # Reset la camera.
         camera = self.ids.camera_widget
         # Désactive la caméra
         camera.stop_camera()
@@ -283,15 +320,15 @@ class InterfacePilotage(Screen):
         self.camera_active = not self.camera_active
 
         self.camera_active = not self.camera_active
-        #Reset l'affichage des commandes.
+        # Reset l'affichage des commandes.
 
-        #Desactivation joystick droite
+        # Desactivation joystick droite
         joystick = self.ids.joystick_deplacement_horizental
         joystick.opacity = 0
         joystick.disabled = True
         self.ids.btn_activation_commande.text = "Activation pilotage manuel"
         self.joystick_active = not self.joystick_active
-        #Desactivation joystick gauche
+        # Desactivation joystick gauche
         slider_horizental = self.ids.slider_altitude
         slider_horizental.opacity = 0
         slider_horizental.disabled = True
@@ -300,12 +337,10 @@ class InterfacePilotage(Screen):
 class CameraProjetApp(App):
     def build(self):
         sm = ScreenManager()
-        #Permet de choisir le type de transition.
+        # Permet de choisir le type de transition.
         sm.transition = RiseInTransition()
         return sm
+
+
 if __name__ == '__main__':
     CameraProjetApp().run()
-
-
-
-
