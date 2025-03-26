@@ -30,8 +30,8 @@ while True:
 
     # Determines the frame size, 640 x 480 offers a nice balance between speed and accurate identification
     frame1 = cv2.resize(flipped, (640, 480))
-    # frame1.shape[0] = 480 donc height
-    # frame1.shape[1] = 640 donc width
+     #frame1.shape[0] = 480 #donc height
+     #frame1.shape[1] = 640 #donc width
 
     gauche = frame1.shape[1] * 0.2
     droite = frame1.shape[1] - gauche

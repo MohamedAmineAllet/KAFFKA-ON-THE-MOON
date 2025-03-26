@@ -10,6 +10,7 @@ stocker dans un fichier réservé pour ça,(...)
 @version : Python (3.11.9) Kivy(2.3.1)
 """
 import os
+from collections import Counter
 
 import numpy as np
 from kivy.app import App
@@ -29,6 +30,9 @@ import socket
 import time
 import threading
 import datetime
+
+#from Programs import Controle_De_La_Main
+from Programs.module import findpostion, findnameoflandmark
 
 
 class JoystickServer(threading.Thread):
