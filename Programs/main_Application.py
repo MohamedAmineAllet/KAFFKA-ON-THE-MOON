@@ -171,9 +171,10 @@ class CameraWidget(Image):
                 return frame
         return None
 
-    def start_camera(self, source=0, fps=30):
+    def start_camera(self, source=("udpsrc port=5000 caps=application/x-rtp,media=video,encoding-name=H264 ! "
+    "rtph264depay ! avdec_h264 ! videoconvert ! appsink drop=true"), fps=30):
         # Demarre la camera dépendamment de la source.
-        self.capture = cv2.VideoCapture(source)
+        self.capture = cv2.VideoCapture(source,cv2.CAP_GSTREAMER)
 
         if not self.capture.isOpened():
             print("Erreur : Impossible d'ouvrir la caméra.")
@@ -218,7 +219,7 @@ class InterfacePilotage(Screen):
             self.ids.img_decoller_atterir_drone.source = "ImageInterfaceCamera/ImageDecollerDrone.png"
             self.drone_en_vol = not self.drone_en_vol
 
-            joystick_server.update_values()
+            joystick_server.update_values()# a mettre les valeur qu'on veut.
         else:
             self.ids.img_decoller_atterir_drone.source = "ImageInterfaceCamera/ImageAtterireDrone.png"
             self.drone_en_vol = not self.drone_en_vol
