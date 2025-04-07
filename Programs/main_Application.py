@@ -10,6 +10,7 @@ stocker dans un fichier réservé pour ça,(...)
 @version : Python (3.11.9) Kivy(2.3.1)
 """
 import os
+from collections import Counter
 
 import numpy as np
 from kivy.app import App
@@ -29,6 +30,9 @@ import socket
 import time
 import threading
 import datetime
+
+#from Programs import Controle_De_La_Main
+from Programs.module import findpostion, findnameoflandmark
 
 
 class JoystickServer(threading.Thread):
@@ -171,10 +175,9 @@ class CameraWidget(Image):
                 return frame
         return None
 
-    def start_camera(self, source=("udpsrc port=5000 caps=application/x-rtp,media=video,encoding-name=H264 ! "
-    "rtph264depay ! avdec_h264 ! videoconvert ! appsink drop=true"), fps=30):
+    def start_camera(self, source=1, fps=15):
         # Demarre la camera dépendamment de la source.
-        self.capture = cv2.VideoCapture(source,cv2.CAP_GSTREAMER)
+        self.capture = cv2.VideoCapture(source)
 
         if not self.capture.isOpened():
             print("Erreur : Impossible d'ouvrir la caméra.")
@@ -219,7 +222,7 @@ class InterfacePilotage(Screen):
             self.ids.img_decoller_atterir_drone.source = "ImageInterfaceCamera/ImageDecollerDrone.png"
             self.drone_en_vol = not self.drone_en_vol
 
-            joystick_server.update_values()# a mettre les valeur qu'on veut.
+            joystick_server.update_values()
         else:
             self.ids.img_decoller_atterir_drone.source = "ImageInterfaceCamera/ImageAtterireDrone.png"
             self.drone_en_vol = not self.drone_en_vol
@@ -234,12 +237,25 @@ class InterfacePilotage(Screen):
         fingers = []
         finger = []
 
+        def minimum(position, minimum):
+            if position < minimum:
+                return position
+            else:
+                return minimum
+
+        def maximum(position, maximum):
+            if position > maximum:
+                return position
+            else:
+                return maximum
+
         while True:
             ret, frame = cap.read()
             flipped = cv2.flip(frame, 1)
 
             # Determines the frame size, 640 x 480 offers a nice balance between speed and accurate identification
-            frame1 = cv2.resize(flipped, (640, 480))
+            #frame1 = cv2.resize(flipped, (640, 480))
+            frame1 = flipped
             # frame1.shape[0] = 480 donc height
             # frame1.shape[1] = 640 donc width
 
@@ -261,10 +277,10 @@ class InterfacePilotage(Screen):
 
                 # trouver les extrémités de la main
                 for i in range(1, len(a) - 1):
-                    xmin = Controle_De_La_Main.minimum(a[i][1], xMin)
-                    xmax = Controle_De_La_Main.maximum(a[i][1], xMax)
-                    ymin = Controle_De_La_Main.minimum(a[i][2], yMin)
-                    ymax = Controle_De_La_Main.maximum(a[i][2], yMax)
+                    xmin = minimum(a[i][1], xMin)
+                    xmax = maximum(a[i][1], xMax)
+                    ymin = minimum(a[i][2], yMin)
+                    ymax = maximum(a[i][2], yMax)
 
                 # faire bouger selon la position dans l'écran
                 if yMax > bas and yMin > haut:
@@ -308,7 +324,7 @@ class InterfacePilotage(Screen):
                 # speak("you have" + str(up) + "fingers up  and" + str(down) + "fingers down")
 
         # Ce code nous permet de lancer un autre fichier python dans le fichier python courrant.
-        import os
+        """import os
         def run_program():
             os.system('Controle_De_La_Main.py')
 
@@ -316,7 +332,7 @@ class InterfacePilotage(Screen):
             # CODE A CHANGER TRES IMPORTANT RAISON : Dans le future parce que la camera n'est pas similaire pour les deux.
             print("Desactiver la camera")
         else:
-            run_program()
+            run_program()"""
 
     def connecter_la_camera(self):
 
