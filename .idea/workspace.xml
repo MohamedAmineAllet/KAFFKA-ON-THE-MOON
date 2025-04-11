@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="sockets, camera et ardupilot" />
+    <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="1)Création d'une nouvelle colonne de prédiction du prochain jour.&#10;Par : Mohamed-Amine,Allet&#10;date : 2025-04-07">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Programs/cameraprojet.kv" beforeDir="false" afterPath="$PROJECT_DIR$/Programs/cameraprojet.kv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Programs/main_Application.py" beforeDir="false" afterPath="$PROJECT_DIR$/Programs/main_Application.py" afterDir="false" />
+    </list>
     <list id="34b81173-17f7-48ff-b6c3-ba772a07cee4" name="Changes by Fatma" comment="" />
     <list id="c317acb5-95a5-484f-958a-a4cdb83a4b8f" name="Changes by MSI THIN 15" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,12 +33,12 @@
     &quot;assignee&quot;: &quot;KKML19&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/MohamedAmineAllet/KAFFKA-ON-THE-MOON.git&quot;,
-    &quot;accountId&quot;: &quot;570014d7-b776-4864-91ed-0b7ba2b7459d&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/MohamedAmineAllet/KAFFKA-ON-THE-MOON.git",
+    "accountId": "c394922b-ccad-4d54-9e13-cd46e4bd3c47"
   }
-}</component>
+}]]></component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$USER_HOME$/AppData/Local/Programs/Python/Python312/Lib/site-packages/dronekit/__init__.py" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -58,7 +62,7 @@
     &quot;Python.fichier2.executor&quot;: &quot;Run&quot;,
     &quot;Python.lieur_fichier.executor&quot;: &quot;Run&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main_Application.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.main_Application.executor&quot;: &quot;Run&quot;,
     &quot;Python.main_SoftwareInTheLoop.executor&quot;: &quot;Run&quot;,
     &quot;Python.predicteurDeMeteo.executor&quot;: &quot;Run&quot;,
     &quot;Python.predicteurTest.executor&quot;: &quot;Run&quot;,
@@ -193,6 +197,7 @@
       <workItem from="1742825512376" duration="18967000" />
       <workItem from="1743796565304" duration="1772000" />
       <workItem from="1744029898186" duration="2957000" />
+      <workItem from="1744339659152" duration="4087000" />
     </task>
     <task id="LOCAL-00001" summary="Base code projet en SIM.&#10;Date :  2025-02-03&#10;commit par : Mohamed-Amine,Allet">
       <option name="closed" value="true" />
@@ -330,7 +335,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742950749466</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="1)Création d'une nouvelle colonne de prédiction du prochain jour.&#10;Par : Mohamed-Amine,Allet&#10;date : 2025-04-07">
+      <option name="closed" value="true" />
+      <created>1744050686010</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1744050686010</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -361,7 +374,8 @@
     <MESSAGE value="1) Ajout d'un fichier lieur_fichier.py qui lance en parralèle les deux mains.&#10;2)Utilisation d'un socket qui permet de partager certaines données entre les fichiers mains constamment dès le moment ou elle sont changé dans un fichier(Ici main_Application.py)&#10;3) Reset a 0 la valeur transférée lorsqu'on relache le joystick.&#10;Date :  2025-03-20&#10;commit par : Mohamed-Amine,Allet" />
     <MESSAGE value="1)Création valeur test/train dans le predicteur de pluie et neige.&#10;2)Ajout de la fonction de prise de photo qui sont stockée dans une dossier.&#10;Par : Mohamed-Amine,Allet&#10;date : 2025-03-24" />
     <MESSAGE value="sockets, camera et ardupilot" />
-    <option name="LAST_COMMIT_MESSAGE" value="sockets, camera et ardupilot" />
+    <MESSAGE value="1)Création d'une nouvelle colonne de prédiction du prochain jour.&#10;Par : Mohamed-Amine,Allet&#10;date : 2025-04-07" />
+    <option name="LAST_COMMIT_MESSAGE" value="1)Création d'une nouvelle colonne de prédiction du prochain jour.&#10;Par : Mohamed-Amine,Allet&#10;date : 2025-04-07" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/workspace_xml$relieur_fichier.coverage" NAME="relieur_fichier Coverage Results" MODIFIED="1742257066605" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
@@ -370,7 +384,7 @@
     <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$Are_Fingers_up_or_Down.coverage" NAME="Are Fingers up or Down Coverage Results" MODIFIED="1739206408783" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/.venv1/Scripts" />
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$test6.coverage" NAME="test6 Coverage Results" MODIFIED="1740196660784" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/workspace_xml$Controle_De_La_Main.coverage" NAME="Controle_De_La_Main Coverage Results" MODIFIED="1744039307025" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Programs" />
-    <SUITE FILE_PATH="coverage/workspace_xml$main_Application.coverage" NAME="main_Application Coverage Results" MODIFIED="1744039248879" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Programs" />
+    <SUITE FILE_PATH="coverage/workspace_xml$main_Application.coverage" NAME="main_Application Coverage Results" MODIFIED="1744343508363" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Programs" />
     <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$Simple_Hand_Tracker.coverage" NAME="Simple-Hand-Tracker Coverage Results" MODIFIED="1739206216524" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/workspace_xml$Simple_Hand_Tracker.coverage" NAME="Simple-Hand-Tracker Coverage Results" MODIFIED="1741134408467" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$predicteurDeMeteo.coverage" NAME="predicteurDeMeteo Coverage Results" MODIFIED="1739685614010" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MachinesIntelligentes" />
