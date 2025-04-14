@@ -43,6 +43,7 @@ class JoystickServer(threading.Thread):
         self.running = True
         self.lock = threading.Lock()
 
+
     def run(self):
         """
         Creer un serveur pour héberger des donnéees et des informations en utilisant un socket
