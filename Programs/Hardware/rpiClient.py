@@ -17,13 +17,44 @@ from dronekit import LocationGlobalRelative
 import socket
 from pymavlink import mavutil
 
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect(("10.185.12.131", 12345))  #localhost
+def reaction (pigeonVoyageur) :
+    if not (pigeonVoyageur.isdigit()):
+        print("Reçu:" ,pigeonVoyageur)
+    else:
+        try:
+            pigeonVoyageur = int(pigeonVoyageur)
 
-print("Je suis branché!!!")
+            match pigeonVoyageur:
+                case 1:
+                    print("up")
+                case 2:
+                    print("down")
+                case 3:
+                    print("left")
+                case 4:
+                    print("right")
 
-client.sendall(b"Hello, serveur !")
+        except(Exception):
+            print("Le Message n'est pas un Entier")
+        finally:
+            print("******************")
+
 
 while True:
-    print(client.recv(1024))
-    client.close()
+        try:
+            client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            client.connect(("localhost", 12345))  # localhost
+            time.sleep(1)
+
+            while True:
+                client.sendall(b"piou piou -Over") #Message inutile
+                pigeonVoyageur = client.recv(1024)  # Le message reçu
+                reaction(pigeonVoyageur)
+
+
+        except(ConnectionRefusedError, ConnectionResetError, KeyboardInterrupt) as e:  # erreurs de connections
+            print("Erreur de connection Client", str(e))
+            time.sleep(1)
+        finally:
+            print("Over and Out")
+            client.close()

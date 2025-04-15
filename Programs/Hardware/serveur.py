@@ -1,38 +1,52 @@
 import socket
-import time
-import keyboard  # using module keyboard
-from threading import Timer
+import threading
+import keyboard
 
+# AF_INET → Utilisation d’IPv4  SOCK_STREAM → Utilisation de TCP (connexion fiable)
 serveur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-serveur.bind(('', 12345))
+
+HOST = ''
+PORT = 12345
+
+serveur.bind((HOST, PORT))
 serveur.listen(1)
 print("Le serveur est prêt...")
 
+# Variable partagée entre threads
+message_lock = threading.Lock()
+message = "piou piou 1er du nom"
 
-def backgroundController(connection):
-    Message = 'Hello World from the PC'
-    print(Message)
+def clavierStalker():
+    global message
+    while True:
+        event = keyboard.read_event()
+        if event.event_type == keyboard.KEY_DOWN:
+            with message_lock:
+                message = event.name
 
-    try:
-        connection.send(bytes(Message.encode('utf-8')))
-    except ConnectionResetError as e:
-        print(f"❌ Erreur de connexion (reset): {e}")
-    except ConnectionAbortedError as e:
-        print(f"❌ Erreur de connexion (abordée): {e}")
-    except Exception as e:
-        print(f"❌ Autre erreur: {e}")
+# Lancer le thread clavier UNE FOIS, en dehors de la boucle principale
+thread_clavier = threading.Thread(target=clavierStalker, daemon=True)
+thread_clavier.start()
 
-    Timer(5, backgroundController, [connection]).start()
-
+def envoyerMessage(connection):
+    with message_lock:
+        try:
+            connection.send(bytes(message.encode('utf-8')))
+        except Exception as e:
+            print(f"Erreur d'envoi : {e}")
 
 while True:
-    connection, adresse = serveur.accept()
-    print(f"Nouvelle connexion de {adresse}")
-
-    # Lancer la fonction de contrôle en arrière-plan
-    backgroundController(connection)
-
-    if keyboard.is_pressed("enter"):  # if key 'enter' is pressed
-        connection.send(bytes('You Pressed A Key!'.encode('utf-8')))
-        print("message enter envoyé")
-
+    connection, addresse = serveur.accept()
+    print("Client connecté :", addresse)
+    try:
+        while True:
+            envoyerMessage(connection)
+            data = connection.recv(1024)
+            if not data:
+                print("Client déconnecté.")
+                break
+            #print("Reçu :", data.decode())
+    except Exception as e:
+        print("Erreur connexion :", str(e))
+    finally:
+        connection.close()
