@@ -5,6 +5,7 @@ from collections import Counter
 from module import findnameoflandmark, findpostion, speak
 import math
 
+
 # Use CV2 Functionality to create a Video stream and add some values + variables
 cap = cv2.VideoCapture(0)
 tip=[8,12,16,20]
