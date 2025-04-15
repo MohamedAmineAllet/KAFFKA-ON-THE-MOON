@@ -240,13 +240,16 @@ class InterfacePilotage(Screen):
     drone_en_vol = False
     slider_altitude_active = False
     slider_rotation_active = False
+    def decoller_drone(self):
+        #os.
+        pass
 
     def decoller_atterir_drone(self):  # Pas oublier d'ajouter l'effet du drone ici en gros lorsque le drone decolle on donne une vitesse a voir avec Kemuel.
         if self.drone_en_vol:
             self.ids.img_decoller_atterir_drone.source = "ImageInterfaceCamera/ImageDecollerDrone.png"
             self.drone_en_vol = not self.drone_en_vol
 
-            joystick_server.update_values()
+            joystick_server.update_values(0,0,5,3)
         else:
             self.ids.img_decoller_atterir_drone.source = "ImageInterfaceCamera/ImageAtterireDrone.png"
             self.drone_en_vol = not self.drone_en_vol

@@ -280,9 +280,9 @@ def client_du_joystick():
                     break
                 try:
                     x_str, y_str = data.split(',')  # valeurs selon l'axe des x et y dans un plan parallèle au sol entre [-1, 1]
-                    Vy = float(x_str) * 10 # pour nous y c'est l'axe est ouest donc x du joystick
-                    Vx = float(y_str) * 10  # Pour nous x c'est l'axe nord sud donc y du joystick
-
+                    Vy = float(x_str) * 20 # pour nous y c'est l'axe est ouest donc x du joystick
+                    Vx = float(y_str) * 20  # Pour nous x c'est l'axe nord sud donc y du joystick
+                    print("********", Vy, Vx )
                     setVitesse(Vx, Vy, 0, 5)
                 except ValueError:
                     print("Données invalides :", data)
@@ -292,14 +292,13 @@ def client_du_joystick():
         finally:
             client.close()
 
-# Crée un thread pour excécuter la fonction client en arrière plan
-joystick_thread = threading.Thread(target=client_du_joystick, daemon=True)
-joystick_thread.start()
+
 
 """ ******* La Mission en question ****** """
 # vehicle = connectMyCopter() # Pour le Speedou
 arm_and_takeoff(4)
 
+""" 
 # vers le Nord
 setVitesse(10, 0, 0, 10)
 
@@ -328,13 +327,17 @@ voler_en_cercle(5, 1, 1)
 
 # Le drone atterit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 atterisage_du_drone()
+"""
 
-
+# Crée un thread pour excécuter la fonction client en arrière plan
+joystick_thread = threading.Thread(target=client_du_joystick, daemon=True)
+joystick_thread.start()
 
 # Fermer SITL proprement
 time.sleep(2)
 vehicule.close()
 sitl.stop()
+
 
 ###### problèmes ######
 # - Faire un tourbillon
