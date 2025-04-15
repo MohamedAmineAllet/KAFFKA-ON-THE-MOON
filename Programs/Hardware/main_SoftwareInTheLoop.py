@@ -249,6 +249,19 @@ def voler_en_cercle(vitesse, boucles, duree):
             setReturnToLauch()
             """
 
+def atterisage_du_drone():
+    setMode(9)
+    while True: #le drone déscend dans l'axe z, mais on aime pas le produit vectoriel
+        altitude = vehicule.location.global_relative_frame.alt
+        print(f"Altitude actuelle : {altitude:.2f} m")
+        time.sleep(1)
+        # son altitude diminiue jusqu'à tant qu'il arrive à 0.1 (pour éviter tout problème)
+        if altitude <= 0.1:
+            print("Le sol a été atteint, on desarme")
+            vehicule.armed = False
+            break
+    print("Drone désarmé, atterrissage terminé.")
+
 def client_du_joystick():
     """
     Utilisation de socket (Interface de connection réseau) pour se connecter en tant que client
@@ -288,21 +301,21 @@ joystick_thread.start()
 arm_and_takeoff(4)
 
 # vers le Nord
-#setVitesse(10, 0, 0, 10)
+setVitesse(10, 0, 0, 10)
 
 # vers le Sud
-#setVitesse(-10, 0, 0, 10)
+setVitesse(-10, 0, 0, 10)
 
 # ne pas bouger durant 5s
-#setMode(5) #Loiter
+setMode(5) #Loiter
 time.sleep(5)
-#setMode(4)
+setMode(4)
 
 # vers l'Est
-#setVitesse(0, 10, 0, 10)
+setVitesse(0, 10, 0, 10)
 
 # vers l'Ouest
-#setVitesse(0, -10, 0, 10)
+setVitesse(0, -10, 0, 10)
 
 # se rendre à un point précis
 point = ajouter_point(-35.362919, 149.165452, 7)
@@ -311,11 +324,10 @@ suivre_trajectoire(vehicule, point)
 # titre assez explicite
 voler_en_cercle(5, 1, 1)
 
-setMode(6) # Mode RTL = 6 en ArduPilot
-setMode(9)
-print("Altitude Actuelle: %d" % vehicule.location.global_relative_frame.alt)
+#setMode(6) # Mode RTL = 6 en ArduPilot
 
-
+# Le drone atterit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+atterisage_du_drone()
 
 
 

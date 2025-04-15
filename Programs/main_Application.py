@@ -43,6 +43,7 @@ class JoystickServer(threading.Thread):
         self.running = True
         self.lock = threading.Lock()
 
+
     def run(self):
         """
         Creer un serveur pour héberger des donnéees et des informations en utilisant un socket
@@ -161,7 +162,28 @@ class CameraWidget(Image):
     def __init__(self, **kwargs):
         super(CameraWidget, self).__init__(**kwargs)
         self.capture = None  # La capture vidéo sera activée/désactivée
+        self.enregistrement_en_cours = False
+        self.video_writer = None
 
+    def demarrer_enregistrement(self, filename="VideoStockee/video.mp4", fps=15):
+        if self.capture is None or not self.capture.isOpened():
+            print("Erreur : La caméra n'est pas active.")
+            return
+
+        os.makedirs("VideoStockee", exist_ok=True)
+        width = int(self.capture.get(cv2.CAP_PROP_FRAME_WIDTH))
+        height = int(self.capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        fourcc = cv2.VideoWriter_fourcc(*'XVID')
+        self.video_writer = cv2.VideoWriter(filename, fourcc, fps, (width, height))
+        self.recording = True
+        print(f"Enregistrement démarré : {filename}")
+
+    def stopper_enregistrement(self):
+        if self.recording and self.video_writer:
+            self.video_writer.release()
+            self.video_writer = None
+            self.recording = False
+            print("Enregistrement arrêté")
 
     def capture_un_frame(self):
         """
@@ -175,7 +197,7 @@ class CameraWidget(Image):
                 return frame
         return None
 
-    def start_camera(self, source=1, fps=15):
+    def start_camera(self, source=0, fps=15):
         # Demarre la camera dépendamment de la source.
         self.capture = cv2.VideoCapture(source)
 
@@ -190,6 +212,9 @@ class CameraWidget(Image):
         if self.capture:
             ret, frame = self.capture.read()
             if ret:
+                if self.enregistrement_en_cours and self.video_writer:
+                    self.video_writer.write(frame)
+
                 buf = cv2.flip(frame, 0).tobytes()
                 texture = Texture.create(size=(frame.shape[1], frame.shape[0]), colorfmt='bgr')
                 texture.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
@@ -216,8 +241,7 @@ class InterfacePilotage(Screen):
     slider_altitude_active = False
     slider_rotation_active = False
 
-    def decoller_atterir_drone(
-            self):  # Pas oublier d'ajouter l'effet du drone ici en gros lorsque le drone decolle on donne une vitesse a voir avec Kemuel.
+    def decoller_atterir_drone(self):  # Pas oublier d'ajouter l'effet du drone ici en gros lorsque le drone decolle on donne une vitesse a voir avec Kemuel.
         if self.drone_en_vol:
             self.ids.img_decoller_atterir_drone.source = "ImageInterfaceCamera/ImageDecollerDrone.png"
             self.drone_en_vol = not self.drone_en_vol
@@ -227,7 +251,7 @@ class InterfacePilotage(Screen):
             self.ids.img_decoller_atterir_drone.source = "ImageInterfaceCamera/ImageAtterireDrone.png"
             self.drone_en_vol = not self.drone_en_vol
 
-            return -1
+            joystick_server.update_values()
 
     def demarrerHandTracking(self):
         #video stream et variables
@@ -412,6 +436,22 @@ class InterfacePilotage(Screen):
                 print(f"Erreur critique lors de la sauvegarde : {str(e)}")
         else:
             print("La caméra n'est pas ouverte.")
+    def prendre_une_video(self):
+        camera = self.ids.camera_widget
+        if self.camera_active:
+            if camera.enregistrement_en_cours:
+                camera.stopper_enregistrement()
+                camera.enregistrement_en_cours = False
+                self.ids.img_prendre_video.source ="ImageInterfaceCamera/ImagePrendreVideo.png"
+
+            else:
+                timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M")
+                filename = f"VideoStockee/video_{timestamp}.mp4"
+                camera.demarrer_enregistrement(filename)
+                self.ids.img_prendre_video.source ="ImageInterfaceCamera/ImagePrendrePhoto3.png"
+                camera.enregistrement_en_cours = True
+        else:
+            print("camera désactivée activer la pour enregistrer une vidéo")
     def reinitialization(self):
         # Reset la camera.
         camera = self.ids.camera_widget

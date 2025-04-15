@@ -159,13 +159,14 @@
 
 
 #Bouton de droite
-    Button:
+    Button:#Prendre une vidéo
+        id : prendre_video
         background_color: 1,0,0,0
         size_hint:0.08,0.08
         pos: root.width*0.9,root.height*0.2 #Pour centrer le bouton.
-        on_press:root.press()
+        on_press:root.prendre_une_video()
         Image:
-
+            id : img_prendre_video
             source: "ImageInterfaceCamera/ImagePrendreVideo.png" #Image libre de droits : source https://fr.vecteezy.com/png/9400746-dslr-photo-appareil-photo-clipart-design-illustration
             pos:self.parent.pos
             size:self.parent.size
