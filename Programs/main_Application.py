@@ -23,6 +23,8 @@ from kivy.uix.screenmanager import ScreenManager, Screen, RiseInTransition
 from kivy.animation import Animation
 from kivy.clock import Clock
 import cv2
+
+from collections import Counter
 # from Hardware import main_SoftwareInTheLoop
 
 # Biblioteque utile a la transmission video du Rpi vers l'appareil.
@@ -31,7 +33,8 @@ import time
 import threading
 import datetime
 
-#from Programs import Controle_De_La_Main
+from pywin.framework.editor import frame
+
 from Programs.module import findpostion, findnameoflandmark
 
 
@@ -240,6 +243,7 @@ class InterfacePilotage(Screen):
     drone_en_vol = False
     slider_altitude_active = False
     slider_rotation_active = False
+    handtracker_active = False
 
     def decoller_atterir_drone(self):  # Pas oublier d'ajouter l'effet du drone ici en gros lorsque le drone decolle on donne une vitesse a voir avec Kemuel.
         if self.drone_en_vol:
@@ -253,99 +257,17 @@ class InterfacePilotage(Screen):
 
             joystick_server.update_values()
 
-    def demarrerHandTracking(self):
-        #video stream et variables
-        cap = cv2.VideoCapture(0)
-        tip = [8, 12, 16, 20]
-        tipname = [8, 12, 16, 20]
-        fingers = []
-        finger = []
+    def demarrer_handtracking(self):
+        self.handtracker_active = not self.handtracker_active;
 
-        def minimum(position, minimum):
-            if position < minimum:
-                return position
-            else:
-                return minimum
+        if self.handtracker_active and self.camera_active:
+            self.joystick_active = False
+            self.slider_altitude_active = False
+            self.slider_rotation_active = False
 
-        def maximum(position, maximum):
-            if position > maximum:
-                return position
-            else:
-                return maximum
+            track = HandTracking()
+            track.start_camera(0)
 
-        while True:
-            ret, frame = cap.read()
-            flipped = cv2.flip(frame, 1)
-
-            # Determines the frame size, 640 x 480 offers a nice balance between speed and accurate identification
-            #frame1 = cv2.resize(flipped, (640, 480))
-            frame1 = flipped
-            # frame1.shape[0] = 480 donc height
-            # frame1.shape[1] = 640 donc width
-
-            gauche = frame1.shape[1] * 0.2
-            droite = frame1.shape[1] - gauche
-            haut = frame1.shape[0] * 0.2
-            bas = frame1.shape[0] - haut
-
-            # crée une liste des positions des jointures de chaque doigt
-            a = findpostion(frame1)
-            b = findnameoflandmark(frame1)
-
-            # Below is a series of If statement that will determine if a finger is up or down and
-            # then will print the details to the console
-            if len(b and a) != 0:
-                # initialiser les extrémités
-                xMin = a[0][1], xMax = a[0][1]
-                yMin = a[0][2], yMax = a[0][2]
-
-                # trouver les extrémités de la main
-                for i in range(1, len(a) - 1):
-                    xmin = minimum(a[i][1], xMin)
-                    xmax = maximum(a[i][1], xMax)
-                    ymin = minimum(a[i][2], yMin)
-                    ymax = maximum(a[i][2], yMax)
-
-                # faire bouger selon la position dans l'écran
-                if yMax > bas and yMin > haut:
-                    print("appeler méthode, bas")
-                if yMax < bas and yMin < haut:
-                    print("appeler méthode, haut")
-                if xMax > droite and xMin > gauche:
-                    print("méthode droite")
-                if xMax < droite and xMin < gauche:
-                    print("méthode gauche")
-
-                finger = []
-                if a[0][1:] < a[4][1:]:
-                    finger.append(1)
-                else:
-                    finger.append(0)
-
-                fingers = []
-                for id in range(0, 4):
-                    if a[tip[id]][2:] < a[tip[id] - 2][2:]:
-                        fingers.append(1)
-                    else:
-                        fingers.append(0)
-
-            # Below will print to the terminal the number of fingers that are up or down
-            x = fingers + finger
-            c = Counter(x)
-            up = c[1]
-
-            if up == 1:
-                print("avance")
-            elif up == 2:
-                print("recule")
-
-            # Below shows the current frame to the desktop
-            cv2.imshow("Frame", frame1);
-            key = cv2.waitKey(1) & 0xFF
-            # Below will speak out load when |s| is pressed on the keyboard about what fingers are up or down
-            if key == ord("q"):
-                break
-                # speak("you have" + str(up) + "fingers up  and" + str(down) + "fingers down")
 
         # Ce code nous permet de lancer un autre fichier python dans le fichier python courrant.
         """import os
@@ -474,6 +396,115 @@ class InterfacePilotage(Screen):
         slider_horizental = self.ids.slider_altitude
         slider_horizental.opacity = 0
         slider_horizental.disabled = True
+
+
+class HandTracking:
+    def __init__(self):
+        self.source = 0
+        self.capture = None  # La capture vidéo sera activée/désactivée
+
+    def lecture_frame_unique(self):
+        
+        ##Cette méthode me permet de capturer la frame du moment afin de l'utiliser plus tard
+        ##dans l'Interface Pilotage.
+        ##:return frame La frame du moment courant qui est affiché dans l'application:
+        
+        if self.capture and self.capture.isOpened():
+            ret, frame = self.capture.read()
+            if ret and frame is not None:
+                return frame
+        return None
+
+    def start_camera(self, source=0, fps=15):
+        # Demarre la camera dépendamment de la source.
+        self.capture = cv2.VideoCapture(source)
+
+        if not self.capture.isOpened():
+            print("Erreur : Impossible d'ouvrir la caméra.")
+            return
+        Clock.schedule_interval(self.update, 1.0 / fps)
+
+
+    def update(self, dt):
+        tip = [8, 12, 16, 20]
+        fingers = []
+        finger = []
+        if self.capture:
+            ret, frame = self.capture.read()
+
+            if ret:
+                buf = cv2.flip(frame, 1).tobytes()
+                texture = Texture.create(size=(frame.shape[1], frame.shape[0]), colorfmt='bgr')
+                texture.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
+                self.texture = texture
+
+            gauche = frame.shape[1] * 0.2
+            droite = frame.shape[1] - gauche
+            haut = frame.shape[0] * 0.2
+            bas = frame.shape[0] - haut
+
+            # crée une liste des positions des jointures de chaque doigt
+            a = findpostion(frame)
+            b = findnameoflandmark(frame)
+
+            # Below is a series of If statement that will determine if a finger is up or down and
+            # then will print the details to the console
+            if len(b and a) != 0:
+                # initialiser les extrémités
+                x_min = a[0][1]
+                x_max = a[0][1]
+                y_min = a[0][2]
+                y_max = a[0][2]
+
+                # trouver les extrémités de la main
+                for i in range(1, len(a) - 1):
+                    x_min = min(a[i][1], x_min)
+                    x_max = max(a[i][1], x_max)
+                    y_min= min(a[i][2], y_min)
+                    y_max = max(a[i][2], y_max)
+
+                # faire bouger selon la position dans l'écran
+                if y_max > bas and y_min > haut:
+                    print("méthode BAS")
+                if y_max < bas and y_min < haut:
+                    print("méthode HAUT")
+                if x_max > droite and x_min > gauche:
+                    print("méthode DROITE")
+                if x_max < droite and x_min < gauche:
+                    print("méthode GAUCHE")
+
+                finger = []
+                if a[0][1:] < a[4][1:]:
+                    finger.append(1)
+                else:
+                    finger.append(0)
+
+                fingers = []
+                for id in range(0, 4):
+                    if a[tip[id]][2:] < a[tip[id] - 2][2:]:
+                        fingers.append(1)
+                    else:
+                        fingers.append(0)
+
+        x = fingers + finger
+        c = Counter(x)
+        up = c[1]
+
+        if up == 2:
+            print("avance")
+        elif up == 3:
+            print("recule")
+
+
+        cv2.imshow("Frame", frame)
+
+    def stop_camera(self):
+        # Arrete la transmission video et remet l'image par defaut
+        if self.capture:
+            self.capture.release()
+            self.capture = None
+        Clock.unschedule(self.update)
+        self.source = "ImageInterfaceCamera/ImageArriereFondCamera.png"
 
 
 class CameraProjetApp(App):

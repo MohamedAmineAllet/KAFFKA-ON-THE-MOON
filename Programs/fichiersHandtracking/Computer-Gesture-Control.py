@@ -15,7 +15,7 @@ finger=[]
 while True:
 
      ret, frame = cap.read()
-     #flipped = cv2.flip(frame, flipCode = -1)
+     #flipped = cv2.flip(frame_front, flipCode = -1)
      frame1 = cv2.resize(frame, (640, 480))
 
      

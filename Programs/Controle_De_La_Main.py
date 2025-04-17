@@ -8,10 +8,20 @@ import math
 
 # Use CV2 Functionality to create a Video stream and add some values + variables
 cap = cv2.VideoCapture(0)
+
+if not cap.isOpened():
+    print("Unable to open camera.")
+    cap.release()
+    cv2.destroyAllWindows()
+    exit()
+
 tip=[8,12,16,20]
 tipname=[8,12,16,20]
 fingers=[]
 finger=[]
+
+front_width = 640
+front_height = 480
 
 def minimum(position, minimum):
     if position < minimum:
@@ -26,23 +36,30 @@ def maximum(position, maximum):
 
 # Create an infinite loop which will produce the live feed to our desktop and that will search for hands
 while True:
-    ret, frame = cap.read()
-    flipped = cv2.flip(frame, flipCode=1)
+    ret, frame_front = cap.read()
 
-    # Determines the frame size, 640 x 480 offers a nice balance between speed and accurate identification
-    frame1 = cv2.resize(flipped, (640, 480))
-     #frame1.shape[0] = 480 #donc height
-     #frame1.shape[1] = 640 #donc width
+    if not ret:
+        print("Unable to read.")
+        cap.release()
+        break
 
-    gauche = frame1.shape[1] * 0.2
-    droite = frame1.shape[1] - gauche
-    haut = frame1.shape[0]*0.2
-    bas = frame1.shape[0] - haut
+    flipped = cv2.flip(frame_front, flipCode=1)
+
+    # Determines the frame_front size, 640 x 480 offers a nice balance between speed and accurate identification
+    frame_pip = cv2.resize(flipped, (front_width, front_height))
+
+    #frame1.shape[0] = 480 #donc height
+    #frame1.shape[1] = 640 #donc width
+
+    gauche = frame_pip.shape[1] * 0.2
+    droite = frame_pip.shape[1] - gauche
+    haut = frame_pip.shape[0]*0.2
+    bas = frame_pip.shape[0] - haut
 
 
     # crée une liste des positions des jointures de chaque doigt
-    a = findpostion(frame1)
-    b = findnameoflandmark(frame1)
+    a = findpostion(frame_pip)
+    b = findnameoflandmark(frame_pip)
 
     # Below is a series of If statement that will determine if a finger is up or down and
     # then will print the details to the console
@@ -63,13 +80,13 @@ while True:
 
         #faire bouger selon la position dans l'écran
         if yMax > bas and yMin > haut:
-            print("appeler méthode, bas")
+            print("méthode BAS")
         if yMax < bas and yMin < haut:
-            print("appeler méthode, haut")
+            print("méthode HAUT")
         if xMax > droite and xMin > gauche:
-            print("méthode droite")
+            print("méthode DROITE")
         if xMax < droite and xMin < gauche:
-            print("méthode gauche")
+            print("méthode GAUCHE")
 
 
         finger = []
@@ -90,16 +107,18 @@ while True:
     c = Counter(x)
     up = c[1]
 
-    if up == 1:
+    if up == 2:
         print("avance")
-    elif up == 2:
+    elif up == 3:
         print("recule")
 
-    # Below shows the current frame to the desktop
-    cv2.imshow("Frame", frame1);
-    key = cv2.waitKey(1) & 0xFF
+    # Below shows the current frame_front to the desktop
+    #cv2.imshow("Frame", frame_pip);
+    cv2.imshow("Frame", frame_pip)
 
+    key = cv2.waitKey(1) & 0xFF
     # Below will speak out load when |s| is pressed on the keyboard about what fingers are up or down
     if key == ord("q"):
         break
         #speak("you have" + str(up) + "fingers up  and" + str(down) + "fingers down")
+

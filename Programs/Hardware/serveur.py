@@ -12,28 +12,21 @@ serveur.bind((HOST, PORT))
 serveur.listen(1)
 print("Le serveur est prêt...")
 
-# Variable partagée entre threads
-message_lock = threading.Lock()
-message = "piou piou 1er du nom"
 
-def clavierStalker():
-    global message
-    while True:
-        event = keyboard.read_event()
-        if event.event_type == keyboard.KEY_DOWN:
-            with message_lock:
-                message = event.name
+def backgroundController(connection):
+    Message = 'Hello World from the PC'
+    print(Message)
 
-# Lancer le thread clavier UNE FOIS, en dehors de la boucle principale
-thread_clavier = threading.Thread(target=clavierStalker, daemon=True)
-thread_clavier.start()
+    try:
+        connection.send(bytes(Message.encode('utf-8')))
+    except ConnectionResetError as e:
+        print(f"❌ Erreur de connexion (reset): {e}")
+    except ConnectionAbortedError as e:
+        print(f"❌ Erreur de connexion (abordée): {e}")
+    except Exception as e:
+        print(f"❌ Autre erreur: {e}")
 
-def envoyerMessage(connection):
-    with message_lock:
-        try:
-            connection.send(bytes(message.encode('utf-8')))
-        except Exception as e:
-            print(f"Erreur d'envoi : {e}")
+    Timer(5, backgroundController, [connection]).start()
 
 while True:
     connection, addresse = serveur.accept()
