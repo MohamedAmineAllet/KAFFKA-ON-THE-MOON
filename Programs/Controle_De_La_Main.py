@@ -5,6 +5,7 @@ from collections import Counter
 from module import findnameoflandmark, findpostion, speak
 import math
 
+
 # Use CV2 Functionality to create a Video stream and add some values + variables
 cap = cv2.VideoCapture(0)
 
@@ -27,14 +28,11 @@ def minimum(position, minimum):
         return position
     else:
         return minimum
-
-
 def maximum(position, maximum):
     if position > maximum:
         return position
     else:
         return maximum
-
 
 # Create an infinite loop which will produce the live feed to our desktop and that will search for hands
 while True:
@@ -119,7 +117,6 @@ while True:
     cv2.imshow("Frame", frame_pip)
 
     key = cv2.waitKey(1) & 0xFF
-
     # Below will speak out load when |s| is pressed on the keyboard about what fingers are up or down
     if key == ord("q"):
         break

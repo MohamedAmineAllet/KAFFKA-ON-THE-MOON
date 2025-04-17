@@ -11,6 +11,7 @@ stocker dans un fichier réservé pour ça,(...)
 """
 import os
 from collections import Counter
+
 import numpy as np
 from kivy.app import App
 from kivy.properties import NumericProperty
@@ -35,18 +36,12 @@ import datetime
 from pywin.framework.editor import frame
 
 from Programs.module import findpostion, findnameoflandmark
-# ********** SERVEUR  ********** #
-
-# ********** INTERFACE de PILOTAGE ********** #
-
-# ********** JOYSTICK ********** #
 
 
-# actully on devrait le renomer serveur
 class JoystickServer(threading.Thread):
     def __init__(self):
         super().__init__()
-        self.joystick_x = 0.0 # valeur
+        self.joystick_x = 0.0
         self.joystick_y = 0.0
         self.running = True
         self.lock = threading.Lock()
@@ -83,11 +78,9 @@ class JoystickServer(threading.Thread):
 
 joystick_server = JoystickServer()
 joystick_server.start()
-"""
-La class JoystickDeplacementHorizental est une class que j'ai conçu afin de stocker deux coefficiant un en x et un en y
-que je vais utiliser pour déplacer le drone horizentalement seulement.Afin, d'illustrer ce joystick a l'utilisateur 
-il sera dessiner avec une premiere elipse comme background et une deuxième elipse blanche comme joystick
-"""
+
+
+# ********** Application Interface du Pilote ************* #
 
 
 class JoystickDeplacementHorizental(Widget):
@@ -265,13 +258,16 @@ class InterfacePilotage(Screen):
     def demarrer_handtracking(self):
         self.handtracker_active = not self.handtracker_active;
 
+        track = HandTracking()
+
         if self.handtracker_active and self.camera_active:
             self.joystick_active = False
             self.slider_altitude_active = False
             self.slider_rotation_active = False
 
-            track = HandTracking()
             track.start_camera(0)
+        else:
+            track.stop_camera()
 
 
         # Ce code nous permet de lancer un autre fichier python dans le fichier python courrant.
@@ -363,14 +359,13 @@ class InterfacePilotage(Screen):
                 print(f"Erreur critique lors de la sauvegarde : {str(e)}")
         else:
             print("La caméra n'est pas ouverte.")
-
     def prendre_une_video(self):
         camera = self.ids.camera_widget
         if self.camera_active:
             if camera.enregistrement_en_cours:
                 camera.stopper_enregistrement()
                 camera.enregistrement_en_cours = False
-                self.ids.img_prendre_video.source = "ImageInterfaceCamera/ImagePrendreVideo.png"
+                self.ids.img_prendre_video.source ="ImageInterfaceCamera/ImagePrendreVideo.png"
 
             else:
                 timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M")
@@ -404,34 +399,22 @@ class InterfacePilotage(Screen):
         slider_horizental.disabled = True
 
 
-class HandTracking:
-    def __init__(self):
-        self.source = 0
+class HandTracking(CameraWidget):
+    def __init__(self, **kwargs):
+        """
+        constructor de la classe HandTracking
+        """
+        super().__init__(**kwargs)
+        self.source = "0"
         self.capture = None  # La capture vidéo sera activée/désactivée
-
-    def lecture_frame_unique(self):
-
-        ##Cette méthode me permet de capturer la frame du moment afin de l'utiliser plus tard
-        ##dans l'Interface Pilotage.
-        ##:return frame La frame du moment courant qui est affiché dans l'application:
-
-        if self.capture and self.capture.isOpened():
-            ret, frame = self.capture.read()
-            if ret and frame is not None:
-                return frame
-        return None
-
-    def start_camera(self, source=0, fps=15):
-        # Demarre la camera dépendamment de la source.
-        self.capture = cv2.VideoCapture(source)
-
-        if not self.capture.isOpened():
-            print("Erreur : Impossible d'ouvrir la caméra.")
-            return
-        Clock.schedule_interval(self.update, 1.0 / fps)
 
 
     def update(self, dt):
+
+        self.value_x = 0
+        self.value_y = 0
+        self.value_z = 0
+
         tip = [8, 12, 16, 20]
         fingers = []
         finger = []
@@ -472,12 +455,16 @@ class HandTracking:
                 # faire bouger selon la position dans l'écran
                 if y_max > bas and y_min > haut:
                     print("méthode BAS")
+                    self.value_z = -1
                 if y_max < bas and y_min < haut:
                     print("méthode HAUT")
+                    self.value_z = 1
                 if x_max > droite and x_min > gauche:
                     print("méthode DROITE")
+                    self.value_y = 1
                 if x_max < droite and x_min < gauche:
                     print("méthode GAUCHE")
+                    self.value_y = -1
 
                 finger = []
                 if a[0][1:] < a[4][1:]:
@@ -498,20 +485,20 @@ class HandTracking:
 
         if up == 2:
             print("avance")
+            self.value_x = 1
         elif up == 3:
             print("recule")
+            self.value_x = -1
 
+        joystick_server.update_values(self.value_x, self.value_y, self.value_z)
 
-        cv2.imshow("Frame", frame)
+        key = cv2.waitKey(1) & 0xFF
+        # Below will speak out load when |s| is pressed on the keyboard about what fingers are up or down
+        if key == ord("q"):
+            self.stop_camera()
 
-    def stop_camera(self):
-        # Arrete la transmission video et remet l'image par defaut
-        if self.capture:
-            self.capture.release()
-            self.capture = None
-        Clock.unschedule(self.update)
-        self.source = "ImageInterfaceCamera/ImageArriereFondCamera.png"
-
+# case no hand: values set to 0
+# quand ferme handtracking, revient cam normale
 
 class CameraProjetApp(App):
     def build(self):
