@@ -11,7 +11,6 @@ stocker dans un fichier réservé pour ça,(...)
 """
 import os
 from collections import Counter
-
 import numpy as np
 from kivy.app import App
 from kivy.properties import NumericProperty
@@ -23,29 +22,28 @@ from kivy.uix.screenmanager import ScreenManager, Screen, RiseInTransition
 from kivy.animation import Animation
 from kivy.clock import Clock
 import cv2
-
 from collections import Counter
-# from Hardware import main_SoftwareInTheLoop
-
-# Biblioteque utile a la transmission video du Rpi vers l'appareil.
 import socket
 import time
 import threading
 import datetime
+# from Hardware import main_SoftwareInTheLoop
+# Biblioteque utile a la transmission video du Rpi vers l'appareil.
 
 from pywin.framework.editor import frame
 
 from Programs.module import findpostion, findnameoflandmark
 
 
-class JoystickServer(threading.Thread):
+# ********** Serveur ************* #
+class serveur_application(threading.Thread):
     def __init__(self):
         super().__init__()
-        self.joystick_x = 0.0
-        self.joystick_y = 0.0
+        self.valeur_x = 0.0  # on va changer le nom ce n'est pas que pour le
+        self.valeur_y = 0.0  #
+        self.valeur_z = 0.0  #
         self.running = True
         self.lock = threading.Lock()
-
 
     def run(self):
         """
@@ -54,14 +52,14 @@ class JoystickServer(threading.Thread):
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         server.bind(('localhost', 12345))
-        server.listen(1)  #
+        server.listen(1)
         print("Serveur joystick en écoute ...")
 
         conn, addr = server.accept()  # addresse du client qui se connecte et socket de communication
         print("Client connecté", addr)
         while self.running:
             with self.lock:
-                data = f"{self.joystick_x},{self.joystick_y}".encode()
+                data = f"{self.valeur_x},{self.valeur_y}, {self.valeur_z}".encode()
             try:
                 conn.sendall(data)
                 time.sleep(0.05)
@@ -70,13 +68,16 @@ class JoystickServer(threading.Thread):
         conn.close()
         server.close()
 
-    def update_values(self, x, y):
+    def update_values(self, x, y, z):
         with self.lock:
-            self.joystick_x = x
-            self.joystick_y = y
+            self.valeur_x = x
+            self.valeur_y = y
+            self.valeur_z = z
 
 
-joystick_server = JoystickServer()
+
+# Ici on lance le Serveur
+joystick_server = serveur_application()
 joystick_server.start()
 
 
@@ -84,6 +85,11 @@ joystick_server.start()
 
 
 class JoystickDeplacementHorizental(Widget):
+    """
+    La class JoystickDeplacementHorizental est une classe que j'ai conçu afin de stocker deux coefficiant un en x et un en y
+    que je vais utiliser pour déplacer le drone horizentalement seulement.Afin, d'illustrer ce joystick l'utilisateur
+    il sera dessiner avec une premiere elipse comme background et une deuxième elipse blanche comme joystick
+    """
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -142,7 +148,7 @@ class JoystickDeplacementHorizental(Widget):
             self.value_x = dx / max_radius
             self.value_y = dy / max_radius
             # Update le transfert du coefficiant x et y.
-            joystick_server.update_values(self.value_x, self.value_y)
+            joystick_server.update_values(self.value_x, self.value_y, 0)  # J'ai  mis 0 comme valeur en y à envoyer
 
             print(f"Joystick position: X={self.value_x:.2f}, Y={self.value_y:.2f}")
 
@@ -230,7 +236,6 @@ class CameraWidget(Image):
         self.source = "ImageInterfaceCamera/ImageArriereFondCamera.png"
 
 
-
 class InterfaceDAcceuil(Screen):
     pass
 
@@ -243,7 +248,8 @@ class InterfacePilotage(Screen):
     slider_rotation_active = False
     handtracker_active = False
 
-    def decoller_atterir_drone(self):  # Pas oublier d'ajouter l'effet du drone ici en gros lorsque le drone decolle on donne une vitesse a voir avec Kemuel.
+    def decoller_atterir_drone(
+            self):  # Pas oublier d'ajouter l'effet du drone ici en gros lorsque le drone decolle on donne une vitesse a voir avec Kemuel.
         if self.drone_en_vol:
             self.ids.img_decoller_atterir_drone.source = "ImageInterfaceCamera/ImageDecollerDrone.png"
             self.drone_en_vol = not self.drone_en_vol
@@ -268,7 +274,6 @@ class InterfacePilotage(Screen):
             track.start_camera(0)
         else:
             track.stop_camera()
-
 
         # Ce code nous permet de lancer un autre fichier python dans le fichier python courrant.
         """import os
@@ -359,22 +364,24 @@ class InterfacePilotage(Screen):
                 print(f"Erreur critique lors de la sauvegarde : {str(e)}")
         else:
             print("La caméra n'est pas ouverte.")
+
     def prendre_une_video(self):
         camera = self.ids.camera_widget
         if self.camera_active:
             if camera.enregistrement_en_cours:
                 camera.stopper_enregistrement()
                 camera.enregistrement_en_cours = False
-                self.ids.img_prendre_video.source ="ImageInterfaceCamera/ImagePrendreVideo.png"
+                self.ids.img_prendre_video.source = "ImageInterfaceCamera/ImagePrendreVideo.png"
 
             else:
                 timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M")
                 filename = f"VideoStockee/video_{timestamp}.mp4"
                 camera.demarrer_enregistrement(filename)
-                self.ids.img_prendre_video.source ="ImageInterfaceCamera/ImagePrendrePhoto3.png"
+                self.ids.img_prendre_video.source = "ImageInterfaceCamera/ImagePrendrePhoto3.png"
                 camera.enregistrement_en_cours = True
         else:
             print("camera désactivée activer la pour enregistrer une vidéo")
+
     def reinitialization(self):
         # Reset la camera.
         camera = self.ids.camera_widget
@@ -408,7 +415,6 @@ class HandTracking(CameraWidget):
         self.source = "0"
         self.capture = None  # La capture vidéo sera activée/désactivée
 
-
     def update(self, dt):
 
         self.value_x = 0
@@ -426,6 +432,7 @@ class HandTracking(CameraWidget):
                 texture = Texture.create(size=(frame.shape[1], frame.shape[0]), colorfmt='bgr')
                 texture.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
                 self.texture = texture
+                cv2.imshow("Frame", frame)
 
             gauche = frame.shape[1] * 0.2
             droite = frame.shape[1] - gauche
@@ -449,7 +456,7 @@ class HandTracking(CameraWidget):
                 for i in range(1, len(a) - 1):
                     x_min = min(a[i][1], x_min)
                     x_max = max(a[i][1], x_max)
-                    y_min= min(a[i][2], y_min)
+                    y_min = min(a[i][2], y_min)
                     y_max = max(a[i][2], y_max)
 
                 # faire bouger selon la position dans l'écran
