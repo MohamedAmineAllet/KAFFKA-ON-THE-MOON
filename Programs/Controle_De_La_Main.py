@@ -34,6 +34,21 @@ def maximum(position, maximum):
     else:
         return maximum
 
+def quadrillage(ecran):
+    # Couleur grise
+    gray = (128, 128, 128)
+    thickness = 1
+
+    # Tracer les lignes verticales
+    for i in range(1, 3):
+        x = i * (512 // 3)
+        cv2.line(ecran, (x, 0), (x, 512), gray, thickness)
+
+    # Tracer les lignes horizontales
+    for i in range(1, 3):
+        y = i * (512 // 3)
+        cv2.line(ecran, (0, y), (512, y), gray, thickness)
+
 # Create an infinite loop which will produce the live feed to our desktop and that will search for hands
 while True:
     ret, frame_front = cap.read()
