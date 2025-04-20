@@ -283,67 +283,74 @@ def client_du_joystick():
         try:
             client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # IPv4 , TCP
             client.connect(("localhost", 12345))
-            print("Conncté au serveur joystick")
+            print("Connecté au serveur joystick")
 
             while True:
                 data = client.recv(
                     1024).decode()  # Décoder les informations venant du serveur (dans l'application)
                 if not data:  # pas de message => break
+                    setMode(5)  # on ne bouge pas mode loiter
                     break
                 try:
                     x_str, y_str, z_str = data.split(
                         ',')  # valeurs selon l'axe des x et y dans un plan parallèle au sol entre [-1, 1]
-                    Vy = float(x_str) * 10  # pour nous y c'est l'axe est ouest donc x du joystick
-                    Vx = float(y_str) * 10  # Pour nous x c'est l'axe nord sud donc y du joystick
-                    Vx = float(y_str) * 10  # z
+                    Vy = float(x_str) * 20  # pour nous y c'est l'axe est ouest donc x du joystick
+                    Vx = float(y_str) * 20  # Pour nous x c'est l'axe nord sud donc y du joystick
+                    Vz = float(z_str) * 20  # Pour nous x c'est l'axe nord sud donc y du joystick
 
+                    setVitesse(Vx, Vy,Vz, 5)
+                    print(f" Vx : {Vx:.2f} m", f" Vy : {Vy:.2f} m",f" Vz : {Vz:.2f} m" )
 
-                    setVitesse(Vx, Vy, 0, 5)
                 except ValueError:
                     print("Données invalides :", data)
         except(ConnectionRefusedError, ConnectionResetError) as e:  # erreurs de connections
-            # print("Erreur de connection reconnection dans 1s...", str(e))
+            print("Erreur de connection...")
             time.sleep(1)
         finally:
             client.close()
 
 
 # Crée un thread pour excécuter la fonction client en arrière plan
-joystick_thread = threading.Thread(target=client_du_joystick, daemon=True)
-joystick_thread.start()
+# joystick_thread = threading.Thread(target=client_du_joystick, daemon=True)
+# joystick_thread.start()
 
 """ ******* La Mission en question ****** """
 # vehicle = connectMyCopter() # Pour le Speedou
 arm_and_takeoff(4)
+while True:
+    client_du_joystick()
 
-# vers le Nord
-setVitesse(10, 0, 0, 10)
-
-# vers le Sud
-setVitesse(-10, 0, 0, 10)
-
-# ne pas bouger durant 5s
-setMode(5)  # Loiter
-time.sleep(5)
-setMode(4)
-
-# vers l'Est
-setVitesse(0, 10, 0, 10)
-
-# vers l'Ouest
-setVitesse(0, -10, 0, 10)
-
-# se rendre à un point précis
-point = ajouter_point(-35.362919, 149.165452, 7)
-suivre_trajectoire(vehicule, point)
-
-# titre assez explicite
-voler_en_cercle(5, 1, 1)
-
-# setMode(6) # Mode RTL = 6 en ArduPilot
-
-# Le drone atterit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-atterisage_du_drone()
+    """ 
+    # vers le Nord
+    setVitesse(10, 0, 0, 10)
+    
+    # vers le Sud
+    setVitesse(-10, 0, 0, 10)
+    
+    # ne pas bouger durant 5s
+    setMode(5)  # Loiter
+    time.sleep(5)
+    setMode(4)
+    
+    # vers l'Est
+    setVitesse(0, 10, 0, 10)
+    
+    # vers l'Ouest
+    setVitesse(0, -10, 0, 10)
+    
+    # se rendre à un point précis
+    point = ajouter_point(-35.362919, 149.165452, 7)
+    suivre_trajectoire(vehicule, point)
+    
+    # titre assez explicite
+    voler_en_cercle(5, 1, 1)
+    
+    # setMode(6) # Mode RTL = 6 en ArduPilot
+    
+    # Le drone atterit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    atterisage_du_drone()
+    time.sleep(30)
+    """
 
 # Fermer SITL proprement
 time.sleep(2)

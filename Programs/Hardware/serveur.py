@@ -12,21 +12,33 @@ serveur.bind((HOST, PORT))
 serveur.listen(1)
 print("Le serveur est prêt...")
 
+# Variable partagée entre threads donc necessite un verrou pour eviter les truc chelou
+message_lock = threading.Lock()
+message = "piou piou 1er du nom"
 
-def backgroundController(connection):
-    Message = 'Hello World from the PC'
-    print(Message)
 
-    try:
-        connection.send(bytes(Message.encode('utf-8')))
-    except ConnectionResetError as e:
-        print(f"❌ Erreur de connexion (reset): {e}")
-    except ConnectionAbortedError as e:
-        print(f"❌ Erreur de connexion (abordée): {e}")
-    except Exception as e:
-        print(f"❌ Autre erreur: {e}")
+def clavierStalker():
+    global message
+    while True:
+        event = keyboard.read_event()
+        if event.event_type == keyboard.KEY_DOWN:
+            # pour ne pas que plusieurs fonctions modifient message on lui mets un verrou
+            with message_lock:
+                message = event.name
 
-    Timer(5, backgroundController, [connection]).start()
+
+# Lancer le thread clavier UNE FOIS, en dehors de la boucle principale
+thread_clavier = threading.Thread(target=clavierStalker, daemon=True)
+thread_clavier.start()
+
+
+def envoyerMessage(connection):
+    with message_lock:
+        try:
+            connection.send(bytes(message.encode('utf-8')))
+        except Exception as e:
+            print(f"Erreur d'envoi : {e}")
+
 
 while True:
     connection, addresse = serveur.accept()
@@ -38,7 +50,7 @@ while True:
             if not data:
                 print("Client déconnecté.")
                 break
-            #print("Reçu :", data.decode())
+            # print("Reçu :", data.decode())
     except Exception as e:
         print("Erreur connexion :", str(e))
     finally:

@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="sbeub sbeub booom">
-      <change beforePath="$PROJECT_DIR$/.idea/Projet D'integration SIM.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Projet D'integration SIM.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="db2f3173-f04f-4175-8d78-a98db456e8e9" name="Changes" comment="serveur.py et clientRpi.py en prévision du code à mettre sur le rpipi tous fonctionne?">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Programs/Controle_De_La_Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Programs/Controle_De_La_Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Programs/Hardware/main_SoftwareInTheLoop.py" beforeDir="false" afterPath="$PROJECT_DIR$/Programs/Hardware/main_SoftwareInTheLoop.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Programs/Hardware/rpiClient.py" beforeDir="false" afterPath="$PROJECT_DIR$/Programs/Hardware/rpiClient.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Programs/Hardware/serveur.py" beforeDir="false" afterPath="$PROJECT_DIR$/Programs/Hardware/serveur.py" afterDir="false" />
     </list>
@@ -52,12 +51,12 @@
     &quot;assignee&quot;: &quot;KKML19&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/MohamedAmineAllet/KAFFKA-ON-THE-MOON.git&quot;,
-    &quot;accountId&quot;: &quot;c394922b-ccad-4d54-9e13-cd46e4bd3c47&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/MohamedAmineAllet/KAFFKA-ON-THE-MOON.git",
+    "accountId": "570014d7-b776-4864-91ed-0b7ba2b7459d"
   }
-}</component>
+}]]></component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$USER_HOME$/AppData/Local/Programs/Python/Python312/Lib/site-packages/dronekit/__init__.py" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -167,6 +166,39 @@
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  &lt;component name=&quot;PropertiesComponent&quot;&gt;{
+  &amp;quot;keyToString&amp;quot;: {
+    &amp;quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&amp;quot;: &amp;quot;true&amp;quot;,
+    &amp;quot;Python.Are Fingers up or Down.executor&amp;quot;: &amp;quot;Run&amp;quot;,
+    &amp;quot;Python.Controle De La Main.executor&amp;quot;: &amp;quot;Run&amp;quot;,
+    &amp;quot;Python.Controle_De_La_Main.executor&amp;quot;: &amp;quot;Run&amp;quot;,
+    &amp;quot;Python.SITL.executor&amp;quot;: &amp;quot;Run&amp;quot;,
+    &amp;quot;Python.Simple-Hand-Tracker.executor&amp;quot;: &amp;quot;Run&amp;quot;,
+    &amp;quot;Python.fichier2.executor&amp;quot;: &amp;quot;Run&amp;quot;,
+    &amp;quot;Python.lieur_fichier.executor&amp;quot;: &amp;quot;Run&amp;quot;,
+    &amp;quot;Python.main.executor&amp;quot;: &amp;quot;Run&amp;quot;,
+    &amp;quot;Python.main_Application.executor&amp;quot;: &amp;quot;Debug&amp;quot;,
+    &amp;quot;Python.main_SoftwareInTheLoop.executor&amp;quot;: &amp;quot;Run&amp;quot;,
+    &amp;quot;Python.predicteurDeMeteo.executor&amp;quot;: &amp;quot;Run&amp;quot;,
+    &amp;quot;Python.predicteurTest.executor&amp;quot;: &amp;quot;Run&amp;quot;,
+    &amp;quot;Python.relieur_fichier.executor&amp;quot;: &amp;quot;Run&amp;quot;,
+    &amp;quot;Python.rpiClient.executor&amp;quot;: &amp;quot;Run&amp;quot;,
+    &amp;quot;Python.serveur.executor&amp;quot;: &amp;quot;Run&amp;quot;,
+    &amp;quot;Python.test2.executor&amp;quot;: &amp;quot;Run&amp;quot;,
+    &amp;quot;RunOnceActivity.ShowReadmeOnStart&amp;quot;: &amp;quot;true&amp;quot;,
+    &amp;quot;RunOnceActivity.git.unshallow&amp;quot;: &amp;quot;true&amp;quot;,
+    &amp;quot;SHARE_PROJECT_CONFIGURATION_FILES&amp;quot;: &amp;quot;true&amp;quot;,
+    &amp;quot;git-widget-placeholder&amp;quot;: &amp;quot;main&amp;quot;,
+    &amp;quot;ignore.virus.scanning.warn.message&amp;quot;: &amp;quot;true&amp;quot;,
+    &amp;quot;kotlin-language-version-configured&amp;quot;: &amp;quot;true&amp;quot;,
+    &amp;quot;last_opened_file_path&amp;quot;: &amp;quot;C:/Amine/Bdeb/Informatique/Projet D'integration SIM/KAFFKA-ON-THE-MOON/MachinesIntelligentes/Donnés&amp;quot;,
+    &amp;quot;node.js.detected.package.eslint&amp;quot;: &amp;quot;true&amp;quot;,
+    &amp;quot;node.js.detected.package.tslint&amp;quot;: &amp;quot;true&amp;quot;,
+    &amp;quot;node.js.selected.package.eslint&amp;quot;: &amp;quot;(autodetect)&amp;quot;,
+    &amp;quot;node.js.selected.package.tslint&amp;quot;: &amp;quot;(autodetect)&amp;quot;,
+    &amp;quot;nodejs_package_manager_path&amp;quot;: &amp;quot;npm&amp;quot;,
+    &amp;quot;settings.editor.selected.configurable&amp;quot;: &amp;quot;preferences.pluginManager&amp;quot;,
+    &amp;quot;vue.rearranger.settings.migration&amp;quot;: &amp;quot;true&amp;quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -293,6 +325,7 @@
       <workItem from="1744638965922" duration="6410000" />
       <workItem from="1744662510651" duration="3345000" />
       <workItem from="1744685082475" duration="3145000" />
+      <workItem from="1744688680347" duration="10801000" />
     </task>
     <task id="LOCAL-00001" summary="Base code projet en SIM.&#10;Date :  2025-02-03&#10;commit par : Mohamed-Amine,Allet">
       <option name="closed" value="true" />
@@ -430,15 +463,6 @@
       <option name="project" value="LOCAL" />
       <updated>1742950749466</updated>
     </task>
-    <task id="LOCAL-00018" summary="sbeub sbeub booom">
-      <option name="closed" value="true" />
-      <created>1744035397364</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1744035397364</updated>
-    </task>
-    <option name="localTasksCounter" value="19" />
     <task id="LOCAL-00018" summary="1)Création d'une nouvelle colonne de prédiction du prochain jour.&#10;Par : Mohamed-Amine,Allet&#10;date : 2025-04-07">
       <option name="closed" value="true" />
       <created>1744050686010</created>
@@ -479,9 +503,26 @@
     <MESSAGE value="1)Création valeur test/train dans le predicteur de pluie et neige.&#10;2)Ajout de la fonction de prise de photo qui sont stockée dans une dossier.&#10;Par : Mohamed-Amine,Allet&#10;date : 2025-03-24" />
     <MESSAGE value="sockets, camera et ardupilot" />
     <MESSAGE value="1)Création d'une nouvelle colonne de prédiction du prochain jour.&#10;Par : Mohamed-Amine,Allet&#10;date : 2025-04-07" />
-    <option name="LAST_COMMIT_MESSAGE" value="1)Création d'une nouvelle colonne de prédiction du prochain jour.&#10;Par : Mohamed-Amine,Allet&#10;date : 2025-04-07" />
+    <MESSAGE value="1)Création d'un nouveau bouton pour prendre une vidéo.(Seul problème à regler lorsque je desactive la caméra pendant qu'il y a un enregistrement sa ne stop pas la vidéo sa la mets en suspend jusqu'a que je réactive la camera) &#10;Solution 1) stopper l'enregistrement&#10;Solution 2) Empecher de désactiver la camera tant que l'enregistrement est en cours &#10;Par : Mohamed-Amine,Allet&#10;date : 2025-04-10" />
+    <option name="LAST_COMMIT_MESSAGE" value="1)Création d'un nouveau bouton pour prendre une vidéo.(Seul problème à regler lorsque je desactive la caméra pendant qu'il y a un enregistrement sa ne stop pas la vidéo sa la mets en suspend jusqu'a que je réactive la camera) &#10;Solution 1) stopper l'enregistrement&#10;Solution 2) Empecher de désactiver la camera tant que l'enregistrement est en cours &#10;Par : Mohamed-Amine,Allet&#10;date : 2025-04-10" />
     <MESSAGE value="sbeub sbeub booom" />
-    <option name="LAST_COMMIT_MESSAGE" value="sbeub sbeub booom" />
+    <option name="LAST_COMMIT_MESSAGE" value="1)Création d'un nouveau bouton pour prendre une vidéo.(Seul problème à regler lorsque je desactive la caméra pendant qu'il y a un enregistrement sa ne stop pas la vidéo sa la mets en suspend jusqu'a que je réactive la camera) &#10;Solution 1) stopper l'enregistrement&#10;Solution 2) Empecher de désactiver la camera tant que l'enregistrement est en cours &#10;Par : Mohamed-Amine,Allet&#10;date : 2025-04-10" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Programs/Hardware/main_SoftwareInTheLoop.py</url>
+          <line>271</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Programs/Hardware/main_SoftwareInTheLoop.py</url>
+          <line>288</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/workspace_xml$cameraRpi.coverage" NAME="cameraRpi Coverage Results" MODIFIED="1744038390673" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Programs" />
@@ -497,10 +538,10 @@
     <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$main_SoftwareInTheLoop.coverage" NAME="main_SoftwareInTheLoop Coverage Results" MODIFIED="1738893676110" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Hardware" />
     <SUITE FILE_PATH="coverage/KAFFKA_ON_THE_MOON$Simple_Hand_Tracker.coverage" NAME="Simple-Hand-Tracker Coverage Results" MODIFIED="1739206216524" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/workspace_xml$predicteurTest.coverage" NAME="predicteurTest Coverage Results" MODIFIED="1741733625764" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MachinesIntelligentes" />
-    <SUITE FILE_PATH="coverage/workspace_xml$rpiClient.coverage" NAME="rpiClient Coverage Results" MODIFIED="1744688195012" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Programs/Hardware" />
-    <SUITE FILE_PATH="coverage/workspace_xml$main_SoftwareInTheLoop.coverage" NAME="main_SoftwareInTheLoop Coverage Results" MODIFIED="1744317227401" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Programs/Hardware" />
+    <SUITE FILE_PATH="coverage/workspace_xml$rpiClient.coverage" NAME="rpiClient Coverage Results" MODIFIED="1744691908835" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Programs/Hardware" />
+    <SUITE FILE_PATH="coverage/workspace_xml$main_SoftwareInTheLoop.coverage" NAME="main_SoftwareInTheLoop Coverage Results" MODIFIED="1744724652803" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Programs/Hardware" />
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$Simple_Hand_Tracker.coverage" NAME="Simple-Hand-Tracker Coverage Results" MODIFIED="1739685692020" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
-    <SUITE FILE_PATH="coverage/workspace_xml$lieur_fichier.coverage" NAME="lieur_fichier Coverage Results" MODIFIED="1742613342284" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Programs" />
+    <SUITE FILE_PATH="coverage/workspace_xml$lieur_fichier.coverage" NAME="lieur_fichier Coverage Results" MODIFIED="1744690025794" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Programs" />
     <SUITE FILE_PATH="coverage/workspace_xml$relieur_fichier.coverage" NAME="relieur_fichier Coverage Results" MODIFIED="1742257066605" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$Version1PredicteurMeteo.coverage" NAME="Version1PredicteurMeteo Coverage Results" MODIFIED="1739906755431" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MachinesIntelligentes" />
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$predicteurDeMeteo.coverage" NAME="predicteurDeMeteo Coverage Results" MODIFIED="1739685614010" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MachinesIntelligentes" />
@@ -520,7 +561,7 @@
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$main_Application.coverage" NAME="main_Application Coverage Results" MODIFIED="1741051919052" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/workspace_xml$test2.coverage" NAME="test2 Coverage Results" MODIFIED="1741641627734" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Software" />
     <SUITE FILE_PATH="coverage/workspace_xml$cameraRpi.coverage" NAME="cameraRpi Coverage Results" MODIFIED="1744038390673" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Programs" />
-    <SUITE FILE_PATH="coverage/workspace_xml$main_Application.coverage" NAME="main_Application Coverage Results" MODIFIED="1744039248879" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Programs" />
+    <SUITE FILE_PATH="coverage/workspace_xml$main_Application.coverage" NAME="main_Application Coverage Results" MODIFIED="1744724665288" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Programs" />
     <SUITE FILE_PATH="coverage/workspace_xml$Controle_De_La_Main.coverage" NAME="Controle_De_La_Main Coverage Results" MODIFIED="1744039307025" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Programs" />
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$main_SoftwareInTheLoop.coverage" NAME="main_SoftwareInTheLoop Coverage Results" MODIFIED="1740425766430" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Hardware" />
     <SUITE FILE_PATH="coverage/Projet_D_integration_SIM_iml$fichier2.coverage" NAME="fichier2 Coverage Results" MODIFIED="1740099571461" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

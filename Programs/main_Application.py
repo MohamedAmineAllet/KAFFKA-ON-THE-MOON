@@ -11,6 +11,7 @@ stocker dans un fichier réservé pour ça,(...)
 """
 import os
 from collections import Counter
+
 import numpy as np
 from kivy.app import App
 from kivy.properties import NumericProperty
@@ -35,9 +36,13 @@ from pywin.framework.editor import frame
 from Programs.module import findpostion, findnameoflandmark
 
 
-# ********** Serveur ************* #
-class serveur_application(threading.Thread):
+# ********** SERVEUR ********** #
+class Serveur_application(threading.Thread):
     def __init__(self):
+        """
+        Self est un objet courant de CETTE classe
+        On initialise ici avec des valeurs qui nous seront utiles
+        """
         super().__init__()
         self.valeur_x = 0.0  # on va changer le nom ce n'est pas que pour le
         self.valeur_y = 0.0  #
@@ -47,16 +52,20 @@ class serveur_application(threading.Thread):
 
     def run(self):
         """
-        Creer un serveur pour héberger des donnéees et des informations en utilisant un socket
+        Creer un serveur pour héberger et envoyer des donnéees et des informations en utilisant une socket
         """
-        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        serveur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        server.bind(('localhost', 12345))
-        server.listen(1)
-        print("Serveur joystick en écoute ...")
+        HOST = ''
+        PORT = 12345
 
-        conn, addr = server.accept()  # addresse du client qui se connecte et socket de communication
+        serveur.bind((HOST, PORT))
+        serveur.listen(1)
+        print("Serveur Application en écoute ...")
+
+        conn, addr = serveur.accept()  # addresse du client qui se connecte et socket de communication
         print("Client connecté", addr)
+
         while self.running:
             with self.lock:
                 data = f"{self.valeur_x},{self.valeur_y}, {self.valeur_z}".encode()
@@ -66,9 +75,18 @@ class serveur_application(threading.Thread):
             except(BrokenPipeError, ConnectionResetError):
                 break
         conn.close()
-        server.close()
+        serveur.close()
 
     def update_values(self, x, y, z):
+        """
+        methode pour envoyer des valeurs de directions via le serveur depuis les autres méthodes
+        IMPORTANT: On se base sur le joystick pour les valeurs à envoyer.
+        Ses valeurs seront ajustées dans SITL
+        :param x: axe gauche droite (joystick et handtracking)
+        :param y: axe haut bas (joystick et handtracking)
+        :param z: paramètre pour monter et descendre
+        :return: none (la fonction change les paramètre de self)
+        """
         with self.lock:
             self.valeur_x = x
             self.valeur_y = y
@@ -82,7 +100,6 @@ joystick_server.start()
 
 
 # ********** Application Interface du Pilote ************* #
-
 
 class JoystickDeplacementHorizental(Widget):
     """
@@ -148,7 +165,7 @@ class JoystickDeplacementHorizental(Widget):
             self.value_x = dx / max_radius
             self.value_y = dy / max_radius
             # Update le transfert du coefficiant x et y.
-            joystick_server.update_values(self.value_x, self.value_y, 0)  # J'ai  mis 0 comme valeur en y à envoyer
+            joystick_server.update_values(self.value_x, self.value_y, 0) # z en z c'est un espace R2
 
             print(f"Joystick position: X={self.value_x:.2f}, Y={self.value_y:.2f}")
 
@@ -159,7 +176,7 @@ class JoystickDeplacementHorizental(Widget):
 
         # Envoyer les nouvelles valeurs au serveur
         def send_zero_values(dt):
-            joystick_server.update_values(0.0, 0.0)
+            joystick_server.update_values(0.0, 0.0,0)
             print(f"Joystick relâché : X=0.00, Y=0.00")
 
         Clock.schedule_once(send_zero_values, 0.2)
@@ -206,10 +223,13 @@ class CameraWidget(Image):
 
     def start_camera(self, source=0, fps=15):
         # Demarre la camera dépendamment de la source.
-        self.capture = cv2.VideoCapture(source)
+        print("ouvrir caméra ça peut prendre du temps")
+        self.capture = cv2.VideoCapture(0)
 
         if not self.capture.isOpened():
             print("Erreur : Impossible d'ouvrir la caméra.")
+            self.capture.release()
+            cv2.destroyAllWindows()
             return
         Clock.schedule_interval(self.update, 1.0 / fps)
 
@@ -234,6 +254,7 @@ class CameraWidget(Image):
             self.capture = None
         Clock.unschedule(self.update)
         self.source = "ImageInterfaceCamera/ImageArriereFondCamera.png"
+
 
 
 class InterfaceDAcceuil(Screen):
@@ -262,16 +283,17 @@ class InterfacePilotage(Screen):
             joystick_server.update_values()
 
     def demarrer_handtracking(self):
-        self.handtracker_active = not self.handtracker_active;
+        self.handtracker_active = not self.handtracker_active
 
-        track = HandTracking()
+        #track = HandTracking()
+        track = self.ids.camera_widget  # ou l’id du widget handtracking si c’est séparé
 
         if self.handtracker_active and self.camera_active:
             self.joystick_active = False
             self.slider_altitude_active = False
             self.slider_rotation_active = False
 
-            track.start_camera(0)
+            track.start_camera(1)
         else:
             track.stop_camera()
 
@@ -291,7 +313,7 @@ class InterfacePilotage(Screen):
         camera = self.ids.camera_widget
         if not self.camera_active:
             # Active la caméra
-            camera.start_camera(0)
+            camera.start_camera(1)
             self.ids.btn_activation_camera.text = "Désactiver la caméra"
         else:
             # Désactive la caméra
@@ -301,7 +323,7 @@ class InterfacePilotage(Screen):
         self.camera_active = not self.camera_active
 
     def afficher_les_commandes(self):
-        joystick = self.ids.joystick_deplacement_horizental
+        joystick = self.ids.JoystickDeplacementHorizental
         slider_altitude = self.ids.slider_altitude
         slider_rotation = self.ids.slider_rotation
         if self.joystick_active & self.slider_altitude_active & self.slider_rotation_active:
@@ -406,10 +428,11 @@ class InterfacePilotage(Screen):
         slider_horizental.disabled = True
 
 
+# *********** HANDTRACKING ************* #
 class HandTracking(CameraWidget):
     def __init__(self, **kwargs):
         """
-        constructor de la classe HandTracking
+        constructeur de la classe HandTracking
         """
         super().__init__(**kwargs)
         self.source = "0"
@@ -433,6 +456,7 @@ class HandTracking(CameraWidget):
                 texture.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
                 self.texture = texture
                 cv2.imshow("Frame", frame)
+
 
             gauche = frame.shape[1] * 0.2
             droite = frame.shape[1] - gauche
@@ -462,16 +486,16 @@ class HandTracking(CameraWidget):
                 # faire bouger selon la position dans l'écran
                 if y_max > bas and y_min > haut:
                     print("méthode BAS")
-                    self.value_z = -1
+                    self.value_z = 1 # l'axe z dans sitl pointe vers le bas
                 if y_max < bas and y_min < haut:
                     print("méthode HAUT")
-                    self.value_z = 1
+                    self.value_z = -1
                 if x_max > droite and x_min > gauche:
                     print("méthode DROITE")
-                    self.value_y = 1
+                    self.value_x = 1 # conformément au joystick l'axe x est droite-gauche
                 if x_max < droite and x_min < gauche:
                     print("méthode GAUCHE")
-                    self.value_y = -1
+                    self.value_x = -1
 
                 finger = []
                 if a[0][1:] < a[4][1:]:
@@ -492,17 +516,19 @@ class HandTracking(CameraWidget):
 
         if up == 2:
             print("avance")
-            self.value_x = 1
+            # conformément au joystick l'axe y est devant-derrière
+            self.value_y = 1
         elif up == 3:
             print("recule")
-            self.value_x = -1
+            self.value_y = -1
 
         joystick_server.update_values(self.value_x, self.value_y, self.value_z)
 
-        key = cv2.waitKey(1) & 0xFF
+        #key = cv2.waitKey(1) & 0xFF
         # Below will speak out load when |s| is pressed on the keyboard about what fingers are up or down
-        if key == ord("q"):
-            self.stop_camera()
+        #if key == ord("q"):
+        #    self.stop_camera()
+
 
 # case no hand: values set to 0
 # quand ferme handtracking, revient cam normale
@@ -515,5 +541,6 @@ class CameraProjetApp(App):
         return sm
 
 
+# *********** ON LANCE L'APPLICATION *********** #
 if __name__ == '__main__':
     CameraProjetApp().run()
