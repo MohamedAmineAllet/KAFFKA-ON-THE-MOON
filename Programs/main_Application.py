@@ -37,7 +37,7 @@ from Programs.module import findpostion, findnameoflandmark
 
 
 # ********** SERVEUR ********** #
-class Serveur_application(threading.Thread):
+class ServeurApplication(threading.Thread):
     def __init__(self):
         """
         Self est un objet courant de CETTE classe
@@ -95,7 +95,7 @@ class Serveur_application(threading.Thread):
 
 
 # Ici on lance le Serveur
-joystick_server = serveur_application()
+joystick_server = ServeurApplication()
 joystick_server.start()
 
 
@@ -219,6 +219,8 @@ class CameraWidget(Image):
             ret, frame = self.capture.read()
             if ret and frame is not None:
                 return frame
+        else: print("La frame n'existe pas dans le programme")
+
         return None
 
     def start_camera(self, source=0, fps=15):
@@ -285,8 +287,9 @@ class InterfacePilotage(Screen):
     def demarrer_handtracking(self):
         self.handtracker_active = not self.handtracker_active
 
-        #track = HandTracking()
-        track = self.ids.camera_widget  # ou l’id du widget handtracking si c’est séparé
+        #track = self.ids.camera_widget  # ou l’id du widget handtracking si c’est séparé
+        track = HandTracking()
+
 
         if self.handtracker_active and self.camera_active:
             self.joystick_active = False
@@ -448,24 +451,25 @@ class HandTracking(CameraWidget):
         fingers = []
         finger = []
         if self.capture:
-            ret, frame = self.capture.read()
+            """ret, frame1 = self.capture.read()
 
             if ret:
-                buf = cv2.flip(frame, 1).tobytes()
-                texture = Texture.create(size=(frame.shape[1], frame.shape[0]), colorfmt='bgr')
+                buf = cv2.flip(frame1, 1).tobytes()
+                texture = Texture.create(self, size=(frame1.shape[1], frame1.shape[0]), colorfmt='bgr')
                 texture.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
-                self.texture = texture
-                cv2.imshow("Frame", frame)
+                self.texture = texture"""
 
+            frame1 = cv2.flip(HandTracking.capture_un_frame(self), 1)
+            cv2.imshow("Frame", frame1)
 
-            gauche = frame.shape[1] * 0.2
-            droite = frame.shape[1] - gauche
-            haut = frame.shape[0] * 0.2
-            bas = frame.shape[0] - haut
+            gauche = frame1.shape[1] * 0.2
+            droite = frame1.shape[1] - gauche
+            haut = frame1.shape[0] * 0.2
+            bas = frame1.shape[0] - haut
 
             # crée une liste des positions des jointures de chaque doigt
-            a = findpostion(frame)
-            b = findnameoflandmark(frame)
+            a = findpostion(frame1)
+            b = findnameoflandmark(frame1)
 
             # Below is a series of If statement that will determine if a finger is up or down and
             # then will print the details to the console
@@ -524,10 +528,9 @@ class HandTracking(CameraWidget):
 
         joystick_server.update_values(self.value_x, self.value_y, self.value_z)
 
-        #key = cv2.waitKey(1) & 0xFF
-        # Below will speak out load when |s| is pressed on the keyboard about what fingers are up or down
-        #if key == ord("q"):
-        #    self.stop_camera()
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord("q"):
+            self.stop_camera()
 
 
 # case no hand: values set to 0
