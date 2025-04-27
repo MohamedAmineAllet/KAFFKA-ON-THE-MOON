@@ -93,7 +93,6 @@ class ServeurApplication(threading.Thread):
             self.valeur_z = z
 
 
-
 # Ici on lance le Serveur
 joystick_server = ServeurApplication()
 joystick_server.start()
@@ -165,7 +164,7 @@ class JoystickDeplacementHorizental(Widget):
             self.value_x = dx / max_radius
             self.value_y = dy / max_radius
             # Update le transfert du coefficiant x et y.
-            joystick_server.update_values(self.value_x, self.value_y, 0) # z en z c'est un espace R2
+            joystick_server.update_values(self.value_x, self.value_y, 0)  # z en z c'est un espace R2
 
             print(f"Joystick position: X={self.value_x:.2f}, Y={self.value_y:.2f}")
 
@@ -176,7 +175,7 @@ class JoystickDeplacementHorizental(Widget):
 
         # Envoyer les nouvelles valeurs au serveur
         def send_zero_values(dt):
-            joystick_server.update_values(0.0, 0.0,0)
+            joystick_server.update_values(0.0, 0.0, 0)
             print(f"Joystick relâché : X=0.00, Y=0.00")
 
         Clock.schedule_once(send_zero_values, 0.2)
@@ -219,7 +218,8 @@ class CameraWidget(Image):
             ret, frame = self.capture.read()
             if ret and frame is not None:
                 return frame
-        else: print("La frame n'existe pas dans le programme")
+        else:
+            print("La frame n'existe pas dans le programme")
 
         return None
 
@@ -258,18 +258,23 @@ class CameraWidget(Image):
         self.source = "ImageInterfaceCamera/ImageArriereFondCamera.png"
 
 
-
 class InterfaceDAcceuil(Screen):
     pass
 
 
 class InterfacePilotage(Screen):
-    camera_active = False
-    joystick_active = False
-    drone_en_vol = False
-    slider_altitude_active = False
-    slider_rotation_active = False
-    handtracker_active = False
+    def __init__(self, **kwargs):
+        super(InterfacePilotage, self).__init__(**kwargs)
+        self.hand_tracker = None
+        self.camera_active = False
+        self.joystick_active = False
+        self.drone_en_vol = False
+        self.slider_altitude_active = False
+        self.slider_rotation_active = False
+        self.handtracking_active = False
+        # Planifie la mise à jour du handtracking
+        Clock.schedule_interval(self.update_handtracking, 1.0 / 30.0)  # 30 FPS
+
 
     def decoller_atterir_drone(
             self):  # Pas oublier d'ajouter l'effet du drone ici en gros lorsque le drone decolle on donne une vitesse a voir avec Kemuel.
@@ -284,32 +289,24 @@ class InterfacePilotage(Screen):
 
             joystick_server.update_values()
 
+    def update_handtracking(self, dt):
+        if self.handtracking_active and self.hand_tracker:
+            texture = self.hand_tracker.update()
+            if texture:
+                self.ids.handtracking_image.texture = texture
+
     def demarrer_handtracking(self):
-        self.handtracker_active = not self.handtracker_active
-
-        #track = self.ids.camera_widget  # ou l’id du widget handtracking si c’est séparé
-        track = HandTracking()
-
-
-        if self.handtracker_active and self.camera_active:
-            self.joystick_active = False
-            self.slider_altitude_active = False
-            self.slider_rotation_active = False
-
-            track.start_camera(1)
+        if not self.handtracking_active:
+            self.hand_tracker = HandTracking(source=0)
+            Clock.schedule_interval(self.hand_tracker.update, 1.0 / 30.0)  # Planifiez l'update
+            self.handtracking_active = True
+            self.ids.handtracking_image.opacity = 1
         else:
-            track.stop_camera()
-
-        # Ce code nous permet de lancer un autre fichier python dans le fichier python courrant.
-        """import os
-        def run_program():
-            os.system('Controle_De_La_Main.py')
-
-        if self.camera_active:
-            # CODE A CHANGER TRES IMPORTANT RAISON : Dans le future parce que la camera n'est pas similaire pour les deux.
-            print("Desactiver la camera")
-        else:
-            run_program()"""
+            if self.hand_tracker:
+                Clock.unschedule(self.hand_tracker.update)
+                self.hand_tracker.stop()
+            self.handtracking_active = False
+            self.ids.handtracking_image.opacity = 0
 
     def connecter_la_camera(self):
 
@@ -432,87 +429,83 @@ class InterfacePilotage(Screen):
 
 
 # *********** HANDTRACKING ************* #
-class HandTracking(CameraWidget):
-    def __init__(self, **kwargs):
+class HandTracking:
+    def __init__(self, source=0):
         """
         constructeur de la classe HandTracking
         """
-        super().__init__(**kwargs)
         self.source = "0"
-        self.capture = None  # La capture vidéo sera activée/désactivée
-
-    def update(self, dt):
-
+        self.capture = cv2.VideoCapture(source)
         self.value_x = 0
         self.value_y = 0
         self.value_z = 0
+        self.texture = None
+
+    def update(self, dt=None):
+        ret, frame = self.capture.read()
+        if not ret:
+            return None
+        frame = cv2.flip(frame, 1)
+        h, w = frame.shape[:2]
 
         tip = [8, 12, 16, 20]
         fingers = []
         finger = []
-        if self.capture:
-            """ret, frame1 = self.capture.read()
 
-            if ret:
-                buf = cv2.flip(frame1, 1).tobytes()
-                texture = Texture.create(self, size=(frame1.shape[1], frame1.shape[0]), colorfmt='bgr')
-                texture.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
-                self.texture = texture"""
 
-            frame1 = cv2.flip(HandTracking.capture_un_frame(self), 1)
-            cv2.imshow("Frame", frame1)
+        cv2.imshow("Frame", frame)
 
-            gauche = frame1.shape[1] * 0.2
-            droite = frame1.shape[1] - gauche
-            haut = frame1.shape[0] * 0.2
-            bas = frame1.shape[0] - haut
+        gauche = frame.shape[1] * 0.2
+        droite = frame.shape[1] - gauche
+        haut = frame.shape[0] * 0.2
+        bas = frame.shape[0] - haut
 
-            # crée une liste des positions des jointures de chaque doigt
-            a = findpostion(frame1)
-            b = findnameoflandmark(frame1)
+        # crée une liste des positions des jointures de chaque doigt
+        a = findpostion(frame)
+        b = findnameoflandmark(frame)
 
-            # Below is a series of If statement that will determine if a finger is up or down and
-            # then will print the details to the console
-            if len(b and a) != 0:
-                # initialiser les extrémités
-                x_min = a[0][1]
-                x_max = a[0][1]
-                y_min = a[0][2]
-                y_max = a[0][2]
+        # Below is a series of If statement that will determine if a finger is up or down and
+        # then will print the details to the console
+        if len(b and a) != 0:
+            # initialiser les extrémités
+            x_min = a[0][1]
+            x_max = a[0][1]
+            y_min = a[0][2]
+            y_max = a[0][2]
 
-                # trouver les extrémités de la main
-                for i in range(1, len(a) - 1):
-                    x_min = min(a[i][1], x_min)
-                    x_max = max(a[i][1], x_max)
-                    y_min = min(a[i][2], y_min)
-                    y_max = max(a[i][2], y_max)
+            # trouver les extrémités de la main
+            for i in range(1, len(a) - 1):
+                x_min = min(a[i][1], x_min)
+                x_max = max(a[i][1], x_max)
+                y_min = min(a[i][2], y_min)
+                y_max = max(a[i][2], y_max)
 
-                # faire bouger selon la position dans l'écran
-                if y_max > bas and y_min > haut:
-                    print("méthode BAS")
-                    self.value_z = 1 # l'axe z dans sitl pointe vers le bas
-                if y_max < bas and y_min < haut:
-                    print("méthode HAUT")
-                    self.value_z = -1
-                if x_max > droite and x_min > gauche:
-                    print("méthode DROITE")
-                    self.value_x = 1 # conformément au joystick l'axe x est droite-gauche
-                if x_max < droite and x_min < gauche:
-                    print("méthode GAUCHE")
-                    self.value_x = -1
+            # faire bouger selon la position dans l'écran
+            if y_max > bas and y_min > haut:
+                print("méthode BAS")
+                self.value_z = 1  # l'axe z dans sitl pointe vers le bas
+            if y_max < bas and y_min < haut:
+                print("méthode HAUT")
+                self.value_z = -1
+            if x_max > droite and x_min > gauche:
+                print("méthode DROITE")
+                self.value_x = 1  # conformément au joystick l'axe x est droite-gauche
+            if x_max < droite and x_min < gauche:
+                print("méthode GAUCHE")
+                self.value_x = -1
 
-                finger = []
-                if a[0][1:] < a[4][1:]:
-                    finger.append(1)
+            finger = []
+            if a[0][1:] < a[4][1:]:
+                finger.append(1)
+            else:
+                finger.append(0)
+
+            fingers = []
+            for id in range(0, 4):
+                if a[tip[id]][2:] < a[tip[id] - 2][2:]:
+                    fingers.append(1)
                 else:
-                    finger.append(0)
-
-                fingers = []
-                for id in range(0, 4):
-                    if a[tip[id]][2:] < a[tip[id] - 2][2:]:
-                        fingers.append(1)
-                    else:
-                        fingers.append(0)
+                    fingers.append(0)
 
         x = fingers + finger
         c = Counter(x)
@@ -525,12 +518,18 @@ class HandTracking(CameraWidget):
         elif up == 3:
             print("recule")
             self.value_y = -1
-
         joystick_server.update_values(self.value_x, self.value_y, self.value_z)
 
-        key = cv2.waitKey(1) & 0xFF
-        if key == ord("q"):
-            self.stop_camera()
+        buf = cv2.flip(frame, 0).tobytes()
+        self.texture = Texture.create(size=(w, h), colorfmt='bgr')
+        self.texture.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
+
+        return self.texture
+
+
+    def stop(self):
+        if self.capture:
+            self.capture.release()
 
 
 # case no hand: values set to 0
