@@ -134,7 +134,7 @@
         background_color: 255,255,255,0
         size_hint:0.09,0.09
         pos: root.width*0.005,root.height*0.2
-        on_press : root.demarrerHandTracking()
+        on_press : root.demarrer_handtracking()
         Image:
             source: "ImageInterfaceCamera/ImageHandTracking.png" #licence CC(Attribution): https://thenounproject.com/icon/hand-tracking-6668879/
             pos: self.parent.pos
@@ -185,7 +185,7 @@
 #Joystick manipulation drone.
 
     JoystickDeplacementHorizental:
-        id: joystick_deplacement_horizental
+        id: JoystickDeplacementHorizental
         size_hint: None, None
         size: 200*(3/4), 200*(3/4)
         pos_hint: {"center_x": 0.75, "center_y": 0.2}

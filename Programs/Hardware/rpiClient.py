@@ -6,20 +6,45 @@ import time
 import argparse
 import math
 import collections
-
 import dronekit_sitl
 import collections
 import collections.abc
-collections.MutableMapping = collections.abc.MutableMapping
-from dronekit import connect, VehicleMode, LocationGlobalRelative
+from dronekit import connect, VehicleMode, LocationGlobalRelative, APIException, Command
 import time
-from dronekit import LocationGlobalRelative
 import socket
+import argparse
 from pymavlink import mavutil
 
-def reaction (pigeonVoyageur) :
+collections.MutableMapping = collections.abc.MutableMapping
+
+
+# **********LES FONCTIONS**********#
+
+def connectMyCopter():
+    """
+    Se connecter à un véhicule configuré avec Ardupilot via Mavlink
+    :return: Un objet vehicule
+    """
+    parser = argparse.ArgumentParser(description='commands')
+    parser.add_argument('--connect')
+    args = parser.parse_args()
+
+    connection_string = args.connect
+
+    if not connection_string:
+        import dronekit_sitl
+        sitl = dronekit_sitl.start_default()
+        connection_string = sitl.connection_string()
+
+    vehicule = connect(connection_string, wait_ready=True)
+
+    return vehicule
+
+
+
+def reaction(pigeonVoyageur):
     if not (pigeonVoyageur.isdigit()):
-        print("Reçu:" ,pigeonVoyageur)
+        print("Reçu:", pigeonVoyageur)
     else:
         try:
             pigeonVoyageur = int(pigeonVoyageur)
@@ -41,20 +66,20 @@ def reaction (pigeonVoyageur) :
 
 
 while True:
-        try:
-            client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            client.connect(("localhost", 12345))  # localhost
-            time.sleep(1)
+    try:
+        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client.connect(("localhost", 12345))  # localhost
+        time.sleep(1)
 
-            while True:
-                client.sendall(b"piou piou -Over") #Message inutile
-                pigeonVoyageur = client.recv(1024)  # Le message reçu
-                reaction(pigeonVoyageur)
+        while True:
+            client.sendall(b"piou piou -Over")  # Message inutile
+            pigeonVoyageur = client.recv(1024)  # Le message reçu
+            reaction(pigeonVoyageur)
 
 
-        except(ConnectionRefusedError, ConnectionResetError, KeyboardInterrupt) as e:  # erreurs de connections
-            print("Erreur de connection Client", str(e))
-            time.sleep(1)
-        finally:
-            print("Over and Out")
-            client.close()
+    except(ConnectionRefusedError, ConnectionResetError, KeyboardInterrupt) as e:  # erreurs de connections
+        print("Erreur de connection Client", str(e))
+        time.sleep(1)
+    finally:
+        print("Over and Out")
+        client.close()

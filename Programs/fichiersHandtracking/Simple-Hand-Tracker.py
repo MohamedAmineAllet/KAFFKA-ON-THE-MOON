@@ -19,9 +19,9 @@ with handsModule.Hands(static_image_mode=False, min_detection_confidence=0.7, mi
      while True:
            ret, frame = cap.read()
            #Unedit the below line if your live feed is produced upsidedown
-           #flipped = cv2.flip(frame, flipCode = -1)
+           #flipped = cv2.flip(frame_front, flipCode = -1)
            
-           #Determines the frame size, 640 x 480 offers a nice balance between speed and accurate identification
+           #Determines the frame_front size, 640 x 480 offers a nice balance between speed and accurate identification
            frame1 = cv2.resize(frame, (640, 480))
            
            #produces the hand framework overlay ontop of the hand, you can choose the colour here too)
@@ -43,7 +43,7 @@ with handsModule.Hands(static_image_mode=False, min_detection_confidence=0.7, mi
                           #print(pixelCoordinatesLandmark)
                           #print(normalizedLandmark)
             
-           #Below shows the current frame to the desktop 
+           #Below shows the current frame_front to the desktop
            cv2.imshow("Frame", frame1);
            key = cv2.waitKey(1) & 0xFF
            

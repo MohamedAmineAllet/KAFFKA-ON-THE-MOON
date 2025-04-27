@@ -10,6 +10,7 @@ import dronekit_sitl
 
 import collections
 import collections.abc
+
 collections.MutableMapping = collections.abc.MutableMapping
 
 from dronekit import connect, VehicleMode, LocationGlobalRelative
@@ -27,6 +28,7 @@ connection_string = 'tcp:127.0.0.1:5760'  # Port ouvert par SITL
 print(f"La chaîne de connection du véhicule: {connection_string}")
 # Se connecter au véhicule simulé
 vehicule = connect(connection_string, wait_ready=True)
+
 
 def setMode(modeNumber):
     """
@@ -57,6 +59,7 @@ def setMode(modeNumber):
     )
     time.sleep(1)
 
+
 # 2 Lancer Mission Planner automatiquement
 """
 mission_planner_path = "C:\\Program Files (x86)\\Mission Planner\\MissionPlanner.exe"
@@ -74,6 +77,7 @@ def connectMyCopter():
     vehicle = connect(connection_string, wait_ready=True)
     return vehicle
 """
+
 
 def positionConversion(ned, yaw):
     """ Convertit la position NED en Body Frame (Avant, Droite, Bas). """
@@ -93,8 +97,10 @@ def positionConversion(ned, yaw):
     # Afficher la position en Body Frame
     return ("Position en Body Frame:", position_body)
 
+
 # Stockage de la position initiale
 position_initiale = None
+
 
 def setVitesse(vx, vy, vz, duree):
     """
@@ -116,7 +122,7 @@ def setVitesse(vx, vy, vz, duree):
         mavutil.mavlink.MAV_FRAME_BODY_NED,  # FRAME_BODY_NED pour se déplacer Body Frame
         0b0000111111000111,  # type_mask (only speeds enabled)
         0, 0, 0,  # x, y, z positions (not used)
-        vx, vy,vz,  # x, y, z velocity in m/s
+        vx, vy, vz,  # x, y, z velocity in m/s
         0, 0, 0,  # x, y, z acceleration (not supported yet, ignored in GCS_Mavlink)
         0, 0, )  # yaw, yaw_rate (not supported yet, ignored in GCS_Mavlink)
 
@@ -143,6 +149,7 @@ def setVitesse(vx, vy, vz, duree):
 
             print(f"Déplacement relatif: ΔX={delta_x:.2f}m, ΔY={delta_y:.2f}m, ΔZ={delta_z:.2f}m")
             print(f"Vitesse actuelle: Vx={vx:.2f}, Vy={vy:.2f}, Vz={vz:.2f}")
+
 
 def arm_and_takeoff(target_altitude):
     """
@@ -186,8 +193,10 @@ def arm_and_takeoff(target_altitude):
     print("Target altitude reached")
     return None
 
+
 def ajouter_point(latitude, longitude, altitude):
     return LocationGlobalRelative(latitude, longitude, altitude)
+
 
 def suivre_trajectoire(vehicule, point, vitesse=10):
     """
@@ -200,7 +209,7 @@ def suivre_trajectoire(vehicule, point, vitesse=10):
     """
     print(f"Navigation vers {point.lat}, {point.lon}, {point.alt}m")
 
-    vehicule.simple_goto(point, groundspeed= vitesse)
+    vehicule.simple_goto(point, groundspeed=vitesse)
 
     while True:  # permet de calculer la distance restante jusqu'a notre point
         position_actuelle = vehicule.location.global_relative_frame
@@ -215,6 +224,7 @@ def suivre_trajectoire(vehicule, point, vitesse=10):
             break
         time.sleep(2)
 
+
 def voler_en_cercle(vitesse, boucles, duree):
     """
     faire voler le drone en cercle.
@@ -225,7 +235,7 @@ def voler_en_cercle(vitesse, boucles, duree):
     :param duree: temps pour chaque points
     """
     print("demarrage du vol en cercle")
-    points = 36 # nombre de points selon la grandeur du cercle
+    points = 36  # nombre de points selon la grandeur du cercle
     angle_step = 2 * math.pi / points
     for loop in range(0, boucles):
         for point in range(points):
@@ -233,7 +243,7 @@ def voler_en_cercle(vitesse, boucles, duree):
             vx = vitesse * math.cos(angle)  # Vitesse sur l'axe Nord/Sud
             vy = vitesse * math.sin(angle)  # Vitesse sur l'axe Est/Ouest
             vz = 0  # Altitude constante
-            setVitesse(vx, vy, vz, duree) # effets de la durée sur le cercle???
+            setVitesse(vx, vy, vz, duree)  # effets de la durée sur le cercle???
 
     print("vole en cercle terminer")
     """
@@ -249,9 +259,10 @@ def voler_en_cercle(vitesse, boucles, duree):
             setReturnToLauch()
             """
 
+
 def atterisage_du_drone():
     setMode(9)
-    while True: #le drone déscend dans l'axe z, mais on aime pas le produit vectoriel
+    while True:  # le drone déscend dans l'axe z, mais on aime pas le produit vectoriel
         altitude = vehicule.location.global_relative_frame.alt
         print(f"Altitude actuelle : {altitude:.2f} m")
         time.sleep(1)
@@ -262,85 +273,91 @@ def atterisage_du_drone():
             break
     print("Drone désarmé, atterrissage terminé.")
 
+
 def client_du_joystick():
     """
     Utilisation de socket (Interface de connection réseau) pour se connecter en tant que client
     au serveur de l'application et recevoir des valeurs et informations ex: joystick
     """
-    while True: # boucle infinie pour se connecter au serveur et gérer les données en continu
+    while True:  # boucle infinie pour se connecter au serveur et gérer les données en continu
         try:
-            client = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # IPv4 , TCP
+            client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # IPv4 , TCP
             client.connect(("localhost", 12345))
-            print("Conncté au serveur joystick")
+            print("Connecté au serveur joystick")
 
             while True:
                 data = client.recv(
                     1024).decode()  # Décoder les informations venant du serveur (dans l'application)
-                if not data: # pas de message => break
+                if not data:  # pas de message => break
+                    setMode(5)  # on ne bouge pas mode loiter
                     break
                 try:
-                    x_str, y_str = data.split(',')  # valeurs selon l'axe des x et y dans un plan parallèle au sol entre [-1, 1]
-                    Vy = float(x_str) * 20 # pour nous y c'est l'axe est ouest donc x du joystick
+                    x_str, y_str, z_str = data.split(
+                        ',')  # valeurs selon l'axe des x et y dans un plan parallèle au sol entre [-1, 1]
+                    Vy = float(x_str) * 20  # pour nous y c'est l'axe est ouest donc x du joystick
                     Vx = float(y_str) * 20  # Pour nous x c'est l'axe nord sud donc y du joystick
-                    print("********", Vy, Vx )
-                    setVitesse(Vx, Vy, 0, 5)
+                    Vz = float(z_str) * 20  # Pour nous x c'est l'axe nord sud donc y du joystick
+
+                    setVitesse(Vx, Vy,Vz, 5)
+                    print(f" Vx : {Vx:.2f} m", f" Vy : {Vy:.2f} m",f" Vz : {Vz:.2f} m" )
+
                 except ValueError:
                     print("Données invalides :", data)
-        except(ConnectionRefusedError, ConnectionResetError) as e: # erreurs de connections
-            # print("Erreur de connection reconnection dans 1s...", str(e))
+        except(ConnectionRefusedError, ConnectionResetError) as e:  # erreurs de connections
+            print("Erreur de connection...")
             time.sleep(1)
         finally:
             client.close()
 
 
+# Crée un thread pour excécuter la fonction client en arrière plan
+# joystick_thread = threading.Thread(target=client_du_joystick, daemon=True)
+# joystick_thread.start()
 
 """ ******* La Mission en question ****** """
 # vehicle = connectMyCopter() # Pour le Speedou
 arm_and_takeoff(4)
+while True:
+    client_du_joystick()
 
-""" 
-# vers le Nord
-setVitesse(10, 0, 0, 10)
-
-# vers le Sud
-setVitesse(-10, 0, 0, 10)
-
-# ne pas bouger durant 5s
-setMode(5) #Loiter
-time.sleep(5)
-setMode(4)
-
-# vers l'Est
-setVitesse(0, 10, 0, 10)
-
-# vers l'Ouest
-setVitesse(0, -10, 0, 10)
-
-# se rendre à un point précis
-point = ajouter_point(-35.362919, 149.165452, 7)
-suivre_trajectoire(vehicule, point)
-
-# titre assez explicite
-voler_en_cercle(5, 1, 1)
-
-#setMode(6) # Mode RTL = 6 en ArduPilot
-
-# Le drone atterit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-atterisage_du_drone()
-"""
-
-# Crée un thread pour excécuter la fonction client en arrière plan
-joystick_thread = threading.Thread(target=client_du_joystick, daemon=True)
-joystick_thread.start()
+    """ 
+    # vers le Nord
+    setVitesse(10, 0, 0, 10)
+    
+    # vers le Sud
+    setVitesse(-10, 0, 0, 10)
+    
+    # ne pas bouger durant 5s
+    setMode(5)  # Loiter
+    time.sleep(5)
+    setMode(4)
+    
+    # vers l'Est
+    setVitesse(0, 10, 0, 10)
+    
+    # vers l'Ouest
+    setVitesse(0, -10, 0, 10)
+    
+    # se rendre à un point précis
+    point = ajouter_point(-35.362919, 149.165452, 7)
+    suivre_trajectoire(vehicule, point)
+    
+    # titre assez explicite
+    voler_en_cercle(5, 1, 1)
+    
+    # setMode(6) # Mode RTL = 6 en ArduPilot
+    
+    # Le drone atterit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    atterisage_du_drone()
+    time.sleep(30)
+    """
 
 # Fermer SITL proprement
 time.sleep(2)
 vehicule.close()
 sitl.stop()
 
-
 ###### problèmes ######
 # - Faire un tourbillon
 # - le code du cercle
 # -
-
