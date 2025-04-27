@@ -7,13 +7,11 @@
 
 
 <ButtonRound@Button>:  # Définition d'un bouton personnalisé, utilisant un bouton existant comme base
-    size_hint: None, None
-    size: 200, 200
     background_normal: ''
     background_color: 0, 0, 0, 0  # Fond transparent (pour ne pas afficher l'image par défaut)
     canvas.before:
         Color:
-            rgba: 0, 0, 1, 0
+            rgba: 0, 0, 1, 0.5
         Ellipse:  # Dessiner un cercle (ellipse) avec la taille et position du bouton
             pos: self.pos
             size: self.size
@@ -54,14 +52,14 @@
         outline_width: 2
         #text: "Accueil"
         allow_stretch: True
-        size_hint: (0.5,0.3)
+        size_hint: ((130/612),(128/508))
         text_size: self.size
         halign: 'center'
         valign: 'middle'
         font_size: self.height*0.25
 
 
-        pos_hint: {'center_x': 422/612, 'center_y': 413/508 }
+        pos_hint: {'center_x': 423/612, 'center_y': 413/508 }#Position du centre de la lune.
         on_release: root.manager.current = 'interfacepilotage'
 
 <InterfacePilotage>:

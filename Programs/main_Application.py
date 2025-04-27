@@ -50,7 +50,7 @@ class JoystickServer(threading.Thread):
         """
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        server.bind(('localhost', 12345))
+        server.bind(('localhost', 12345))#a changer pour hotspot créer par le Rpi
         server.listen(1)  #
         print("Serveur joystick en écoute ...")
 
@@ -137,7 +137,7 @@ class JoystickDeplacementHorizental(Widget):
             knob_y = self.center_y + dy - self.knob.size[1] / 2
             self.knob.pos = (knob_x, knob_y)
 
-            # Mettre à jour les valeurs X et Y (normalisées entre -1 et 1)
+            # Mettre à jour les valeurs X et Y (normalisées entre -1 et 1) afin d'utiliser comme facteur de vitesse.
             self.value_x = dx / max_radius
             self.value_y = dy / max_radius
             # Update le transfert du coefficiant x et y.
@@ -146,6 +146,11 @@ class JoystickDeplacementHorizental(Widget):
             print(f"Joystick position: X={self.value_x:.2f}, Y={self.value_y:.2f}")
 
     def on_touch_up(self, touch):
+        """
+        Cette méthode
+        :param touch:
+        :return:
+        """
         if self.disabled:
             return False
         self.update_graphics_pos()
