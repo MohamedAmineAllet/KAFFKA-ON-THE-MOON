@@ -453,7 +453,6 @@ class HandTracking:
         finger = []
 
 
-        cv2.imshow("Frame", frame)
 
         gauche = frame.shape[1] * 0.2
         droite = frame.shape[1] - gauche
@@ -480,18 +479,18 @@ class HandTracking:
                 y_min = min(a[i][2], y_min)
                 y_max = max(a[i][2], y_max)
 
-            # faire bouger selon la position dans l'écran
+            # déterminer la commande selon la position dans l'écran
             if y_max > bas and y_min > haut:
-                print("méthode BAS")
+                #print("méthode BAS")
                 self.value_z = 1  # l'axe z dans sitl pointe vers le bas
             if y_max < bas and y_min < haut:
-                print("méthode HAUT")
+                #print("méthode HAUT")
                 self.value_z = -1
             if x_max > droite and x_min > gauche:
-                print("méthode DROITE")
+                #print("méthode DROITE")
                 self.value_x = 1  # conformément au joystick l'axe x est droite-gauche
             if x_max < droite and x_min < gauche:
-                print("méthode GAUCHE")
+                #print("méthode GAUCHE")
                 self.value_x = -1
 
             finger = []
