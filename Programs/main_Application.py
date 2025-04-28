@@ -223,10 +223,10 @@ class CameraWidget(Image):
 
         return None
 
-    def start_camera(self, source=0, fps=15):
+    def start_camera(self, source=0, fps=60):
         # Demarre la camera dépendamment de la source.
         print("ouvrir caméra ça peut prendre du temps")
-        self.capture = cv2.VideoCapture(0)
+        self.capture = cv2.VideoCapture('udp://@0.0.0.0:5000', cv2.CAP_FFMPEG)
 
         if not self.capture.isOpened():
             print("Erreur : Impossible d'ouvrir la caméra.")
@@ -340,7 +340,7 @@ class InterfacePilotage(Screen):
             joystick.opacity = 1
             joystick.disabled = False
 
-            slider_rotation.opacity = 1
+            slider_rotation.opacity = 0
             slider_rotation.disabled = False
 
             slider_altitude.opacity = 1

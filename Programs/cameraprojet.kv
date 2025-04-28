@@ -167,7 +167,7 @@
         id : prendre_video
         background_color: 1,0,0,0
         size_hint:0.08,0.08
-        pos: root.width*0.9,root.height*0.2 #Pour centrer le bouton.
+        pos: root.width*0.9,root.height*0.3 #Pour centrer le bouton.
         on_press:root.prendre_une_video()
         Image:
             id : img_prendre_video
@@ -180,10 +180,23 @@
         id : prendre_photo
         background_color: 1,0,0,0
         size_hint:0.08,0.08
-        pos: root.width*0.9,root.height*0.1 #Pour centrer le bouton.
+        pos: root.width*0.9,root.height*0.2 #Pour centrer le bouton.
         on_press:root.prendreUnePhoto()
         Image:
             source: "ImageInterfaceCamera/ImagePrendrePhoto6.png" #Image libre de droits : source https://fr.vecteezy.com/png/9400746-dslr-photo-appareil-photo-clipart-design-illustration
+            pos:self.parent.pos
+            size:self.parent.size
+            allow_stretch: True
+    Button:#Accéder à la galérie.
+
+        id : acceder_galerie
+        background_color: 1,0,0,0
+        size_hint:0.08,0.08
+        pos: root.width*0.9,root.height*0.1 #Pour centrer le bouton.
+        on_press:root.prendre_une_video()
+        Image:
+            id : img_acceder_galerie
+            source: "ImageInterfaceCamera/AccederGalerie.png" #Image libre de droits : source https://fr.vecteezy.com/png/9400746-dslr-photo-appareil-photo-clipart-design-illustration
             pos:self.parent.pos
             size:self.parent.size
             allow_stretch: True
@@ -225,6 +238,9 @@
         on_value: root.afficher_valeur()
         disabled: True
         opacity: 0
+        value_track: True
+        value_track_color:(0,1,0,1)
+
         
 
 
