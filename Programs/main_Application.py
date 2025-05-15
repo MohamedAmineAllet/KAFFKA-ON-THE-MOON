@@ -41,12 +41,13 @@ class ServeurApplication(threading.Thread):
     def __init__(self):
         """
         Self est un objet courant de CETTE classe
-        On initialise ici avec des valeurs qui nous seront utiles
+        On initialise ici avec des valeurs qui nous seront utiles pour le manimant du drone.
         """
         super().__init__()
-        self.valeur_x = 0.0  # on va changer le nom ce n'est pas que pour le
-        self.valeur_y = 0.0  #
-        self.valeur_z = 0.0  #
+        self.valeur_x = 0.0
+        self.valeur_y = 0.0
+        self.valeur_z = 0.0
+        self.valeur_cos_theta = 0.0
         self.running = True
         self.lock = threading.Lock()
 
@@ -54,7 +55,7 @@ class ServeurApplication(threading.Thread):
         """
         Creer un serveur pour héberger et envoyer des donnéees et des informations en utilisant une socket
         """
-        serveur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        serveur = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #Protocole utilisé TCP
 
         HOST = ''
         PORT = 12345
@@ -68,7 +69,7 @@ class ServeurApplication(threading.Thread):
 
         while self.running:
             with self.lock:
-                data = f"{self.valeur_x},{self.valeur_y}, {self.valeur_z}".encode()
+                data = f"{self.valeur_x},{self.valeur_y}, {self.valeur_z},{self.valeur_cos_theta}".encode()
             try:
                 conn.sendall(data)
                 time.sleep(0.05)
@@ -77,20 +78,22 @@ class ServeurApplication(threading.Thread):
         conn.close()
         serveur.close()
 
-    def update_values(self, x, y, z):
+    def update_values(self, x, y, z, cos_theta):
         """
         methode pour envoyer des valeurs de directions via le serveur depuis les autres méthodes
         IMPORTANT: On se base sur le joystick pour les valeurs à envoyer.
         Ses valeurs seront ajustées dans SITL
         :param x: axe gauche droite (joystick et handtracking)
-        :param y: axe haut bas (joystick et handtracking)
+        :param y: axe devant derrière (joystick et handtracking)
         :param z: paramètre pour monter et descendre
+        :param cos_theta: paramètre pour faire rotationner le drone sur lui même.
         :return: none (la fonction change les paramètre de self)
         """
         with self.lock:
             self.valeur_x = x
             self.valeur_y = y
             self.valeur_z = z
+            self.valeur_cos_theta = cos_theta
 
 
 # Ici on lance le Serveur
@@ -103,28 +106,26 @@ joystick_server.start()
 class JoystickDeplacementHorizental(Widget):
     """
     La class JoystickDeplacementHorizental est une classe que j'ai conçu afin de stocker deux coefficiant un en x et un en y
-    que je vais utiliser pour déplacer le drone horizentalement seulement.Afin, d'illustrer ce joystick l'utilisateur
+    que je vais utiliser pour déplacer le drone horizentalement seulement.Afin, d'illustrer ce joystick à l'utilisateur
     il sera dessiner avec une premiere elipse comme background et une deuxième elipse blanche comme joystick
     """
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.size = (200 * (3 / 4), 200 * (3 / 4))  # Taille du joystick
-        self.knob_size = (50 * (3 / 4), 50 * (3 / 4))  # Taille du bouton central
+        self.size = (200 * (3 / 4), 200 * (3 / 4))
+        self.knob_size = (50 * (3 / 4), 50 * (3 / 4))
         with self.canvas:
-            Color(0, 0, 1, 0.5)  # Bleu semi-transparent pour la base
-            self.base = Ellipse(size=self.size, pos=self.center)  # Base fixe du joystick
+            Color(0, 0, 1, 0.5)
+            self.base = Ellipse(size=self.size, pos=self.center)
 
-            Color(1, 1, 1, 1)  # Blanc pour le bouton central
-            self.knob = Ellipse(size=self.knob_size, pos=self.center)  # Bouton central
+            Color(1, 1, 1, 1)
+            self.knob = Ellipse(size=self.knob_size, pos=self.center)
         self.bind(pos=self.update_graphics_pos)  # Met à jour les positions graphiques
 
     def update_graphics_pos(self, *args):
         """
         La méthode update_graphics_pos s'occupe de changer l'affichage des positions des cercles de manière interactive
-        lorsque l'utilisateur clique a un endroit.
-        :param self:
-        :param args:
+        lorsque l'utilisateur clique à un endroit l'élipse blanche se dessine à l'endroit où se trouve la souris/le doight.
         """
         base_x = self.center_x - self.base.size[0] / 2
         base_y = self.center_y - self.base.size[1] / 2
@@ -136,9 +137,11 @@ class JoystickDeplacementHorizental(Widget):
 
     def on_touch_move(self, touch):  # a ecrire toute les formules dans word.
         """
-        En gros en rapide que je veux mieu écrire.(cette methode stock la valeeur de l'endroit ou touche
-        l'utilisateur pour la stocker afin de l'utiliser dans l'affichage
-         graphique pour aussi normalizer cette valeur afin de l'utiliser comme coefficiant x & y plus tard.
+        Cette méthode permet que lorsque l'utilisateur clique a un endroit dans le cercle bleu une
+        valeur en x et y sont stocké qui dépende de la distance entre le centre du cercle bleue
+        et l'endroit appuyée.Afin de limiter cette valeur on la normalise pour obtenir une valeur
+        entre -1 et 1 qui va servir de coéfficiant de variation de vitesse.Pour ensuite,envoyer cette valeur par
+        notre serveur socket dans l'autre main(main_SoftwareInTheLoop.py)
         :param touch:
         :return:
         """
@@ -149,7 +152,7 @@ class JoystickDeplacementHorizental(Widget):
             dy = touch.y - self.center_y  # Distance en Y
 
             # Limiter le déplacement dans un rayon maximal
-            max_radius = self.size[0] / 2 - self.knob_size[0] / 2  # Rayon disponible
+            max_radius = self.size[0] / 2 - self.knob_size[0] / 2
             distance = (dx ** 2 + dy ** 2) ** 0.5  # Distance au centre
 
             if distance > max_radius:
@@ -160,11 +163,11 @@ class JoystickDeplacementHorizental(Widget):
             knob_y = self.center_y + dy - self.knob.size[1] / 2
             self.knob.pos = (knob_x, knob_y)
 
-            # Mettre à jour les valeurs X et Y (normalisées entre -1 et 1)
+            # Mets à jour les valeurs X et Y (normalisées entre -1 et 1)
             self.value_x = dx / max_radius
             self.value_y = dy / max_radius
             # Update le transfert du coefficiant x et y.
-            joystick_server.update_values(self.value_x, self.value_y, 0)  # z en z c'est un espace R2
+            joystick_server.update_values(self.value_x, self.value_y, 0, 0)  # z en z c'est un espace R2
 
             print(f"Joystick position: X={self.value_x:.2f}, Y={self.value_y:.2f}")
 
@@ -173,9 +176,15 @@ class JoystickDeplacementHorizental(Widget):
             return False
         self.update_graphics_pos()
 
-        # Envoyer les nouvelles valeurs au serveur
+
         def send_zero_values(dt):
-            joystick_server.update_values(0.0, 0.0, 0)
+            """
+            Lorsque l'utilisateur relache le joystick ,afin que le drone ne bouge pas en
+            permanance sans qu'on lui donne d'ordre,les valeurs des différents coefficiant
+            de variation de vitesse sont renitializer a 0 pour que le drone devient stable.
+            :rtype: object
+            """
+            joystick_server.update_values(0.0, 0.0, 0, 0)
             print(f"Joystick relâché : X=0.00, Y=0.00")
 
         Clock.schedule_once(send_zero_values, 0.2)
@@ -272,9 +281,9 @@ class InterfacePilotage(Screen):
         self.slider_altitude_active = False
         self.slider_rotation_active = False
         self.handtracking_active = False
+        self.camera_est_image_principal = True
         # Planifie la mise à jour du handtracking
         Clock.schedule_interval(self.update_handtracking, 1.0 / 30.0)  # 30 FPS
-
 
     def decoller_atterir_drone(
             self):  # Pas oublier d'ajouter l'effet du drone ici en gros lorsque le drone decolle on donne une vitesse a voir avec Kemuel.
@@ -282,12 +291,12 @@ class InterfacePilotage(Screen):
             self.ids.img_decoller_atterir_drone.source = "ImageInterfaceCamera/ImageDecollerDrone.png"
             self.drone_en_vol = not self.drone_en_vol
 
-            joystick_server.update_values()
+            #joystick_server.update_values()
         else:
             self.ids.img_decoller_atterir_drone.source = "ImageInterfaceCamera/ImageAtterireDrone.png"
             self.drone_en_vol = not self.drone_en_vol
 
-            joystick_server.update_values()
+            #joystick_server.update_values()
 
     def update_handtracking(self, dt):
         if self.handtracking_active and self.hand_tracker:
@@ -308,6 +317,9 @@ class InterfacePilotage(Screen):
             self.handtracking_active = False
             self.ids.handtracking_image.opacity = 0
 
+    def detection_plante(self):
+        print("detection plante pas encore codée")
+
     def connecter_la_camera(self):
 
         camera = self.ids.camera_widget
@@ -323,7 +335,7 @@ class InterfacePilotage(Screen):
         self.camera_active = not self.camera_active
 
     def afficher_les_commandes(self):
-        joystick = self.ids.JoystickDeplacementHorizental
+        joystick = self.ids.joystick_deplacement_horizental
         slider_altitude = self.ids.slider_altitude
         slider_rotation = self.ids.slider_rotation
         if self.joystick_active & self.slider_altitude_active & self.slider_rotation_active:
@@ -340,7 +352,7 @@ class InterfacePilotage(Screen):
             joystick.opacity = 1
             joystick.disabled = False
 
-            slider_rotation.opacity = 0
+            slider_rotation.opacity = 1
             slider_rotation.disabled = False
 
             slider_altitude.opacity = 1
@@ -368,6 +380,47 @@ class InterfacePilotage(Screen):
         print("Valeur de la vitesse de rotation :", self.ids.slider_rotation.value)
 
     # Bouton de droite
+    def echanger_dimension_camera(self):
+        camera_principale = self.ids.camera_widget
+        camera_handtracking = self.ids.handtracking_image
+        parent = camera_principale.parent
+
+        if not parent:
+            return
+
+
+        parent.remove_widget(camera_principale)
+        parent.remove_widget(camera_handtracking)
+
+        if self.camera_est_image_principal:
+
+            camera_principale.size_hint = (0.25, 0.25)
+            camera_principale.pos_hint = {"center_x": 0.85, "center_y": 0.85}
+
+
+            camera_handtracking.size_hint = (1, 1)
+            camera_handtracking.pos_hint = {"center_x": 0.5, "center_y": 0.5}
+
+
+            parent.add_widget(camera_handtracking)
+            parent.add_widget(camera_principale)
+
+        else:
+
+            camera_handtracking.size_hint = (0.25, 0.25)
+            camera_handtracking.pos_hint = {"center_x": 0.85, "center_y": 0.85}
+
+
+            camera_principale.size_hint = (1, 1)
+            camera_principale.pos_hint = {"center_x": 0.5, "center_y": 0.5}
+
+
+            parent.add_widget(camera_principale)
+            parent.add_widget(camera_handtracking)
+
+
+        self.camera_est_image_principal = not self.camera_est_image_principal
+
     def prendreUnePhoto(self):
         camera = self.ids.camera_widget
         frame = camera.capture_un_frame()
@@ -427,6 +480,10 @@ class InterfacePilotage(Screen):
         slider_horizental.opacity = 0
         slider_horizental.disabled = True
 
+        slider_vertical = self.ids.slider_rotation
+        slider_vertical.opacity = 0
+        slider_vertical.disabled = True
+
 
 # *********** HANDTRACKING ************* #
 class HandTracking:
@@ -450,9 +507,11 @@ class HandTracking:
 
         tip = [8, 12, 16, 20]
         fingers = []
+
         finger = []
-
-
+        self.value_x = 0
+        self.value_y = 0
+        self.value_z = 0
 
         gauche = frame.shape[1] * 0.2
         droite = frame.shape[1] - gauche
@@ -481,16 +540,16 @@ class HandTracking:
 
             # déterminer la commande selon la position dans l'écran
             if y_max > bas and y_min > haut:
-                #print("méthode BAS")
+                # print("méthode BAS")
                 self.value_z = 1  # l'axe z dans sitl pointe vers le bas
             if y_max < bas and y_min < haut:
-                #print("méthode HAUT")
+                # print("méthode HAUT")
                 self.value_z = -1
             if x_max > droite and x_min > gauche:
-                #print("méthode DROITE")
+                # print("méthode DROITE")
                 self.value_x = 1  # conformément au joystick l'axe x est droite-gauche
             if x_max < droite and x_min < gauche:
-                #print("méthode GAUCHE")
+                # print("méthode GAUCHE")
                 self.value_x = -1
 
             finger = []
@@ -517,14 +576,13 @@ class HandTracking:
         elif up == 3:
             print("recule")
             self.value_y = -1
-        joystick_server.update_values(self.value_x, self.value_y, self.value_z)
+        joystick_server.update_values(self.value_x, self.value_y, self.value_z, 0)
 
         buf = cv2.flip(frame, 0).tobytes()
         self.texture = Texture.create(size=(w, h), colorfmt='bgr')
         self.texture.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
 
         return self.texture
-
 
     def stop(self):
         if self.capture:
@@ -536,6 +594,7 @@ class HandTracking:
 
 class CameraProjetApp(App):
     def build(self):
+        self.icon = "ImageIcons/ImageRevelationDesOuvriersDurantCetteSession.jpeg"
         sm = ScreenManager()
         # Permet de choisir le type de transition.
         sm.transition = RiseInTransition()

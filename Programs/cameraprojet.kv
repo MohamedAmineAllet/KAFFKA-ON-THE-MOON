@@ -11,7 +11,7 @@
     background_color: 0, 0, 0, 0  # Fond transparent (pour ne pas afficher l'image par défaut)
     canvas.before:
         Color:
-            rgba: 0, 0, 1, 0.5
+            rgba: 0, 0, 1, 0
         Ellipse:  # Dessiner un cercle (ellipse) avec la taille et position du bouton
             pos: self.pos
             size: self.size
@@ -25,7 +25,7 @@
     BoxLayout:
         orientation: "vertical"
         Label:
-            text: "Le drone est-il a l'écart de tout danger si ce n'est pas le cas veuillez éloigner tout objet pouvant endommager le drone."
+            text: "Si le drone n’est pas à l’abri du danger, veuillez éloigner tous les objets qui pourraient l’endommager."
             text_size: root.width-10,None
             halign: 'center'
         BoxLayout:
@@ -63,20 +63,22 @@
         on_release: root.manager.current = 'interfacepilotage'
 
 <InterfacePilotage>:
-    CameraWidget:
-        id: camera_widget
-        source: "ImageInterfaceCamera/ImageArriereFondCamera.png" # Source : https://www.flaticon.com/fr/icone-gratuite/fleche-gauche_5093116
-        size_hint: 1, 1
-        pos_hint: {"center_x": 0.5, "center_y": 0.5}  # Assure que l'image est bien centrée
-        keep_ratio: False
-        allow_stretch: True
+    FloatLayout:
+        CameraWidget:
+            id: camera_widget
+            source: "ImageInterfaceCamera/ImageArriereFondCamera.png"
+            size_hint: 1, 1
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            keep_ratio: False
+            allow_stretch: True
 
-
-    Image:
-        id: handtracking_image
-        size_hint: 0.25, 0.25
-        pos_hint: {'center_x': 0.85, 'center_y': 0.85}
-        opacity: 0  # Masqué par défaut
+        Image:
+            id: handtracking_image
+            size_hint: 0.25, 0.25
+            pos_hint: {'center_x': 0.85, 'center_y': 0.85}
+            opacity: 1
+            keep_ratio: False
+            allow_stretch: True
 
 #Bouton a gauche
 
@@ -128,7 +130,7 @@
         background_color: 1,0,0,0
         size_hint: 0.08, 0.08
         pos: root.width * 0.005, root.height*0.3
-        on_press:root.press()
+        on_press:root.detection_plante()
         Image:
             source:"ImageInterfaceCamera/plante2.png"
             pos:self.parent.pos
@@ -161,7 +163,19 @@
             allow_stretch: True
 
 
+    Button:#Échanger dans l'affichage des caméras.
 
+        id : btn_echanger_dimension_camera
+        background_color: 1,0,0,0
+        size_hint:0.08,0.08
+        pos: root.width*0.9,root.height*0.9 #Pour centrer le bouton.
+        on_press:root.echanger_dimension_camera()
+        Image:
+            id : img_echanger_dimension_camera
+            source: "ImageInterfaceCamera/ImagePourInterdimensionnerCamera.jpg" #Image libre de droits : source https://fr.vecteezy.com/art-vectoriel/6473540-tourner-tourner-fleche-icone-recharger-rond-symbole-pour-votre-conception
+            pos:self.parent.pos
+            size:self.parent.size
+            allow_stretch: True
 #Bouton de droite
     Button:#Prendre une vidéo
         id : prendre_video
@@ -190,10 +204,10 @@
     Button:#Accéder à la galérie.
 
         id : acceder_galerie
-        background_color: 1,0,0,0
+        background_color: 0,1,1,0.5
         size_hint:0.08,0.08
         pos: root.width*0.9,root.height*0.1 #Pour centrer le bouton.
-        on_press:root.prendre_une_video()
+        on_press:root.ouvrir_galerie()
         Image:
             id : img_acceder_galerie
             source: "ImageInterfaceCamera/AccederGalerie.png" #Image libre de droits : source https://fr.vecteezy.com/png/9400746-dslr-photo-appareil-photo-clipart-design-illustration
@@ -204,14 +218,14 @@
 #Joystick manipulation drone.
 
     JoystickDeplacementHorizental:
-        id: JoystickDeplacementHorizental
+        id: joystick_deplacement_horizental
         size_hint: None, None
         size: 200*(3/4), 200*(3/4)
         pos_hint: {"center_x": 0.75, "center_y": 0.2}
         opacity: 0
         disabled: True
 
-    Slider:
+    Slider: #Ce slider s'occupe de l'angle de rotation sur elle même.
         id: slider_rotation
         min:-1
         max:1
@@ -225,13 +239,14 @@
         opacity: 0
         value_track: True
         value_track_color:(0,1,1,1)
-        cursor_image: "ImageInterfaceCamera/The_Goat.png"
-    Slider:
+        cursor_image: "ImageInterfaceCamera/ImageSliderRotation.jpeg"
+
+    Slider: #Ce slider s'occupe de faire monter et descendre le drone.
         id: slider_altitude
         min:-1
         max:1
-        value:0 #Valeur initial.
         step:0.1
+        value:0 #Valeur initial.
         orientation: "vertical"
         size_hint:0.01,0.3
         pos_hint: {"center_x": 0.3, "center_y": 0.2}
