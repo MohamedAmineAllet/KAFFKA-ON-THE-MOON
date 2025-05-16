@@ -11,7 +11,6 @@ stocker dans un fichier réservé pour ça,(...)
 """
 import os
 from collections import Counter
-
 import numpy as np
 from kivy.app import App
 from kivy.properties import NumericProperty
@@ -381,6 +380,16 @@ class InterfacePilotage(Screen):
 
     # Bouton de droite
     def echanger_dimension_camera(self):
+        """
+        Cette méthode permet d'échanger la position de l’image illustrant les deux caméras,
+        les dimensions des l’images illustrant les caméras et
+        d'interchanger leur positionnement en tant que Widget dans le root. (si on ne change pas ça l’image en haut à droite
+        serait camouflé derrière l’autre caméra. Ici qui est le paysage d’un coucher de soleil.)
+        Par deux caméras je parle des deux suivantes :
+        - Celle implanté dans l’appareil qui fait tourner l’application qu’on accède dans le code par cv2.VideoCapture(0) // 0 pour la caméra par défaut dans l’appareil.
+        - Celle que nous avons mis dans le drone soit le modèle IMX219//  qu’on accède avec le code suivant : cv2.VideoCapture('udp://@0.0.0.0:5000', cv2.CAP_FFMPEG)
+        :return:
+        """
         camera_principale = self.ids.camera_widget
         camera_handtracking = self.ids.handtracking_image
         parent = camera_principale.parent
@@ -395,7 +404,7 @@ class InterfacePilotage(Screen):
         if self.camera_est_image_principal:
 
             camera_principale.size_hint = (0.25, 0.25)
-            camera_principale.pos_hint = {"center_x": 0.85, "center_y": 0.85}
+            camera_principale.pos_hint = {"center_x": 0.75, "center_y": 0.85}
 
 
             camera_handtracking.size_hint = (1, 1)
@@ -408,7 +417,7 @@ class InterfacePilotage(Screen):
         else:
 
             camera_handtracking.size_hint = (0.25, 0.25)
-            camera_handtracking.pos_hint = {"center_x": 0.85, "center_y": 0.85}
+            camera_handtracking.pos_hint = {"center_x": 0.75, "center_y": 0.85}
 
 
             camera_principale.size_hint = (1, 1)
@@ -452,7 +461,7 @@ class InterfacePilotage(Screen):
                 timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M")
                 filename = f"VideoStockee/video_{timestamp}.mp4"
                 camera.demarrer_enregistrement(filename)
-                self.ids.img_prendre_video.source = "ImageInterfaceCamera/ImagePrendrePhoto3.png"
+                self.ids.img_prendre_video.source = "ImageInterfaceCamera/ImageArreterVideo.png"
                 camera.enregistrement_en_cours = True
         else:
             print("camera désactivée activer la pour enregistrer une vidéo")
