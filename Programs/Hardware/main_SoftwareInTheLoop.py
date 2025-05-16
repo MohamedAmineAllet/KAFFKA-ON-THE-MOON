@@ -102,7 +102,7 @@ def positionConversion(ned, yaw):
 position_initiale = None
 
 
-def setVitesse(vx, vy, vz, duree):
+def setVitesse(vx, vy, vz, vsintheta, duree):
     """
     Déplacer notre véhicule dans une certaine direction en changeant le vecteur vitesse
     :param vx: + Nord / - Sud      ||  + Devant / - Derrière
@@ -292,14 +292,14 @@ def client_du_joystick():
                     setMode(5)  # on ne bouge pas mode loiter
                     break
                 try:
-                    x_str, y_str, z_str = data.split(
+                    x_str, y_str, z_str, cos_theta_str = data.split(
                         ',')  # valeurs selon l'axe des x et y dans un plan parallèle au sol entre [-1, 1]
                     Vy = float(x_str) * 20  # pour nous y c'est l'axe est ouest donc x du joystick
                     Vx = float(y_str) * 20  # Pour nous x c'est l'axe nord sud donc y du joystick
                     Vz = float(z_str) * 20  # Pour nous x c'est l'axe nord sud donc y du joystick
-
-                    setVitesse(Vx, Vy,Vz, 5)
-                    print(f" Vx : {Vx:.2f} m", f" Vy : {Vy:.2f} m",f" Vz : {Vz:.2f} m" )
+                    Vtheta = float(cos_theta_str) * 20
+                    setVitesse(Vx, Vy, Vz, Vtheta, 5)
+                    print(f" Vx : {Vx:.2f} m", f" Vy : {Vy:.2f} m", f" Vz : {Vz:.2f} m")
 
                 except ValueError:
                     print("Données invalides :", data)
