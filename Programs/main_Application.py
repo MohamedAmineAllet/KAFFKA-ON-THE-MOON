@@ -14,20 +14,23 @@ from collections import Counter
 
 import numpy as np
 from kivy.app import App
-from kivy.properties import NumericProperty
+from kivy.uix.button import Button
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
 from kivy.graphics.texture import Texture
 from kivy.uix.widget import Widget
 from kivy.graphics import Color, Ellipse, Line
 from kivy.uix.screenmanager import ScreenManager, Screen, RiseInTransition
 from kivy.animation import Animation
-from kivy.clock import Clock
+from kivy.clock import Clock, mainthread
 import cv2
 from collections import Counter
 import socket
 import time
 import threading
 import datetime
+
+from numpy.core.defchararray import center
 # from Hardware import main_SoftwareInTheLoop
 # Biblioteque utile a la transmission video du Rpi vers l'appareil.
 
@@ -275,7 +278,6 @@ class InterfacePilotage(Screen):
         # Planifie la mise à jour du handtracking
         Clock.schedule_interval(self.update_handtracking, 1.0 / 30.0)  # 30 FPS
 
-
     def decoller_atterir_drone(
             self):  # Pas oublier d'ajouter l'effet du drone ici en gros lorsque le drone decolle on donne une vitesse a voir avec Kemuel.
         if self.drone_en_vol:
@@ -428,6 +430,42 @@ class InterfacePilotage(Screen):
         slider_horizental.disabled = True
 
 
+# *********** GALERIE PHOTO ************ #
+
+class InterfaceGaleriePhoto(Screen):
+    class InterfaceGaleriePhoto(Screen):
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            self.boutons = []
+            self.dossier_path = "PhotoStockee"
+
+        def on_pre_enter(self):
+            self.creer_liste_fichiers_images()
+            self.creer_boutons()
+
+        def creer_liste_fichiers_images(self):
+            self.liste_fichiers_images = []
+            for file in os.listdir(self.dossier_path):
+                if file.endswith(".png"):
+                    self.liste_fichiers_images.append(file)
+                    print(f"Image ajoutée : {file}")
+
+        def creer_boutons(self):
+            self.ids.grid.clear_widgets()
+
+            for image in self.liste_fichiers_images:
+                image_path = os.path.join(self.dossier_path, image)
+                bouton = Button(
+                    background_normal=image_path,
+                    size_hint=(0.8, 0.8)
+                )
+                bouton.bind(on_press=lambda instance, img=image_path: self.afficher_images(img))
+                self.ids.grid.add_widget(bouton)
+
+        def afficher_images(self, image):
+            print("Afficher images")
+
+
 # *********** HANDTRACKING ************* #
 class HandTracking:
     def __init__(self, source=0):
@@ -451,8 +489,6 @@ class HandTracking:
         tip = [8, 12, 16, 20]
         fingers = []
         finger = []
-
-
 
         gauche = frame.shape[1] * 0.2
         droite = frame.shape[1] - gauche
@@ -481,16 +517,12 @@ class HandTracking:
 
             # déterminer la commande selon la position dans l'écran
             if y_max > bas and y_min > haut:
-                #print("méthode BAS")
                 self.value_z = 1  # l'axe z dans sitl pointe vers le bas
             if y_max < bas and y_min < haut:
-                #print("méthode HAUT")
                 self.value_z = -1
             if x_max > droite and x_min > gauche:
-                #print("méthode DROITE")
                 self.value_x = 1  # conformément au joystick l'axe x est droite-gauche
             if x_max < droite and x_min < gauche:
-                #print("méthode GAUCHE")
                 self.value_x = -1
 
             finger = []
@@ -511,11 +543,9 @@ class HandTracking:
         up = c[1]
 
         if up == 2:
-            print("avance")
             # conformément au joystick l'axe y est devant-derrière
             self.value_y = 1
         elif up == 3:
-            print("recule")
             self.value_y = -1
         joystick_server.update_values(self.value_x, self.value_y, self.value_z)
 
@@ -524,7 +554,6 @@ class HandTracking:
         self.texture.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
 
         return self.texture
-
 
     def stop(self):
         if self.capture:

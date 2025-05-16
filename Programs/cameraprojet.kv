@@ -3,6 +3,8 @@
         name: 'interfacedacceuil'
     InterfacePilotage:
         name: 'interfacepilotage'
+    InterfaceGaleriePhoto:
+        name: 'interfacegalerie'
 
 
 
@@ -193,7 +195,8 @@
         background_color: 1,0,0,0
         size_hint:0.08,0.08
         pos: root.width*0.9,root.height*0.1 #Pour centrer le bouton.
-        on_press:root.prendre_une_video()
+        on_release:
+            root.manager.current = 'interfacegalerie'
         Image:
             id : img_acceder_galerie
             source: "ImageInterfaceCamera/AccederGalerie.png" #Image libre de droits : source https://fr.vecteezy.com/png/9400746-dslr-photo-appareil-photo-clipart-design-illustration
@@ -241,7 +244,34 @@
         value_track: True
         value_track_color:(0,1,0,1)
 
+
         
+<InterfaceGaleriePhoto>
+    BoxLayout:
+        orientation: 'vertical'
+
+        BoxLayout:
+            size_hint_y : None
+            height : 120
+            padding : 10
+            spacing : 10
+
+            Button :
+                size_hint_x : None
+                width : 100
+                height : 120
+                on_release : root.manager.current = 'interfacepilotage'
+                background_normal : "ImageInterfaceCamera/FlecheGaucheRetour.png"
+
+        ScrollView:
+            GridLayout:
+                id: grid
+                cols: 3
+                spacing: 10
+                padding: 10
+                size_hint_y: None
+                height: 300
+
 
 
 
