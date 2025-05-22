@@ -1,3 +1,4 @@
+"""Imports et configuration"""
 import subprocess
 import threading
 from time import sleep
@@ -7,17 +8,18 @@ import argparse
 import math
 import collections
 import dronekit_sitl
-
-import collections
-import collections.abc
-
-collections.MutableMapping = collections.abc.MutableMapping
-
 from dronekit import connect, VehicleMode, LocationGlobalRelative
 import time
 from dronekit import LocationGlobalRelative
 import socket
 from pymavlink import mavutil
+
+"""Compatibilité pour certains environnements Python"""
+import collections
+import collections.abc
+collections.MutableMapping = collections.abc.MutableMapping
+
+
 
 print("Tous le monde est prêt? On met les voiiiles...")
 
@@ -80,7 +82,11 @@ def connectMyCopter():
 
 
 def positionConversion(ned, yaw):
-    """ Convertit la position NED en Body Frame (Avant, Droite, Bas). """
+    """
+        Convertit une position NED (Nord-Est-Bas) en Body Frame (Avant-Droite-Bas)
+        selon l'orientation du drone (yaw).
+        """
+
     nord, est, bas = ned
 
     avant = nord * math.cos(yaw) + est * math.sin(yaw)
@@ -193,19 +199,26 @@ def arm_and_takeoff(target_altitude):
     print("Target altitude reached")
     return None
 
-
+"""
+    Création d'un point GPS
+    """
 def ajouter_point(latitude, longitude, altitude):
     return LocationGlobalRelative(latitude, longitude, altitude)
 
-
+#SE DIRIGER VERS UN POINT GPS
 def suivre_trajectoire(vehicule, point, vitesse=10):
     """
     simple goto mais en affichant la distance restante.
     IMPORTANT: ici on travail avec des location.global_relative_frame
     soit des altitudes et des longitudes qui suivent les coordonées WGS84 (gps)
-    :param vehicule:
-    :param point:
-    :param vitesse:
+    Cette fonction envoie une commande simple_goto pour diriger le drone
+    vers un point GPS, puis vérifie périodiquement la distance restante
+    en ligne droite (approximation en mètres).
+
+    :param vehicule: objet dronekit.Vehicle connecté au drone ou simulateur
+    :param point:objet LocationGlobalRelative (latitude, longitude, altitude)
+                  représentant la cible à atteindre
+    :param vitesse: vitesse sol souhaitée en m/s (default: 10 m/s)
     """
     print(f"Navigation vers {point.lat}, {point.lon}, {point.alt}m")
 
@@ -246,21 +259,13 @@ def voler_en_cercle(vitesse, boucles, duree):
             setVitesse(vx, vy, vz, duree)  # effets de la durée sur le cercle???
 
     print("vole en cercle terminer")
-    """
-            nb_points = int(duree / 0.5)
-            angle_incrementer = (2 * math.pi)
 
-            for i in range(nb_points):
-                angle = i * angle_incrementer
-                vx = vitesse * math.cos(angle)
-                vy = vitesse * math.sin(angle)
-                setVitesse(vx, vy, 0, 1)
-            print("vole en cercle terminer")
-            setReturnToLauch()
-            """
 
 
 def atterisage_du_drone():
+    """
+       Passe en mode LAND et surveille la descente jusqu’à désarmement.
+       """
     setMode(9)
     while True:  # le drone déscend dans l'axe z, mais on aime pas le produit vectoriel
         altitude = vehicule.location.global_relative_frame.alt
@@ -277,7 +282,8 @@ def atterisage_du_drone():
 def client_du_joystick():
     """
     Utilisation de socket (Interface de connection réseau) pour se connecter en tant que client
-    au serveur de l'application et recevoir des valeurs et informations ex: joystick
+    au serveur de l'application et reçoit les commandes du joystick via une connexion TCP.
+    Attend des valeurs [x, y, z, cos(theta)] et ajuste la vitesse.
     """
     while True:  # boucle infinie pour se connecter au serveur et gérer les données en continu
         try:
@@ -320,7 +326,7 @@ arm_and_takeoff(4)
 while True:
     client_du_joystick()
 
-    """ 
+
     # vers le Nord
     setVitesse(10, 0, 0, 10)
     
@@ -350,14 +356,10 @@ while True:
     # Le drone atterit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     atterisage_du_drone()
     time.sleep(30)
-    """
+
 
 # Fermer SITL proprement
 time.sleep(2)
 vehicule.close()
 sitl.stop()
 
-###### problèmes ######
-# - Faire un tourbillon
-# - le code du cercle
-# -

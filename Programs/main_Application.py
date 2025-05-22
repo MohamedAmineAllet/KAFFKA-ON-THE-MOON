@@ -4,7 +4,7 @@ d'afficher les commandes qui controlent le drone en question,l'application s'occ
 stocker dans un fichier réservé pour ça,(...)
 
 @autheur : Mohamed-Amine,Allet
-@autheur :
+@autheur :Gokhale,Kian
 @autheur :
 @autheur :
 @version : Python (3.11.9) Kivy(2.3.1)
