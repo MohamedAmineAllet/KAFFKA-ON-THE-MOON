@@ -1,3 +1,4 @@
+import collections
 import subprocess
 import threading
 from time import sleep
@@ -5,10 +6,8 @@ import dronekit_sitl
 import time
 import argparse
 import math
-import collections
+
 import dronekit_sitl
-import collections
-import collections.abc
 from dronekit import connect, VehicleMode, LocationGlobalRelative, APIException, Command
 import time
 import socket

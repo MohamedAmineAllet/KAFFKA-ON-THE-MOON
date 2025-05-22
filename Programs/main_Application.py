@@ -11,22 +11,26 @@ stocker dans un fichier réservé pour ça,(...)
 """
 import os
 from collections import Counter
+
 import numpy as np
 from kivy.app import App
-from kivy.properties import NumericProperty
+from kivy.uix.button import Button
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
 from kivy.graphics.texture import Texture
 from kivy.uix.widget import Widget
 from kivy.graphics import Color, Ellipse, Line
 from kivy.uix.screenmanager import ScreenManager, Screen, RiseInTransition
 from kivy.animation import Animation
-from kivy.clock import Clock
+from kivy.clock import Clock, mainthread
 import cv2
 from collections import Counter
 import socket
 import time
 import threading
 import datetime
+
+from numpy.core.defchararray import center
 # from Hardware import main_SoftwareInTheLoop
 # Biblioteque utile a la transmission video du Rpi vers l'appareil.
 
@@ -507,6 +511,42 @@ class InterfacePilotage(Screen):
         slider_vertical.disabled = True
 
 
+# *********** GALERIE PHOTO ************ #
+
+class InterfaceGaleriePhoto(Screen):
+    class InterfaceGaleriePhoto(Screen):
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            self.boutons = []
+            self.dossier_path = "PhotoStockee"
+
+        def on_pre_enter(self):
+            self.creer_liste_fichiers_images()
+            self.creer_boutons()
+
+        def creer_liste_fichiers_images(self):
+            self.liste_fichiers_images = []
+            for file in os.listdir(self.dossier_path):
+                if file.endswith(".png"):
+                    self.liste_fichiers_images.append(file)
+                    print(f"Image ajoutée : {file}")
+
+        def creer_boutons(self):
+            self.ids.grid.clear_widgets()
+
+            for image in self.liste_fichiers_images:
+                image_path = os.path.join(self.dossier_path, image)
+                bouton = Button(
+                    background_normal=image_path,
+                    size_hint=(0.8, 0.8)
+                )
+                bouton.bind(on_press=lambda instance, img=image_path: self.afficher_images(img))
+                self.ids.grid.add_widget(bouton)
+
+        def afficher_images(self, image):
+            print("Afficher images")
+
+
 # *********** HANDTRACKING ************* #
 class HandTracking:
     def __init__(self, source=0):
@@ -592,11 +632,9 @@ class HandTracking:
         up = c[1]
 
         if up == 2:
-            print("avance")
             # conformément au joystick l'axe y est devant-derrière
             self.value_y = 1
         elif up == 3:
-            print("recule")
             self.value_y = -1
         joystick_server.update_values(self.value_x, self.value_y, self.value_z, 0)
 
@@ -605,6 +643,7 @@ class HandTracking:
         self.texture.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
 
         return self.texture
+
 
     def stop(self):
         if self.capture:
