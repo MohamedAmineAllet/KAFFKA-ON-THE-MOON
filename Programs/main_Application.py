@@ -206,7 +206,7 @@ class CameraWidget(Image):
 
     def demarrer_enregistrement(self, filename="VideoStockee/video.mp4", fps=15):
         """
-        Cette fonction va m'être plus utile pour le bouton s'occupant de filmer une vidéo.Sachant que l'affichage
+        Cette fonction va être utile pour le bouton s'occupant de filmer une vidéo.Sachant que l'affichage
         visuelle est déjà lancé elle permet de prendre une certaine partie de cette affichage lorsqu'on clique sur
         le bouton en question et de le stocker dans le fichier VideoStockee et dans le cas ou il n'est pas présent
         il va le créer.
@@ -262,7 +262,15 @@ class CameraWidget(Image):
 
     # à changer la source pour l'URL de la caméra.
     def update(self, dt):
+        """
+        Met à jour l'image de la caméra et l'affiche dans l'interface Kivy.
 
+        Cette méthode est appelée à chaque intervalle de temps défini (dt).
+        Elle lit une nouvelle image depuis la capture vidéo en cours, l'enregistre
+        si l'enregistrement est activé, et met à jour la texture affichée dans l'interface Kivy.
+
+        :param dt: est le temps écoulé depuis le dernier appel de cette méthode, en secondes.
+        """
         if self.capture:
             ret, frame = self.capture.read()
             if ret:
@@ -351,6 +359,14 @@ class InterfacePilotage(Screen):
         self.camera_active = not self.camera_active
 
     def afficher_les_commandes(self):
+        """
+        Cette méthode fait en sorte que lorsqu'on clique sur le bouton avec écrit "ACTIVATION PILOTAGE MANUEL"
+        les commandes s'affiche et l'utilisateur peut modifier les valeurs transmisse au drone.
+
+        Ensuite le bouton change pour devenir un bouton avec écrit "DÉSACTIVATION PILOTAGE MANUEL" et lorsque
+        l'utilisateur clique dessus l'affichage des commandes disparait et l'utilisateur ne peut plus faire bouger
+        le drone par les commandes jusqu'a ce qu'il clique sur le bouton a nouveau.
+        """
         joystick = self.ids.joystick_deplacement_horizental
         slider_altitude = self.ids.slider_altitude
         slider_rotation = self.ids.slider_rotation
@@ -379,7 +395,11 @@ class InterfacePilotage(Screen):
         self.joystick_active = not self.joystick_active
 
     def reset_slider(self):
-
+        """
+        Afin d'éviter que le drone reste en mouvement même lorsqu'on ne désire pas le faire bouger si l'utilisateur
+        relache les sliders alors sa valeur revient a 0 qui veut juste dire que le drone n'a plus de vitesse en altitude
+        et en rotation sur lui-même.
+        """
         anim = Animation(value=0, duration=0.2)
 
         # Ce code anime le retour a la valeur de 0 pour le facteur de changement de vitesse d'altitude
@@ -390,10 +410,6 @@ class InterfacePilotage(Screen):
 
         anim.start(self.ids.slider_rotation)
         self.ids.slider_rotation.value = 0
-
-    def afficher_valeur(self):
-        print("Valeur de la vitesse d'altitude :", self.ids.slider_altitude.value)
-        print("Valeur de la vitesse de rotation :", self.ids.slider_rotation.value)
 
     # Bouton de droite
     def echanger_dimension_camera(self):
@@ -484,6 +500,10 @@ class InterfacePilotage(Screen):
             print("camera désactivée activer la pour enregistrer une vidéo")
 
     def reinitialization(self):
+        """
+        Cette fonction fait en sorte que lorsque l'utilisateur quitte d'interface tout est reset la caméra
+        ne reste pas allumé les joysticks se mettent en mode désactiver et les sliders.
+        """
         # Reset la camera.
         camera = self.ids.camera_widget
         # Désactive la caméra
