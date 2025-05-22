@@ -184,12 +184,16 @@ class JoystickDeplacementHorizental(Widget):
             :rtype: object
             """
             joystick_server.update_values(0.0, 0.0, 0, 0)
-            print(f"Joystick relâché : X=0.00, Y=0.00")
+            print(f"Joystick relâché : X=0.00, Y=0.00, Z=0.00,cos_theta=0.00")
 
         Clock.schedule_once(send_zero_values, 0.2)
 
 
 class CameraWidget(Image):
+    """
+    Cette objet est un Widget qui a pour fonction principale de permettre à l'utilisateur du drone de voir les images que
+    film la caméra(le IMX219) sur le drone par l'affichage de celle-ci dans l'application kivy.
+    """
     def __init__(self, **kwargs):
         super(CameraWidget, self).__init__(**kwargs)
         self.capture = None  # La capture vidéo sera activée/désactivée
@@ -197,6 +201,15 @@ class CameraWidget(Image):
         self.video_writer = None
 
     def demarrer_enregistrement(self, filename="VideoStockee/video.mp4", fps=15):
+        """
+        Cette fonction va m'être plus utile pour le bouton s'occupant de filmer une vidéo.Sachant que l'affichage
+        visuelle est déjà lancé elle permet de prendre une certaine partie de cette affichage lorsqu'on clique sur
+        le bouton en question et de le stocker dans le fichier VideoStockee et dans le cas ou il n'est pas présent
+        il va le créer.
+        :param filename: est le chemin du dossier où sont stocké les vidéoes.
+        :param fps: est la constante qu'on assigne pour l'affichage de la vidéo.
+        :return:
+        """
         if self.capture is None or not self.capture.isOpened():
             print("Erreur : La caméra n'est pas active.")
             return
