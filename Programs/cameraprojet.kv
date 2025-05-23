@@ -209,7 +209,7 @@
         background_color: 0,1,1,0.5
         size_hint:0.08,0.08
         pos: root.width*0.9,root.height*0.1 #Pour centrer le bouton.
-        on_press:root.ouvrir_galerie()
+        on_press:root.manager.current = 'interfacegalerie'
         Image:
             id : img_acceder_galerie
             source: "ImageIcons/PointCentraleDesCoequipiers.jpeg" #Image libre de droits : source https://fr.vecteezy.com/png/9400746-dslr-photo-appareil-photo-clipart-design-illustration

@@ -4,8 +4,8 @@ d'afficher les commandes qui controlent le drone en question,l'application s'occ
 stocker dans un fichier réservé pour ça,(...)
 
 @autheur : Mohamed-Amine,Allet
-@autheur :Gokhale,Kian
-@autheur :
+@autheur : Gokhale,Kian
+@autheur : Fatmagul Dedek
 @autheur :
 @version : Python (3.11.9) Kivy(2.3.1)
 """
@@ -58,7 +58,7 @@ class ServeurApplication(threading.Thread):
         """
         Creer un serveur pour héberger et envoyer des donnéees et des informations en utilisant une socket
         """
-        serveur = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #Protocole utilisé TCP
+        serveur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # Protocole utilisé TCP
 
         HOST = ''
         PORT = 12345
@@ -179,7 +179,6 @@ class JoystickDeplacementHorizental(Widget):
             return False
         self.update_graphics_pos()
 
-
         def send_zero_values(dt):
             """
             Lorsque l'utilisateur relache le joystick ,afin que le drone ne bouge pas en
@@ -198,6 +197,7 @@ class CameraWidget(Image):
     Cette objet est un Widget qui a pour fonction principale de permettre à l'utilisateur du drone de voir les images que
     film la caméra(le IMX219) sur le drone par l'affichage de celle-ci dans l'application kivy.
     """
+
     def __init__(self, **kwargs):
         super(CameraWidget, self).__init__(**kwargs)
         self.capture = None  # La capture vidéo sera activée/désactivée
@@ -315,14 +315,14 @@ class InterfacePilotage(Screen):
             self.ids.img_decoller_atterir_drone.source = "ImageInterfaceCamera/ImageDecollerDrone.png"
             self.drone_en_vol = not self.drone_en_vol
 
-            #joystick_server.update_values()
+            # joystick_server.update_values()
         else:
             self.ids.img_decoller_atterir_drone.source = "ImageInterfaceCamera/ImageAtterireDrone.png"
             self.drone_en_vol = not self.drone_en_vol
 
-            #joystick_server.update_values()
+            # joystick_server.update_values()
 
-    def update_handtracking(self, dt):
+    def update_handtracking(self):
         if self.handtracking_active and self.hand_tracker:
             texture = self.hand_tracker.update()
             if texture:
@@ -430,7 +430,6 @@ class InterfacePilotage(Screen):
         if not parent:
             return
 
-
         parent.remove_widget(camera_principale)
         parent.remove_widget(camera_handtracking)
 
@@ -439,10 +438,8 @@ class InterfacePilotage(Screen):
             camera_principale.size_hint = (0.25, 0.25)
             camera_principale.pos_hint = {"center_x": 0.75, "center_y": 0.85}
 
-
             camera_handtracking.size_hint = (1, 1)
             camera_handtracking.pos_hint = {"center_x": 0.5, "center_y": 0.5}
-
 
             parent.add_widget(camera_handtracking)
             parent.add_widget(camera_principale)
@@ -452,14 +449,11 @@ class InterfacePilotage(Screen):
             camera_handtracking.size_hint = (0.25, 0.25)
             camera_handtracking.pos_hint = {"center_x": 0.75, "center_y": 0.85}
 
-
             camera_principale.size_hint = (1, 1)
             camera_principale.pos_hint = {"center_x": 0.5, "center_y": 0.5}
 
-
             parent.add_widget(camera_principale)
             parent.add_widget(camera_handtracking)
-
 
         self.camera_est_image_principal = not self.camera_est_image_principal
 
@@ -534,37 +528,41 @@ class InterfacePilotage(Screen):
 # *********** GALERIE PHOTO ************ #
 
 class InterfaceGaleriePhoto(Screen):
-    class InterfaceGaleriePhoto(Screen):
-        def __init__(self, **kwargs):
-            super().__init__(**kwargs)
-            self.boutons = []
-            self.dossier_path = "PhotoStockee"
+    """Interface pour pouvoir visionner les photos enregistrées"""
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.boutons = []
+        self.dossier_path = "PhotoStockee"
 
-        def on_pre_enter(self):
-            self.creer_liste_fichiers_images()
-            self.creer_boutons()
+    def on_pre_enter(self):
+        """code à executer dès qu'on change d'interface"""
+        self.creer_liste_fichiers_images()
+        self.creer_boutons()
 
-        def creer_liste_fichiers_images(self):
-            self.liste_fichiers_images = []
-            for file in os.listdir(self.dossier_path):
-                if file.endswith(".png"):
-                    self.liste_fichiers_images.append(file)
-                    print(f"Image ajoutée : {file}")
+    def creer_liste_fichiers_images(self):
+        """ajoute la source de chaque image dans une liste"""
+        self.liste_fichiers_images = []
+        for file in os.listdir(self.dossier_path):
+            if file.endswith(".png"):
+                self.liste_fichiers_images.append(file)
+                print(f"Image ajoutée : {file}")
 
-        def creer_boutons(self):
-            self.ids.grid.clear_widgets()
+    def creer_boutons(self):
+        """créer un nouveau bouton avec une image et l'ajoute à l'interface"""
+        self.ids.grid.clear_widgets()
 
-            for image in self.liste_fichiers_images:
-                image_path = os.path.join(self.dossier_path, image)
-                bouton = Button(
-                    background_normal=image_path,
-                    size_hint=(0.8, 0.8)
-                )
-                bouton.bind(on_press=lambda instance, img=image_path: self.afficher_images(img))
-                self.ids.grid.add_widget(bouton)
+        for image in self.liste_fichiers_images:
+            image_path = os.path.join(self.dossier_path, image)
+            bouton = Button(
+                background_normal=image_path,
+                size_hint=(0.8, 0.8)
+            )
+            bouton.bind(on_press=lambda instance, img=image_path: self.afficher_images(img))
+            self.ids.grid.add_widget(bouton)
 
-        def afficher_images(self, image):
-            print("Afficher images")
+    def afficher_images(self, image):
+        """ce qui aurait été executé en cliquant sur les boutons"""
+        print("Afficher images")
 
 
 # *********** HANDTRACKING ************* #
@@ -581,20 +579,23 @@ class HandTracking:
         self.texture = None
 
     def update(self, dt=None):
+        """à chaque update: analyse la frame, map la main et détermine la fonction à envoyer au drone"""
+
         ret, frame = self.capture.read()
         if not ret:
             return None
         frame = cv2.flip(frame, 1)
         h, w = frame.shape[:2]
 
+        #initialisation des variables
         tip = [8, 12, 16, 20]
         fingers = []
-
         finger = []
         self.value_x = 0
         self.value_y = 0
         self.value_z = 0
 
+        #délimitations dans l'écran
         gauche = frame.shape[1] * 0.2
         droite = frame.shape[1] - gauche
         haut = frame.shape[0] * 0.2
@@ -604,10 +605,8 @@ class HandTracking:
         a = findpostion(frame)
         b = findnameoflandmark(frame)
 
-        # Below is a series of If statement that will determine if a finger is up or down and
-        # then will print the details to the console
         if len(b and a) != 0:
-            # initialiser les extrémités
+            # réinitialiser les extrémités
             x_min = a[0][1]
             x_max = a[0][1]
             y_min = a[0][2]
@@ -620,7 +619,7 @@ class HandTracking:
                 y_min = min(a[i][2], y_min)
                 y_max = max(a[i][2], y_max)
 
-            # déterminer la commande selon la position dans l'écran
+            # déterminer la commande selon la position de la main dans l'écran
             if y_max > bas and y_min > haut:
                 # print("méthode BAS")
                 self.value_z = 1  # l'axe z dans sitl pointe vers le bas
@@ -634,6 +633,7 @@ class HandTracking:
                 # print("méthode GAUCHE")
                 self.value_x = -1
 
+            #compte le nombre de doigts levés
             finger = []
             if a[0][1:] < a[4][1:]:
                 finger.append(1)
@@ -656,6 +656,8 @@ class HandTracking:
             self.value_y = 1
         elif up == 3:
             self.value_y = -1
+
+        #envoyer les commandes au drone
         joystick_server.update_values(self.value_x, self.value_y, self.value_z, 0)
 
         buf = cv2.flip(frame, 0).tobytes()
@@ -663,7 +665,6 @@ class HandTracking:
         self.texture.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
 
         return self.texture
-
 
     def stop(self):
         if self.capture:
