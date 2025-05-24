@@ -7,22 +7,25 @@ import time
 import argparse
 import math
 
-import dronekit_sitl
+# DroneKit : contrôle de drones avec ArduPilot via MAVLink
 from dronekit import connect, VehicleMode, LocationGlobalRelative, APIException, Command
-import time
-import socket
-import argparse
 from pymavlink import mavutil
+import socket
 
+# Correction de compatibilité pour certaines versions de Python
 collections.MutableMapping = collections.abc.MutableMapping
 
-
-# **********LES FONCTIONS**********#
+"""
+Ceci est un bout de code qui nous a permis d'exprimenter avec les données reçues d'un serveur
+C'est la base du code qui se retrouve sur le rpi 
+"""
+# ********** LES FONCTIONS ********** #
 
 def connectMyCopter():
     """
-    Se connecter à un véhicule configuré avec Ardupilot via Mavlink
-    :return: Un objet vehicule
+    Connexion à un véhicule ArduPilot via DroneKit.
+    Si aucun paramètre --connect n'est fourni, lance un simulateur SITL.
+    :return: Objet 'vehicule' représentant le drone connecté.
     """
     parser = argparse.ArgumentParser(description='commands')
     parser.add_argument('--connect')
@@ -31,7 +34,6 @@ def connectMyCopter():
     connection_string = args.connect
 
     if not connection_string:
-        import dronekit_sitl
         sitl = dronekit_sitl.start_default()
         connection_string = sitl.connection_string()
 
@@ -40,14 +42,17 @@ def connectMyCopter():
     return vehicule
 
 
-
 def reaction(pigeonVoyageur):
+    """
+    Interprète les messages reçus du serveur.
+    Si le message est un chiffre, effectue une action simulée.
+    Sinon, affiche le message tel quel.
+    """
     if not (pigeonVoyageur.isdigit()):
         print("Reçu:", pigeonVoyageur)
     else:
         try:
             pigeonVoyageur = int(pigeonVoyageur)
-
             match pigeonVoyageur:
                 case 1:
                     print("up")
@@ -57,28 +62,31 @@ def reaction(pigeonVoyageur):
                     print("left")
                 case 4:
                     print("right")
-
-        except(Exception):
+        except Exception:
             print("Le Message n'est pas un Entier")
         finally:
             print("******************")
 
 
+# ********** CLIENT TCP ********** #
+
 while True:
     try:
+        # Création du socket client
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client.connect(("localhost", 12345))  # localhost
+        client.connect(("localhost", 12345))  # Connexion au serveur local
         time.sleep(1)
 
         while True:
-            client.sendall(b"piou piou -Over")  # Message inutile
-            pigeonVoyageur = client.recv(1024)  # Le message reçu
-            reaction(pigeonVoyageur)
+            client.sendall(b"piou piou -Over")  # Envoi d’un message inutile au serveur
+            pigeonVoyageur = client.recv(1024)  # Réception d’un message du serveur
+            pigeonVoyageur = pigeonVoyageur.decode('utf-8')  # Décodage en UTF-8
+            reaction(pigeonVoyageur)  # Traitement du message reçu
 
-
-    except(ConnectionRefusedError, ConnectionResetError, KeyboardInterrupt) as e:  # erreurs de connections
+    except (ConnectionRefusedError, ConnectionResetError, KeyboardInterrupt) as e:
         print("Erreur de connection Client", str(e))
         time.sleep(1)
+
     finally:
         print("Over and Out")
-        client.close()
+        client.close()  # Fermeture propre de la socket

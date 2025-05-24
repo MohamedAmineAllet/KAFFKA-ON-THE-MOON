@@ -19,7 +19,14 @@ import collections
 import collections.abc
 collections.MutableMapping = collections.abc.MutableMapping
 
+"""
+Pour tester la simulation: Software in the loop il faut:
+installer mission planner: https://ardupilot.org/planner/docs/mission-planner-installation.html
+Une fois sur le menu principal: lancer le programme (notre code) 
+et utiliser le menu de mission planer (en haut à gauche) pour se connecter via tcp avec un baud rate de 115200 Hz
+et avec le host name: 127.0.0.1 et remote port 5762
 
+"""
 
 print("Tous le monde est prêt? On met les voiiiles...")
 
@@ -60,25 +67,6 @@ def setMode(modeNumber):
         modeNumber
     )
     time.sleep(1)
-
-
-# 2 Lancer Mission Planner automatiquement
-"""
-mission_planner_path = "C:\\Program Files (x86)\\Mission Planner\\MissionPlanner.exe"
-subprocess.Popen([mission_planner_path])
-# Attendre que Mission Planner se lance
-time.sleep(5) 
-"""
-
-# Se connecter au Firmware soit le Flight Controller et ardupilot
-"""
-def connectMyCopter():
-    parser = argparse.ArgumentParser(description="commands")
-    parser.add_argument("--connect", default=connection_string)
-    args = parser.parse_args()
-    vehicle = connect(connection_string, wait_ready=True)
-    return vehicle
-"""
 
 
 def positionConversion(ned, yaw):
@@ -324,8 +312,8 @@ def client_du_joystick():
 # vehicle = connectMyCopter() # Pour le Speedou
 arm_and_takeoff(4)
 while True:
+    # on peut utiliser le serveur de l'application pour le controller
     client_du_joystick()
-
 
     # vers le Nord
     setVitesse(10, 0, 0, 10)

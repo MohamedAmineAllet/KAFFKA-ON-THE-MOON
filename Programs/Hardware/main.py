@@ -1,1 +1,0 @@
-test_motor(motor_id)
