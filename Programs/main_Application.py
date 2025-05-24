@@ -1,12 +1,13 @@
 """
 Ce programme s'occupe de gerer l'image d'une caméra qui se trouve sur un drone dans ce context,il s'occupe aussi
 d'afficher les commandes qui controlent le drone en question,l'application s'occupe de prendre une photo/vidéo pour la
-stocker dans un fichier réservé pour ça,(...)
+stocker dans un fichier réservé pour ça,(...).En gros,ce programme s'occupe de tout ce qui est intéraction avec
+l'utilisateur prise de données du joystick ou du handtracking et affichage pour l'utilisateur.
 
-@autheur : Mohamed-Amine,Allet
+@autheur : Allet,Mohamed-Amine
 @autheur : Gokhale,Kian
 @autheur : Fatmagul Dedek
-@autheur :
+@autheur : Nadaud, Kemuel Elisée
 @version : Python (3.11.9) Kivy(2.3.1)
 """
 import os
@@ -108,9 +109,9 @@ joystick_server.start()
 
 class JoystickDeplacementHorizental(Widget):
     """
-    La class JoystickDeplacementHorizental est une classe que j'ai conçu afin de stocker deux coefficiant un en x et un en y
-    que je vais utiliser pour déplacer le drone horizentalement seulement.Afin, d'illustrer ce joystick à l'utilisateur
-    il sera dessiner avec une premiere elipse comme background et une deuxième elipse blanche comme joystick
+    La class JoystickDeplacementHorizental est une classe que j'ai conçue afin de stocker deux coefficients un en x et un en y
+    que je vais utiliser pour déplacer le drone horizontalement seulement. Afin, d'illustrer ce joystick à l'utilisateur,
+    il sera dessiné avec une première ellipse comme arrière-plan et une deuxième ellipse blanche comme joystick
     """
 
     def __init__(self, **kwargs):
@@ -127,8 +128,8 @@ class JoystickDeplacementHorizental(Widget):
 
     def update_graphics_pos(self, *args):
         """
-        La méthode update_graphics_pos s'occupe de changer l'affichage des positions des cercles de manière interactive
-        lorsque l'utilisateur clique à un endroit l'élipse blanche se dessine à l'endroit où se trouve la souris/le doight.
+         La méthode update_graphics_pos s'occupe de changer l'affichage des positions des cercles de manière interactive
+        lorsque l'utilisateur clique à un endroit l'ellipse blanche se dessine à l'endroit où se trouve la souris/le doigt.
         """
         base_x = self.center_x - self.base.size[0] / 2
         base_y = self.center_y - self.base.size[1] / 2
@@ -138,13 +139,12 @@ class JoystickDeplacementHorizental(Widget):
         knob_y = self.center_y - self.knob.size[1] / 2
         self.knob.pos = (knob_x, knob_y)
 
-    def on_touch_move(self, touch):  # a ecrire toute les formules dans word.
+    def on_touch_move(self, touch):
         """
-        Cette méthode permet que lorsque l'utilisateur clique a un endroit dans le cercle bleu une
-        valeur en x et y sont stocké qui dépende de la distance entre le centre du cercle bleue
-        et l'endroit appuyée.Afin de limiter cette valeur on la normalise pour obtenir une valeur
-        entre -1 et 1 qui va servir de coéfficiant de variation de vitesse.Pour ensuite,envoyer cette valeur par
-        notre serveur socket dans l'autre main(main_SoftwareInTheLoop.py)
+        Cette méthode permet de stocker des valeurs en x et y lorsque l’utilisateur clique sur une zone du cercle bleu.
+        Ces valeurs dépendent de la distance entre le centre du cercle et le point d’appui. Afin de limiter cette valeur,
+        on la normalise pour obtenir une valeur entre -1 et 1 qui va servir de coefficient de variation de vitesse.
+        Pour ensuite, envoyer cette valeur par notre serveur socket dans l'autre main(main_SoftwareInTheLoop.py)
         :param touch:
         :return:
         """
@@ -181,10 +181,9 @@ class JoystickDeplacementHorizental(Widget):
 
         def send_zero_values(dt):
             """
-            Lorsque l'utilisateur relache le joystick ,afin que le drone ne bouge pas en
-            permanance sans qu'on lui donne d'ordre,les valeurs des différents coefficiant
-            de variation de vitesse sont renitializer a 0 pour que le drone devient stable.
-            :rtype: object
+            Lorsque l'utilisateur relâche le joystick, afin que le drone ne bouge pas en
+            permanence sans qu'on lui donne d'ordre, les valeurs des différents coefficients
+            de variation de vitesse sont réinitialisées à 0 pour que le drone devienne stable.            :rtype: object
             """
             joystick_server.update_values(0.0, 0.0, 0, 0)
             print(f"Joystick relâché : X=0.00, Y=0.00, Z=0.00,cos_theta=0.00")
@@ -194,8 +193,8 @@ class JoystickDeplacementHorizental(Widget):
 
 class CameraWidget(Image):
     """
-    Cette objet est un Widget qui a pour fonction principale de permettre à l'utilisateur du drone de voir les images que
-    film la caméra(le IMX219) sur le drone par l'affichage de celle-ci dans l'application kivy.
+    Cet objet est un Widget qui a pour fonction principale de permettre à l'utilisateur du drone de voir les images que
+    film la caméra (le IMX219) sur le drone par l'affichage de celle-ci dans l'application kivy.
     """
 
     def __init__(self, **kwargs):
@@ -206,11 +205,11 @@ class CameraWidget(Image):
 
     def demarrer_enregistrement(self, filename="VideoStockee/video.mp4", fps=15):
         """
-        Cette fonction va être utile pour le bouton s'occupant de filmer une vidéo.Sachant que l'affichage
-        visuelle est déjà lancé elle permet de prendre une certaine partie de cette affichage lorsqu'on clique sur
-        le bouton en question et de le stocker dans le fichier VideoStockee et dans le cas ou il n'est pas présent
+        Cette fonction va être utile pour le bouton s'occupant de filmer une vidéo. Sachant que l'affichage
+        visuel est déjà lancé, elle permet de prendre une certaine partie de cet affichage lorsqu'on clique sur
+        le bouton en question et de le stocker dans le fichier VideoStockee et, dans le cas où il n'est pas présent,
         il va le créer.
-        :param filename: est le chemin du dossier où sont stocké les vidéoes.
+        :param filename: est le chemin du dossier où sont stocké les vidéos.
         :param fps: est la constante qu'on assigne pour l'affichage de la vidéo.
         :return:
         """
@@ -263,7 +262,7 @@ class CameraWidget(Image):
     # à changer la source pour l'URL de la caméra.
     def update(self, dt):
         """
-        Met à jour l'image de la caméra et l'affiche dans l'interface Kivy.
+        Mets à jour l'image de la caméra et l'affiche dans l'interface Kivy.
 
         Cette méthode est appelée à chaque intervalle de temps défini (dt).
         Elle lit une nouvelle image depuis la capture vidéo en cours, l'enregistre
@@ -529,6 +528,7 @@ class InterfacePilotage(Screen):
 
 class InterfaceGaleriePhoto(Screen):
     """Interface pour pouvoir visionner les photos enregistrées"""
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.boutons = []
@@ -587,7 +587,7 @@ class HandTracking:
         frame = cv2.flip(frame, 1)
         h, w = frame.shape[:2]
 
-        #initialisation des variables
+        # initialisation des variables
         tip = [8, 12, 16, 20]
         fingers = []
         finger = []
@@ -595,7 +595,7 @@ class HandTracking:
         self.value_y = 0
         self.value_z = 0
 
-        #délimitations dans l'écran
+        # délimitations dans l'écran
         gauche = frame.shape[1] * 0.2
         droite = frame.shape[1] - gauche
         haut = frame.shape[0] * 0.2
@@ -633,7 +633,7 @@ class HandTracking:
                 # print("méthode GAUCHE")
                 self.value_x = -1
 
-            #compte le nombre de doigts levés
+            # compte le nombre de doigts levés
             finger = []
             if a[0][1:] < a[4][1:]:
                 finger.append(1)
@@ -657,7 +657,7 @@ class HandTracking:
         elif up == 3:
             self.value_y = -1
 
-        #envoyer les commandes au drone
+        # envoyer les commandes au drone
         joystick_server.update_values(self.value_x, self.value_y, self.value_z, 0)
 
         buf = cv2.flip(frame, 0).tobytes()
